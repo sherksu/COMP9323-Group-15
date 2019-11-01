@@ -1,0 +1,62 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {% include '/basic/navigation.html' %}
+{% endblock %}
+
+{% block content%}
+    <div class="container">
+        <div class="page-header">
+            <h1>Bootstrap Test</h1>
+            <a href="http://www.brandx.net/support/websites/bootstrap/bootstrap-cheat-sheet.html">Cheat sheet!</a>
+        </div>
+        <div id='main' class="input-group">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"
+                        style="background-color: slateblue; color: white; border-color: slateblue">
+                        <span id="labels">div</span>
+                        <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="javascript:void(0)">div</a></li>
+                  <li><a href="javascript:void(0)">button</a></li>
+                  <li><a href="javascript:void(0)">nav</a></li>
+                  <li><a href="javascript:void(0)">p</a></li>
+                </ul>
+            </div>
+            <input id="class_input" type="text" class="form-control" placeholder="css class">
+            <span class="input-group-btn">
+                <button id="clear" class="btn btn-default" type="button">Clear All</button>
+            </span>
+        </div>
+    </div>
+    <div id="show" class="container" style="margin-top:40px"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    let choosen = 'div';
+
+    $("#main a").click(function(){
+        choosen = $(this).text();
+        $("#labels").text(choosen);
+    });
+
+    $("#class_input").bind('keydown', function(event){
+        if(event.keyCode == "13"){
+            let x = $("#class_input").val();
+            if(x){
+                let child = '<'+choosen+' class="'+x+'">test'+'</'+choosen+'>';
+                $("#show").append(child);
+            }else{
+                alert('please input class name!')
+            }
+        }
+    });
+
+    $("#clear").click(() => {
+        $("#show").empty();
+    });
+</script>
+{% endblock%}

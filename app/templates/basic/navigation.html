@@ -1,0 +1,45 @@
+<nav class="navbar navbar-fixed-top">
+    <div style="background-color: black; height:50px">
+        <div class="container">
+            <p class="logo-center">Group15</p>
+            <ul class="navbar-nav navbar-right nav-white">
+                {%- if current_user.is_authenticated %}
+                <li><a href="{{ url_for('guide.world_map') }}"><div class="glyphicon glyphicon-globe"></div></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" role="button">
+                    <div class="glyphicon glyphicon-user"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="{{url_for('profile.detail')}}">
+                                {{user_name}} profile</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="{{url_for('profile.ranking')}}">
+                                rank</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="{{url_for('profile.question_set')}}">
+                                error set</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="{{url_for('profile.study_career')}}">
+                                learning progress</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url_for('guide.logout') }}">Log out</a></li>
+                    </ul>
+                </li>
+                {%- else %}
+                <li><a href="{{ url_for('guide.signup') }}">Sign up</a></li>
+                <li><a href="{{ url_for('guide.login') }}">Log in</a></li>
+                {%- endif %}
+            </ul>
+            <ul class="navbar-nav navbar-left nav-white">
+                <li><a href="/">Home</a></li>
+                <li><a href="/bootstrap">Bootstrap</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

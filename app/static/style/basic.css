@@ -1,0 +1,16 @@
+.text-box {
+    padding: 20px;
+    height: 600px;
+    background-color: white;
+    transition: all 0.5s ease;
+}
+
+.text-box:hover{
+    color: white;
+    background-color: black;
+}
+
+.stripe {
+    background-image:
+        repeating-linear-gradient(45deg, red 0px, yellow 10px, transparent 10px, transparent 20px);
+}

@@ -1,0 +1,186 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block title%}
+{%- if type %}
+{{- type }} {{node_name}}!
+{%- else %}
+Game!
+{%- endif %}
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('static',filename='game/css/animate.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='game/lib/FlipClock-master/compiled/flipclock.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='game/lib/dist/loading-bar.min.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='game/css/game.css') }}">
+{% endblock %}
+
+{% block head_scripts %}
+{{ super() }}
+<script src="{{url_for('static',filename='game/js/game.js')}}"></script>
+<script src="{{url_for('static',filename='game/js/game_feedback.js')}}"></script>
+<script src="{{url_for('static',filename='game/lib/FlipClock-master/compiled/flipclock.min.js')}}"></script>
+<script src="{{url_for('static',filename='game/lib/dist/loading-bar.min.js')}}"></script>
+{% endblock %}
+
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let x = {
+        {%- for x in data %}
+            "{{x._id}}":{{x.correct_answer}},
+        {%- endfor %}
+    };
+
+    let level_info = {
+        {%- if level_info %}
+            "course": "{{ level_info[0].course }}",
+            "level": {{ level_info[0].level }},
+            "exp": {{ level_info[0].exp }},
+            "next_level": {{ level_info[0].next_level }},
+        {%- else %}
+            "level": 1,
+            "exp": 0,
+            "next_level": 100,
+        {%- endif %}
+    };
+
+    let exp = level_info.exp;
+</script>
+{% endblock %}
+
+{# take option for mutiple select #}
+{% macro option(key1, key2,option) %}
+<div class="radio">
+    <label>
+        <input type="radio" value="{{key2-1}}" name="{{key1}}" aria-label="Checkbox for option">{{option}}
+    </label>
+</div>
+{% endmacro %}
+
+{% macro timer() %}
+<div class="timer">
+</div>
+{% endmacro %}
+
+
+{% block content %}
+<div class="container-fluid vw-100" >
+    <div class="row">
+        <div class="col-lg-2" style="position: relative; z-index:100; width:20%">
+            {{ timer() }}
+        </div>
+        <div class="col-lg-8 col-md-10 mh-100vh middle-col">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="margin-top: 20px;overflow: hidden">
+                        <div class="col-lg-5" style="overflow: hidden;height: 300px">
+                            <div class="corp">
+                                <img class="hero" id="avatar1"
+                                     src="{{url_for('static',filename='game/image/korra_static.png')}}">
+                                <img class="hero" id="avatar2"
+                                     src="{{url_for('static',filename='game/image/korra.gif')}}"
+                                     style="display: none;">
+                            </div>
+                        </div>
+                        <div class="col-lg-5" style="margin-left: 120px">
+                            <img class="monster" id="m1" src="{{url_for('static',filename='game/image/m2.gif')}}">
+                            <img class="monster" id="m1_1"src="{{url_for('static',filename='game/image/m1_1.gif')}}"
+                                 style="display: none;margin-left: 40%; float: right;">
+                        </div>
+                        <div class="w-100 grass"></div>
+                </div>
+            </div>
+            <div class="row" style="text-align: center">
+                <div class="col">
+                    <h1>{{type}} -- {{node_name}}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 all-questions" q-num="{{data|length}}">
+                    {% for d in data %}
+                    {% set Qloop = loop %}
+                    <div class="row question"
+                         {% if not loop.first %}
+                         style="display: none"
+                         {% endif%}
+                         q-id="{{Qloop.index}}">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    Question {{loop.index}}:<br>{{d.content}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- #TODO - Stop showing db id to user  -->
+                                {% for o in d.option %}
+                                    {{ option(d._id,loop.index,o) }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+        <button class="btn btn-primary next" onclick="nextQ(this)">Next</button>
+    </div>
+    <div id="result" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;
+    background-color:rgba(0,0,0,0.1)">
+        <div style="position: absolute; margin:auto; left:0; top:0;
+        right:0; bottom:0; height:500px; width:800px; background-color: white; border: solid 1px gray;
+        border-radius:5px; padding:10px; z-index:10000">
+            <div id="question" style="height:400px; overflow: auto">
+                <p>Result</p>
+                <div class="panel-group" id="accordion">
+                    {%- for each in data %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 id="{{ each._id }}head" class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion"
+                                    href="#{{ each._id }}H">
+                                    question {{ loop.index }}
+                                    </a>
+                               </h4>
+                            </div>
+                            <div id="{{ each._id }}H" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    {{each.content}}
+                                    <ul class='list-group'>
+                                    {%- for i in each.option%}
+                                       <li class='list-group-item'>{{ chr(loop.index0 + 65) }}.    {{i}}</li>
+                                    {%- endfor %}
+                                    </ul>
+                                    <button id='tt' class='btn btn-primary' style="float:right"
+                                       value="{{each._id}}">look solutions</button>
+                               </div>
+                            </div>
+                        </div>
+                    {%- endfor %}
+                </div>
+            </div>
+            <div id="person_info">
+                <!--current_user的信息-->
+                <div class="col-lg-4">
+                    <p>Your level <span id="level"></span> (exp:<span id="exp"></span>)</p>
+                    <p>Gain exp <span id="gain_exp"></span></p>
+                </div>
+                <div class="col-lg-4">
+                    <p>Your next_level <span id="next_level"></span></p>
+                    <p>Your correct_rate <span id="correct_rate"></span></p>
+                </div>
+            </div>
+            <button style="position:absolute; right:10px; top:10px" id="result_close">exit</button>
+            <div style="position:absolute; right:10px; bottom:10px">
+                <button id="shows">show data</button>
+                <button id="error_save">save error</button>
+            </div>
+    </div>
+</div>
+{% endblock %}
+

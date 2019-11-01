@@ -1,0 +1,33 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
+{% block content%}
+<div class="dropdown">
+	<button type="button" class="btn dropdown-toggle" id="dropdownMenu1" 
+			data-toggle="dropdown" style="color: rgb(212, 106, 64);">
+  			<span class="glyphicon glyphicon-user"></span> User
+	</button>
+	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		<li role="presentation">
+			<a role="menuitem" tabindex="-1" href="{{url_for('profile.detail',user_name = user_name)}}">{{user_name}}个人信息</a>
+		</li>
+		<li role="presentation">
+			<a role="menuitem" tabindex="-1" href="{{url_for('profile.ranking',user_name = user_name)}}">RANK</a>
+		</li>
+		<li role="presentation">
+			<a role="menuitem" tabindex="-1" href="{{url_for('profile.question_set',user_name = user_name)}}">错题集</a>
+		</li>
+		<li role="presentation">
+			<a role="menuitem" tabindex="-1" href="{{url_for('profile.study_career',user_name = user_name)}}">学习生涯</a>
+		</li>
+		<li role="presentation" class="divider"></li>
+		<li role="presentation">
+			<a role="menuitem" tabindex="-1" href="#">LOG OUT</a>
+		</li>
+	</ul>
+</div>
+
+{% endblock %}

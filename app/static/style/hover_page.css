@@ -1,0 +1,31 @@
+.hover_mask {
+    background-color: rgba(0, 0, 0, 0.1);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left:0;
+}
+
+.hover_body {
+    background-color: white;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    margin: auto;
+    position: absolute;
+    border-radius: 1%;
+    width: 50%;
+    height: 50%;
+    padding:1%;
+}
+
+.chapter_box {
+    border: 1px solid slategray;
+    padding: 5px;
+    height: 200px;
+    width: 200px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #cccccc;
+}

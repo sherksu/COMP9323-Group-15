@@ -1,0 +1,155 @@
+body{
+    user-select: none;
+}
+
+.containers{
+    width: 1920px;
+    height: 1204px;
+    background: url('/static/guide/bgd5.jpg') no-repeat center center;
+}
+
+.button {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(102, 0, 204, 0.85), rgba(166, 77, 255, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.button1 {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;text-align: left;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(102, 0, 204, 0.85), rgba(166, 77, 255, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button1:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.button2 {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;text-align: left;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(0, 51, 0, 0.85), rgba(102, 255, 102, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button2:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.button3 {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;text-align: left;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(204, 51, 0, 0.85), rgba(255, 179, 153, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button3:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.b1{
+    margin: 150px 10px 20px 290px;
+}
+.b2{
+    margin: -30px 100px 50px 650px;
+}
+.b3{
+    margin: -120px 10px 20px 1080px;
+}
+.b4{
+    margin: 140px 10px 20px 1100px;
+}
+.b5{
+    margin: -110px 10px 20px 730px;
+}
+.b6{
+    margin: -240px 10px 20px 450px;
+}
+.b7{
+    margin: -25px 10px 20px 160px;
+}
+.b8{
+    margin: 150px 10px 20px 450px;
+}
+.b9{
+    margin: -140px 10px 20px 900px;
+}
+.b10{
+    margin: -140px 10px 20px 1650px;
+}
+.b11{
+    margin: -420px 10px 20px 1380px;
+}
+
+.pop_bar{
+    margin-top:-370px;
+    margin-left: 565px;
+    font-size: 20px
+}
+
+.tb-rl{
+    -webkit-writing-mode: vertical-lr;
+    writing-mode:vertical-lr;
+}
+
+#popView{
+    margin-top: 50px;
+    height: 500px;
+    width: 600px;
+    border-radius: 0 10px 10px 0;
+    background: linear-gradient(1000deg, rgba(204, 51, 0, 0.85), rgba(255, 179, 153, 0.85));
+    color: #ffffff;
+    -webkit-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
+    -moz-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
+    box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
+    transition: all .30s ease;
+    position:absolute;
+    z-index:2;
+    left:-560px;
+    text-align: center;
+}
+
+#popView img{
+    margin: 90px 20px 0 0;
+
+}
+
+#popView:hover {
+    left:0;
+}

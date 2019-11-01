@@ -1,0 +1,30 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
+{% block content%}
+<div class="alert alert-info">
+  <strong>
+      <h1>Welcome {{username}} <br>
+            This page contains your rank information</h1>
+  </strong>
+</div>
+
+{% if noCourse %}
+    <h2>Currently you have no courses under studying. Please work harder!!</h2>
+{% else %}
+    <ul>
+        {% for index, course in enumerate(course_code_name_list) %}
+            {{course[0]}}   {{course[1]}} <br>
+            Rank number,    Person name,    Level<br>
+            {% for index, person_tuple in enumerate(total_rank_list[index]) %}
+                {{ index+1 }} => {{person_tuple[0]}} => {{person_tuple[1]}} <br>
+            {% endfor %}
+            <br>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}

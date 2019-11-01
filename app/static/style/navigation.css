@@ -1,0 +1,35 @@
+body {
+    padding-top: 80px;
+    background-color: rgb(240, 240, 240);
+}
+
+.logo-center {
+    position: fixed;
+    color: white;
+    font-size: 50px;
+    left: calc(50% - 95px);
+    top: 10px;
+    text-shadow: 1px 2px 1px #cccccc;
+}
+
+.nav-white {
+    color: white;
+    padding: 0;
+}
+
+.nav-white > li > a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+}
+
+.nav-white >li {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    list-style: none;
+}
+
+.nav-white >li:hover {
+    background-color: orangered;
+}

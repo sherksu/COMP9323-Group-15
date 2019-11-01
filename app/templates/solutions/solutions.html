@@ -1,0 +1,136 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {{ nav.top.render() }}
+{% endblock %}
+
+{% block head_scripts %}
+    {{ super() }}
+    <script src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    let E = window.wangEditor;
+    let editor = new E('#toolbar', '#editor');
+    editor.create();
+
+    $('#upload_solution').click(() => {
+        let id = '{{ id }}';
+        let content = editor.txt.text();
+        let name = $('#name').val();
+        let title = $('#title').val();
+        if (name && title && content) {
+            let data = {
+                "by": name,
+                "title": title,
+                "content": content,
+                "id": id,
+            };
+            $.post('solution_save', JSON.stringify(data), (res)=>{
+                alert(res)
+            })
+        }else{
+            alert('please complete the form!')
+        }
+    })
+</script>
+{% endblock%}
+
+{% block styles %}
+{{ super() }}
+<style type="text/css">
+    .toolbars {
+        border:1px solid #cccccc; overflow:auto;
+    }
+
+    .toolbars::-webkit-scrollbar {
+        display:none
+    }
+</style>
+{% endblock %}
+
+{% block content%}
+    <div class="container">
+        <div class="page-header">
+            <h1>solutions</h1>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#yoursolution">upload your solution</button>
+        </div>
+        <div>
+            <h4>{{ content }}</h4>
+            <ul class="list-group">
+            {% for i in option %}
+                <li class="list-group-item">
+                    {% if loop.index0 != correct_answer %}
+                        <p>{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                    {% else %}
+                        <p style="color:greenyellow">{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <p>other solutions</p>
+            <div class="panel panel-group">
+                {% for i in solutions %}
+                    <div class="panel panel-default" style="margin-top:10px">
+                        <div class="panel-heading">
+                                {{ i.title }} - {{ i.by }}
+                        </div>
+                    </div>
+                    <div class="panel-collapse collapse in">
+                        <div class="panel-heading">
+                            {{ i.content }}
+                        </div>
+                        <div class="panel-footer">
+                            {{ i.time}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- modal -->
+    <div class="modal fade" id="yoursolution" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        upload your solution
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!--主体-->
+                    <form role="form" id="solution_form">
+                        <div class="form-group">
+                            <label>name</label>
+                            <input type="text" class="form-control" id="name" placeholder="your name">
+                        </div>
+                        <div class="form-group">
+                            <label>title</label>
+                            <input type="text" class="form-control" id="title" placeholder="title">
+                        </div>
+                        <span>Content</span>
+                        <div id="toolbar" class="toolbars"></div>
+                        <div id="editor" style="border:1px solid #cccccc; height:400px; overflow:auto">
+                            <p style="color:lightgrey">write your solution here.</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        close
+                    </button>
+                    <button id="upload_solution" type="button" class="btn btn-primary">
+                        submit
+                    </button>
+                </div>
+            </div>
+	    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link href="/static/style/guide/world_map.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <body style="padding: 0px">
+       <body style="padding: 0px">
+        <div id="popView">
+            <img src="/static/guide/111.jpg" height="320" width="500">
+            <div class="tb-rl pop_bar" data-toggle="#popView">
+                <span>Here to access Course Structure</span>
+            </div>
+        </div>
+        <div class="containers" style="position:absolute; top:0; z-index: -1">
+            <div class="b1">
+                    <button class="button" type="button" onclick="pp()">
+                            Structure
+                    </button>
+            </div>
+            <div class="b2">
+                <a href="{{ url_for('town.entry_town', course='COMP9020') }}">
+                    <button class="button1" type="button">
+                            COMP9020
+                    </button>
+                </a>
+            </div>
+            <div class="b3">
+                <a href="{{ url_for('town.entry_town', course='COMP9323') }}">
+                    <button class="button1" type="button">
+                            COMP9323
+                    </button>
+                </a>
+            </div>
+            <div class="b4">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button2" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b5">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button2" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b6">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button2" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b7">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button2" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b8">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button3" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b9">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button3" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b10">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button3" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b10">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button3" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+            <div class="b11">
+                <a href="{{ url_for('guide.world_map') }}">
+                    <button class="button3" type="button">
+                            COMP9311
+                    </button>
+                </a>
+            </div>
+        </div>
+    </body>
+{% endblock %}
+
+

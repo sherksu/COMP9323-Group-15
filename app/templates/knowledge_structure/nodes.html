@@ -1,0 +1,54 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {{ nav.top.render() }}
+{% endblock %}
+
+{% block content%}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-2">
+                <ul class="list-group">
+                    <li class="list-group-item" style="background-color: lavender">{{ course.name}}</li>
+                    {% for i in chapters %}
+                        <li class="list-group-item">
+                              <a class="active" data-toggle="collapse" href="#{{i._id}}">{{i.name}}</a>
+                        </li>
+                        <ul id="{{i._id}}" class="collapse list-group" style="margin-bottom:0px">
+                            {% for x in db.knowledge_nodes.find({"chapter": i._id}) %}
+                                <li class="list-group-item" style="border-radius:0px">
+                                    <a class="active" href="/knowledge_structure/{{course.code}}/{{i.name}}/{{x.name}}">
+                                        {{x.name}}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor%}
+                </ul>
+            </div>
+            <div class="col-xs-10">
+                <div class="page-header" style="margin-top:0px">
+                    <h2 style="margin-top:0px">
+                        {% if not chapter %}
+                            This is the knowledge
+                        {% else %}
+                            {{ chapter.name }}
+                    </h2>
+                            <p>{{ chapter.description }}</p>
+                        {% endif %}
+                </div>
+
+                <div>
+                    {% if not node %}
+                        <h3>In this page</h3>
+                        <p>you could learn what you like</p>
+                    {% else%}
+                        <h3>{{ node.name }}</h3>
+                        <h4>{{ node.description }}</h4>
+                        <p>{{ node.content }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

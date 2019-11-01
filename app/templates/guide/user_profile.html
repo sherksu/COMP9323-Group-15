@@ -1,0 +1,99 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
+{% block content %}
+    <style>
+        body{
+            background: url("../../static/guide/bgd8.jpg") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            font-size: 15px;
+            font-family: "Helvetica Neue", Helvetica, Microsoft Yahei;
+            user-select: none;
+        }
+        *{
+            margin: 0;
+        }
+        .panel {
+            margin: 250px auto 60px;
+            text-align: center;
+            background-color: white;
+            width: 500px;
+            border-radius: 10px;
+            padding: 1px;
+            transition: box-shadow .30s;
+        }
+        .panel:hover{
+            box-shadow: #fff 5px 5px 25px;
+        }
+        .avatar img {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            margin-top: -60px;
+        }
+        h3 {
+            font-weight: bold;
+            font-size: 35px;
+            margin: 15px 0 20px;
+        }
+        p.gender{
+            color: #333;
+            font-size: 15px;
+            font-style: italic;
+        }
+        p.lead{
+            color: #333;
+            font-size: 15px;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .btn {
+            color: white;
+            background: rgb(48, 35, 174);
+            font-size: 16px;
+            line-height: 38px;
+            height: 38px;
+            padding: 0 20px;
+            border-radius: 3px;
+            display: inline-block;
+            text-decoration: none;
+            transition: background .15s;
+        }
+        .btn:hover {
+            background-color: rgb(81, 67, 224);
+        }
+        .tags{
+            margin-top: 50px;
+            margin-bottom: 20px;
+            color: #999;
+        }
+        .tag{
+            margin: 0 15px;
+        }
+    </style>
+    <body>
+        <section class="panel">
+            <p class="avatar">
+              <img src="{{ avatar }}" alt="">
+            </p>
+            <h3>{{ rolename }}</h3>
+            <p class="gender">Gender: {{ gender }}</p>
+            <p class="lead">Slogan: {{ slogan }}</p>
+            <p>
+              <a class="btn" href="{{ url_for('guide.role_change') }}">
+                <i class="fa fa-bars"></i> Edit Your Role
+              </a>
+            </p>
+            <p class="tags">
+              <span class="tag"></span>
+              <span class="tag"></span>
+              <span class="tag"></span>
+            </p>
+        </section>
+    </body>
+
+{% endblock %}
