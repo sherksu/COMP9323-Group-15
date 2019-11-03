@@ -58,7 +58,7 @@ def question_set():
     return render_template("/profile/question_set.html", **dic, get_question_content=get_question_content,
                            get_chapter_name=get_chapter_name, get_course_name=get_course_name,
                            get_course_code=get_course_code, get_question_course=get_question_course,
-                           get_question_chapter=get_question_chapter)
+                           get_question_chapter=get_question_chapter,correct_answer = correct_answer)
 
 
 @profile.route('/study_career/')
@@ -105,3 +105,13 @@ def get_question_chapter(question_id):
     question = db.question_set.find_one({"_id": question_id})
     if question:
         return question['chapter']
+    
+def correct_answer(str):
+    if str == '1':
+        return 'A'
+    elif str == '2':
+        return 'B'
+    elif str == '3':
+        return 'C'
+    elif str == '4':
+        return 'D'
