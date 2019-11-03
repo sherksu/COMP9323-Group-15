@@ -7,47 +7,68 @@
 {% block content%}
 <div class="container">
     <h1>{{ name }} question_set </h1>
-    {% for i in levels %}
+    <div class='row'>
+        <div class='col-md-6' align='center'>
+            <h4>错题</h4>
+        </div>
+        <div class='col-md-1' align='center'>
+            <h4>答案</h4>
+        </div>
+        <div class='col-md-2' align='center'>
+            <h4>日期</h4>
+        </div><div class='col-md-3' align='center'>
+            <h4>详情</h4>
+        </div>
+    </div>
+    {% for i in error_set %}
         <div class='row'>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion in" 
-                        href="#collapse{{ get_course_code(i.course) }}">
-                            <h1>{{ get_course_code(i.course) + "    " + get_course_name(i.course) }}</h1>
-                        </a>
-                    </h4>
-                </div>
-                <div id={{ "collapse" + get_course_code(i.course) }} class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class = "row" align = "center">
-                            <div class = "col-md-4" align="center">
-                                <h4 align="center">问题名</h4>
+            <div class='col-md-6' align='center'>
+                <h4>{{ get_question_content(i.question) }}</h4>
+            </div>
+            <div class='col-md-1' align='center'>
+                <h4>{{ i.answer }}</h4>
+            </div>
+            <div class='col-md-2' align='center'>
+                <h4>{{ i.date }}</h4>
+            </div>
+            <div class='col-md-3' align='center'>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion in" 
+                            href="#collapse{{ i.answer }}">
+                                点击查看
+                            </a>
+                        </h4>
+                    </div>
+                    <div id={{ "collapse" + i.answer }} class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class = "row" align = "center">
+                                <div class = "col-md-4" align="center">
+                                    <h6 align="center">课程号</h6>
+                                </div>
+                                <div class = "col-md-4" align="center">
+                                    <h6 align="center">课程名</h6>
+                                </div>
+                                <div class = "col-md-4" align="center">
+                                    <h6 align="center">章节名</h6>
+                                </div>
                             </div>
-                            <div class = "col-md-4" align="center">
-                                <h4 align="center">答案</h4>
-                            </div>
-                            <div class = "col-md-4" align="center">
-                                <h4 align="center">时间</h4>
+                            <div class = "row" align = "center">
+                                <div class = "col-md-4" align="center">
+                                    <h6 align="center">{{ get_course_code(get_question_course(i.question)) }}</h6>
+                                </div>
+                                <div class = "col-md-4" align="center">
+                                    <h6 align="center">{{ get_course_name(get_question_course(i.question)) }}</h6>
+                                </div>
+                                <div class = "col-md-4" align="center">
+                                    <h6 align="center">{{ get_chapter_name(get_question_chapter(i.question)) }}</h6>
+                                </div>
                             </div>
                         </div>
-                        {% for j in error_set %}
-                            {% if get_question_course(j.question) == i.course %}
-                                <div class="row" align="center">
-                                    <div class = "col-md-4" align="center">
-                                        <h4 align="center">{{ get_question_content(j.question) }}</h4>
-                                    </div>
-                                    <div class = "col-md-4" align="center">
-                                        <h4 align="center">{{ correct_answer(j.answer) }}</h4>
-                                    </div>
-                                    <div class = "col-md-4" align="center">
-                                        <h4 align="center">{{ j.date }}</h4>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
                     </div>
                 </div>
+                
             </div>
         </div>
     {% endfor %}
