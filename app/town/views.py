@@ -13,5 +13,5 @@ def entry_town(course):
     course_id = course['_id']
     chapters = db.chapters.find({'course': course_id})
     get_node = db.knowledge_nodes.find
-    return render_template('/town/my_town.html',  course=course,
+    return render_template('/town/my_town.html',  course=course, is_town=True,
                            code=code, _id=course_id, name=name, chapters=list(chapters), get_node=get_node)
