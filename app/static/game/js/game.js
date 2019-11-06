@@ -37,7 +37,7 @@ $( document ).ready(function() {
         $(e.currentTarget).find("input").prop("checked", true);
     });
 
-    // heart = new ldBar($(".heart")[0]);
+    heart = new ldBar($(".heart")[0]);
 
     window.Moster = function(){
         return false
@@ -64,8 +64,12 @@ $( document ).ready(function() {
         })
     })
     // ---------------------------------
-
+    timer.stop();
 });
+
+function cur_answer(){
+    console.log(x[$(".question:visible input").prop("name")])
+}
 
 function nextQ(e) {
     if ($(".question:visible input").serializeArray().length == 0){
@@ -75,8 +79,8 @@ function nextQ(e) {
     let chose = $(".question:visible input").serializeArray()[0];
     if(x[chose.name] == chose.value){
         correct();
-        // qnum = $('.all-questions').attr("q-num");
-        // heart.set(heart.value - (1/qnum*100))
+        qnum = $('.all-questions').attr("q-num");
+        heart.set(heart.value - (1/qnum*100))
     }else{
         $("#m1").m_restart()
     }

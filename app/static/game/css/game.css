@@ -68,10 +68,8 @@
 }
 
 .heart {
-    margin: auto;
-    display: inline;
-    vertical-align: middle;
     zoom:1.5;
+    margin-top: 50%;
 }
 
 .mh-100vh{
