@@ -1,0 +1,98 @@
+{% extends 'bootstrap/base.html' %}
+
+{%- block metas %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{%- endblock metas %}
+
+{%- block styles %}
+<!-- Bootstrap -->
+    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="ranking_page.css" />
+    <style>
+      .w3-bar-item:hover{
+        transform: scale(1.2)
+      }
+      .w3-left, .w3-right, .w3-badge {cursor:pointer}
+      .w3-badge {height:13px;width:13px;padding:0}
+
+
+      .square {
+        height: 200px;
+        width: 200px;
+      }
+
+      .square:hover{
+        transform: scale(1.2)
+      }
+
+      div.scrollmenu {
+
+          overflow: auto;
+          white-space: nowrap;
+      }
+
+      div.scrollmenu a {
+          display: inline-block;
+          color: grey;
+          text-align: center;
+          padding: 14px;
+          text-decoration: none;
+      }
+
+      div.scrollmenu a:hover {
+          background-color: teal;
+      }
+
+    </style>
+{%- endblock styles %}
+
+{%- block body %}
+
+{% block navbar %}
+    {{ nav.top.render() }}
+{% endblock %}
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
+    </div>
+    <div class="w3-col s8 w3-bar w3-pale-blue" align="center">
+      <h2><span>Welcome<br><strong>{{username}}</strong></span></h2><br>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="w3-container w3-aqua">
+    <h3>Ranking page</h3>
+  </div>
+</nav>
+
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px; margin-top:43px; position:relative; height:auto; min-height:100%">
+
+  <!-- Header -->
+  <header class="w3-container w3-light-grey w3-leftbar" style="padding-top:22px">
+    <h1><b><i class="fa fa-dashboard"></i> Ranking </b></h1>
+  </header>
+
+  <br>
+
+  <table class="w3-table w3-striped w3-white">
+    <tr>
+      <td><h3><i class="fa fa-bookmark w3-text-pale-red w3-large"></i></h3></td>
+      <td><h3>Currently you have not attempted courses.<br>
+                Click on the link and have a go !!</h3></td>
+    </tr>
+  </table>
+    <a href="http://localhost:5000/guide/world_map">Return to the world map</a>
+
+</div>
+{% endblock body %}

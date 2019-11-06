@@ -1,30 +1,185 @@
-{% extends '/basic/BasicConfig.html' %}
+{% extends 'bootstrap/base.html' %}
+
+{%- block metas %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{%- endblock metas %}
+
+{%- block styles %}
+<!-- Bootstrap -->
+    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="ranking_page.css" />
+    <style>
+      .w3-bar-item:hover{
+        transform: scale(1.2)
+      }
+      .w3-left, .w3-right, .w3-badge {cursor:pointer}
+      .w3-badge {height:13px;width:13px;padding:0}
+
+
+      .square {
+        height: 200px;
+        width: 200px;
+      }
+
+      .square:hover{
+        transform: scale(1.2)
+      }
+
+      div.scrollmenu {
+
+          overflow: auto;
+          white-space: nowrap;
+      }
+
+      div.scrollmenu a {
+          display: inline-block;
+          color: grey;
+          text-align: center;
+          padding: 14px;
+          text-decoration: none;
+      }
+
+      div.scrollmenu a:hover {
+          background-color: teal;
+      }
+
+    </style>
+{%- endblock styles %}
+
+{%- block body %}
 
 {% block navbar %}
-    {% include('/basic/navigation.html') %}
+    {{ nav.top.render() }}
 {% endblock %}
 
-{% block content%}
-<div class="alert alert-info">
-  <strong>
-      <h1>Welcome {{username}} <br>
-            This page contains your rank information</h1>
-  </strong>
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
+    </div>
+    <div class="w3-col s8 w3-bar w3-pale-blue" align="center">
+      <h2><span>Welcome<br><strong>{{username}}</strong></span></h2><br>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="w3-container w3-aqua">
+    <h3>Ranking page</h3>
+  </div>
+  <div class="w3-bar-block w3-sand" id="ranking_node">
+    {% for index, course in enumerate(course_code_name_list) %}
+      <button class="w3-bar-item w3-button w3-padding" align="center"
+         id="{{index}}" onclick="expand_collapse(this.id)"><i class="fa fa-diamond fa-fw"></i>
+          {{course[0]}}
+      </button>
+    {% endfor %}
+  </div>
+</nav>
+
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px; margin-top:43px; position:relative; height:auto; min-height:100%">
+
+  <!-- Header -->
+  <header class="w3-container w3-light-grey w3-leftbar" style="padding-top:22px">
+    <h1><b><i class="fa fa-dashboard"></i> Ranking </b></h1>
+  </header>
+
+  <br>
+
+  <table class="w3-table w3-striped w3-white">
+    <tr>
+      <td><h3><i class="fa fa-bookmark w3-text-pale-red w3-large"></i></h3></td>
+      <td><h3>This page contains your ranking. Please click on the left panel.</h3></td>
+    </tr>
+  </table>
+
+  <div class="w3-container" style="padding-bottom:60px">
+    {% for index, position in enumerate(position_list) %}
+      <div id="rank_{{index}}" style="display:none">
+        <h3>Course: {{ course_code_name_list[index][0]}} {{course_code_name_list[index][1]}}</h3>
+        <div class="w3-container w3-xlarge h3" id="text_{{index}}"></div><br>
+
+        <div class="w3-light-grey w3-xxxlarge w3-round-xlarge" id="rank_bar_outer_{{index}}">
+          <div class="w3-container w3-center w3-padding w3-red w3-animate-left w3-round-xlarge"
+             id="rank_bar_{{index}}"
+             style="width:0%">
+              0%
+          </div>
+        </div>
+        <br>
+        <div class="scrollmenu">
+          {% for person in total_rank_list[index][::-1] %}
+            <a>
+              <div class="w3-card-4" style="width:100%">
+                  <header class="w3-container w3-sand w3-center"><h2>RANK {{person[0]}}</h2></header>
+                  {% if person[1] == username %}
+                        <div class="w3-container w3-center w3-blue"><h3>{{person[1]}}</h3></div>
+                  {% else %}
+                        <div class="w3-container w3-center w3-light-grey"><h3>{{person[1]}}</h3></div>
+                  {% endif %}
+                  <footer class="w3-container w3-grey w3-center"><h3>LEVEL: {{person[2]}}</h3></footer>
+              </div>
+            </a>
+          {% endfor %}
+
+        </div>
+
+
+      </div>
+    {% endfor %}
+  </div>
+
+  {% block scripts %}
+      <script>
+        var total_num = {{len(course_code_name_list)}};
+        for (i = 0; i < total_num; i++){
+            document.getElementById("rank_"+i).style.display = "none";
+        }
+
+
+        function expand_collapse(id){
+            for (i=0; i<total_num; i++){
+                if (id != i){
+                    document.getElementById("rank_"+i).style.display = "none"
+                }
+                else{
+                    if (document.getElementById("rank_"+i).style.display === "block"){
+                        document.getElementById("rank_"+i).style.display = "none";
+                    }
+                    else{
+                        document.getElementById("rank_"+i).style.display = "block";
+                    }
+                }
+            }
+
+            var bar = document.getElementById("rank_bar_"+id);
+            var width = 0;
+            var maxwidth = {{position_list}}[id];
+
+            var id2 = setInterval(function(){
+                if (width >= maxwidth) {
+                    clearInterval(id2);
+                    document.getElementById("text_"+id).innerText = 'You have beaten ' + width * 1  + '%'+' members in this course';
+                }
+                else {
+                    width++;
+                    bar.style.width = width + '%';
+                    bar.innerHTML =  width * 1  + '%';
+                    document.getElementById("text_"+id).innerText = 'You have beaten ' + width * 1  + '%'+' members in this course';
+                }
+            }, 200);
+
+        }
+
+      </script>
+  {%- endblock scripts %}
+
 </div>
-
-{% if noCourse %}
-    <h2>Currently you have no courses under studying. Please work harder!!</h2>
-{% else %}
-    <ul>
-        {% for index, course in enumerate(course_code_name_list) %}
-            {{course[0]}}   {{course[1]}} <br>
-            Rank number,    Person name,    Level<br>
-            {% for index, person_tuple in enumerate(total_rank_list[index]) %}
-                {{ index+1 }} => {{person_tuple[0]}} => {{person_tuple[1]}} <br>
-            {% endfor %}
-            <br>
-        {% endfor %}
-    </ul>
-{% endif %}
-
-{% endblock %}
+{% endblock body %}
