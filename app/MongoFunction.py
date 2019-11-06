@@ -39,22 +39,41 @@ def show_db_data(debug=DEBUG):
 # 问题: 这里如何数据库没有level项，在做聚合的时候无法返回正确值，会导致ranking页面加载失败
 @show_db_data()
 def get_list_of_level_rank(course_id):
+    '''
+    this function returns the list of level and rank
+    :param course_id: course object id
+    :type course_id: pymongo object id
+    :return: a list of [rank, username, level]
+    :rtype: list
+    '''
+
     result = db.users.aggregate(
         [{"$project": {
-                "username": 1,
-                "rank": {
-                    "$filter": {
-                        "input": "$levels",
-                        "as": "x",
-                        "cond": {
-                            "$eq": ["$$x.course", ObjectId(course_id)]
-                        }
+            "username": 1,
+            "_id": 0,
+            "rank": {
+                "$filter": {
+                    "input": "$levels",
+                    "as": "x",
+                    "cond": {
+                        "$eq": ["$$x.course", ObjectId(course_id)]
                     }
                 }
-            }}, {"$sort": {"rank.level": -1}}]
-        )
+            }
+        }}, {"$sort": {"rank.level": -1}}]
+    )
 
-    return [(i['username'], i['rank'][0]['level']) for i in result]
+    # the sample result is 1 => {'username': 'xinyuan',
+    #                               'rank': [{'course': ObjectId('5db18c70c10657b763c513d5'), 'level': 4}]}
+    # deal with rank: [] or rank: None
+
+    # return a list of list: [[rank, username, level], [], []]
+    rank_result = []
+    for key, value in enumerate(result):
+        if value['rank']:
+            rank_result.append([key+1, value['username'], int(value['rank'][0]['level'])])
+
+    return rank_result
 
 
 # 获取用户的关于course_id的用户名和complete
