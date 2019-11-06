@@ -13,7 +13,7 @@ $( document ).ready(function() {
         }else{
             $(e.currentTarget.nextElementSibling).fadeIn()
         }
-
+        cur_answer()
     });
 
     timer = $('.timer').FlipClock(100, {
@@ -65,6 +65,7 @@ $( document ).ready(function() {
     })
     // ---------------------------------
     timer.stop();
+    cur_answer()
 });
 
 function cur_answer(){
@@ -85,7 +86,6 @@ function nextQ(e) {
         $("#m1").m_restart()
     }
     $(".question:visible").addClass('animated zoomOutLeft')
-
 }
 
 // function updateHeart(){
