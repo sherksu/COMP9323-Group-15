@@ -10,7 +10,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from app.config import Config
 from flask_bcrypt import Bcrypt
-from app.config import nav
 from flask_cors import CORS
 from flask import Flask, render_template
 import pymongo
@@ -38,7 +37,6 @@ def create_app():
     app.config.from_object(Config)
     secure.init_app(app)
     mail.init_app(app)
-    nav.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'guide.login'
     bootstrap.init_app(app)

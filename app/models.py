@@ -1,3 +1,9 @@
+"""
+# Project           : COMP9323
+# Author            : Group 15
+# Date created      : 25/10/2019
+# Description       : Login user class
+"""
 from app import db as pydb, login_manager
 from flask import current_app
 import jwt
