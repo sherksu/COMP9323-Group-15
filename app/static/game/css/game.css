@@ -1,5 +1,5 @@
-/*.row {*/
-/*    background-color: greenyellow;*/
+/*.row, div[class^="col-"] {*/
+/*    !*background-color: greenyellow;*!*/
 /*    border: solid 2px red;*/
 /*}*/
 
@@ -11,8 +11,8 @@
 
 .timer {
     top: 40%;
-    zoom: 0.75;
-    -moz-transform: scale(0.75);
+    zoom: 0.65;
+    -moz-transform: scale(0.65);
     margin: auto;
     width: fit-content;
 }
@@ -79,4 +79,8 @@
 .middle-col{
     max-width: 1000px;
     margin:auto;
+}
+
+.all-questions{
+    font-size: 1.5em;
 }

@@ -1,7 +1,7 @@
 let timer;
 let heart;
-let type= "{{type}}";
-// var tmp
+let aniP = new Promise(((resolve, reject) => {resolve()}));
+var tmp
 $( document ).ready(function() {
     $(".question").on('animationend', function(e) {
         // console.log("animationed",e.currentTarget.nextElementSibling == null,e)
@@ -64,7 +64,7 @@ $( document ).ready(function() {
         })
     })
     // ---------------------------------
-    timer.stop();
+    // timer.stop();
     cur_answer()
 });
 
@@ -79,11 +79,13 @@ function nextQ(e) {
     }
     let chose = $(".question:visible input").serializeArray()[0];
     if(x[chose.name] == chose.value){
-        correct();
+        aniP = aniP.then(()=>{
+            return new Promise(correct);
+        })
         qnum = $('.all-questions').attr("q-num");
         heart.set(heart.value - (1/qnum*100))
     }else{
-        $("#m1").m_restart()
+        $(".monster:visible").m_restart()
     }
     $(".question:visible").addClass('animated zoomOutLeft')
 }
@@ -93,6 +95,12 @@ function nextQ(e) {
 //     curr = $('.question:visible').attr("q-id")
 //     heart.set((1-(curr-1)/qnum)*100)
 // }
+
+function test_aniP(){
+    aniP = aniP.then(()=>{
+            return new Promise(correct);
+        })
+}
 
 function feedback(){
     console.log('final!');
@@ -116,28 +124,26 @@ jQuery.fn.m_restart = function () {
     return this
 };
 
-function m_switch(num1,num2){
-    $("[id*='m"+num1+"']").hide();
-    $("#m"+num2).show();
-}
-
-function m_die(num1,num2){
-    $("[id*='m']").hide();
-    $("#m"+num2).hide();
-}
-
-function correct(){
+function correct(resolve){
     $("#avatar1").hide();
     $("#avatar2").m_restart();
-    $("#m1").m_restart();
+    let alive,die,next
+    alive = "#"+$(".monster:visible")[0].id
+    die= alive.substring(0,3)+"_1"
+    if (alive.substring(0, 3) == "#m1") {
+        next="#m2"
+    } else {
+        next="#m1"
+    }
+    $(alive).m_restart();
     setTimeout(function () {
-        $("#m1").hide();
-        $("#m1_1").m_restart();
+        $(alive).hide();
+        $(die).m_restart();
         setTimeout(function () {
-            $("#m1_1").hide();
-
+            $(die).hide();
             setTimeout(function () {
-                $("#m1").m_restart()
+                $(next).m_restart()
+                resolve()
             }, 200);
         }, 2000);
     }, 2000);
