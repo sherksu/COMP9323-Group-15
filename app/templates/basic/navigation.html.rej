@@ -1,0 +1,16 @@
+diff a/app/templates/basic/navigation.html b/app/templates/basic/navigation.html	(rejected hunks)
+@@ -1,7 +1,13 @@
+ <nav class="navbar navbar-fixed-top">
+     <div style="background-color: black; height:50px">
+         <div class="container">
+-            <p class="logo-center">Group15</p>
++            <p class="logo-center">
++                {%- if title_name is defined %}
++                {{title_name}}
++                {% else %}
++                Group15
++                {% endif %}
++            </p>
+             <ul class="navbar-nav navbar-right nav-white">
+                 {%- if current_user.is_authenticated %}
+                 {%- if is_town%}

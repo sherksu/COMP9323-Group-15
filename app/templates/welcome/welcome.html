@@ -1,43 +1,42 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{% block navbar %}
-    {% include '/basic/navigation.html' %}
+{% block styles %}
+{{ super() }}
+<style>
+body {
+    background-color: #100F16;
+}
+
+.cen_story {
+    position: relative;
+    padding-top:100px;
+    padding-left:500px;
+}
+
+.entry {
+    position: absolute;
+    height:40px;
+    bottom:15px;
+    left: 620px;
+}
+
+#start:hover {
+    height:42px;
+    cursor: pointer;
+    opacity: 90%;
+}
+</style>
 {% endblock %}
 
 {% block content%}
-    <div style="position:absolute; width:100%; top:0; height:450px; background-color:#ffb42e;">
-        <div class="container">
-            <div style="float:right; margin-top: 150px; margin-right:-40px">
-                <img src="/static/welcome/pa.png" height="260px">
-            </div>
-            <div style="position:relative; top:180px; padding-left:120px; ">
-                <p style="color:white; font-family:'Impact', 'Charcoal', sans-serif; font-size: 48pt; margin:0 0 -5px 0;">Oops!</p>
-                <p style="color:white; font-size: 16pt; font-family: 'Comic Sans MS', cursive, sans-serif; margin-bottom:50px">Help to save the data world!</p>
-                <button class="btn btn-primary">Defend it now!</button>
-            </div>
-        </div>
-    </div>
-    <div class="container" style="position:relative; top:370px">
+    <div class="cen_story">
         <div>
-            <div class="page-header">
-                <h3 style="color: #93240a">What can we do...</h3>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="panel" style="height: 400px; padding:10px">
-                        <a href="#"><div style="height:340px; background-image: url('/static/welcome/bg.png')"></div></a>
-                        <span>This is a ...</span>
-                        <button class="btn btn-primary" style="float:right">Go to</button>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="panel" style="height: 400px; padding:10px">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="panel" style="height: 400px; padding:10px">
-                    </div>
-                </div>
+            <img src="/static/welcome/bg1.png" height="650px" oncontextmenu="return false;" ondragstart="return false;">
+            <div class="entry">
+                <a href="{{ url_for('guide.login') }}">
+                    <img id="start" src="/static/welcome/bu.png" height="40px"
+                            oncontextmenu="return false;" ondragstart="return false;">
+                </a>
             </div>
         </div>
     </div>

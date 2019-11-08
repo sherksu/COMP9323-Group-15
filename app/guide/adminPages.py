@@ -91,23 +91,26 @@ def signup():
 
 @guide.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        rem = form.rem.data
-        user = pydb.users.find_one({'username': username})
-        if user and secure.check_password_hash(user['password'].replace("b'", "").replace("'", ""), password):
-            user_obj = User(user['username'])
-            login_user(user_obj, remember=rem)
-            try:
-                role = user['rolename']
-                if role:
-                    return redirect(url_for('guide.world_map'))
-            except KeyError:
-                return redirect(url_for('guide.index'))
-        flash('User does not exist or password is incorrect', category='danger')
-    return render_template('/guide/login.html', form=form)
+    if not current_user.is_authenticated:
+        form = LoginForm()
+        if form.validate_on_submit():
+            username = form.username.data
+            password = form.password.data
+            rem = form.rem.data
+            user = pydb.users.find_one({'username': username})
+            if user and secure.check_password_hash(user['password'].replace("b'", "").replace("'", ""), password):
+                user_obj = User(user['username'])
+                login_user(user_obj, remember=rem)
+                try:
+                    role = user['rolename']
+                    if role:
+                        return redirect(url_for('guide.world_map'))
+                except KeyError:
+                    return redirect(url_for('guide.index'))
+            flash('User does not exist or password is incorrect', category='danger')
+        return render_template('/guide/login.html', form=form)
+    else:
+        return redirect(url_for('guide.world_map'))
 
 
 @guide.route('/logout')
