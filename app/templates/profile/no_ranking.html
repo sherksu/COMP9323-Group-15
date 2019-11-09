@@ -1,4 +1,4 @@
-{% extends 'bootstrap/base.html' %}
+{% extends '/basic/BasicConfig.html' %}
 
 {%- block metas %}
     <meta charset="UTF-8">
@@ -50,11 +50,11 @@
     </style>
 {%- endblock styles %}
 
-{%- block body %}
-
 {% block navbar %}
-    {{ nav.top.render() }}
+    {% include('/basic/navigation.html') %}
 {% endblock %}
+
+{%- block body %}
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
@@ -92,7 +92,7 @@
                 Click on the link and have a go !!</h3></td>
     </tr>
   </table>
-    <a href="http://localhost:5000/guide/world_map">Return to the world map</a>
+    <a href="/guide/world_map">Return to the world map</a>
 
 </div>
 {% endblock body %}
