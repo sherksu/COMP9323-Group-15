@@ -53,7 +53,7 @@
 {%- block body %}
 
 {% block navbar %}
-    {{ nav.top.render() }}
+    {% include('/basic/navigation.html') %}
 {% endblock %}
 
 <!-- Sidebar/menu -->
