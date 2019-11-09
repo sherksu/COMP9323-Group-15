@@ -1,18 +1,18 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{%- block metas %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-{%- endblock metas %}
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
 
-{%- block styles %}
-<!-- Bootstrap -->
+
+{%- block content %}
+
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="ranking_page.css" />
-    <style>
+<style>
       .w3-bar-item:hover{
         transform: scale(1.2)
       }
@@ -47,14 +47,8 @@
           background-color: teal;
       }
 
-    </style>
-{%- endblock styles %}
+</style>
 
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
-
-{% block scripts %}
 <script>
 var total_num = {{len(course_code_name_list)}};
 for (i = 0; i < total_num; i++){
@@ -97,10 +91,8 @@ function expand_collapse(id){
 }
 
 </script>
-{% endblock %}
 
-{%- block body %}
-<!-- Sidebar/menu -->
+<body>
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container w3-row">
     <div class="w3-col s4">
@@ -180,4 +172,5 @@ function expand_collapse(id){
     {% endfor %}
   </div>
 </div>
-{% endblock body %}
+</body>
+{% endblock content %}

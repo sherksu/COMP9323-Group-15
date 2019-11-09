@@ -1,11 +1,11 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{%- block metas %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-{%- endblock metas %}
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
 
-{%- block styles %}
+
+{%- block content %}
 <!-- Bootstrap -->
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -48,20 +48,12 @@
       }
 
     </style>
-{%- endblock styles %}
 
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
-
-{%- block body %}
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container w3-row">
-    <div class="w3-col s4">
-      <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
-    </div>
+
     <div class="w3-col s8 w3-bar w3-pale-blue" align="center">
       <h2><span>Welcome<br><strong>{{username}}</strong></span></h2><br>
     </div>
@@ -95,4 +87,4 @@
     <a href="/guide/world_map">Return to the world map</a>
 
 </div>
-{% endblock body %}
+{% endblock content %}
