@@ -1,10 +1,8 @@
 from . import profile
-from flask import render_template
-from flask_login import current_user
 from app.MongoFunction import *
-from flask import render_template, session
+from flask import render_template
 from . import ranking_function as function
-from flask_login import current_user;
+from flask_login import current_user
 
 
 @profile.route('/', methods=['GET', 'POST'])

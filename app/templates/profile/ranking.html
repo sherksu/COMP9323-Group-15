@@ -1,4 +1,4 @@
-{% extends 'bootstrap/base.html' %}
+{% extends '/basic/BasicConfig.html' %}
 
 {%- block metas %}
     <meta charset="UTF-8">
@@ -50,12 +50,56 @@
     </style>
 {%- endblock styles %}
 
-{%- block body %}
-
 {% block navbar %}
     {% include('/basic/navigation.html') %}
 {% endblock %}
 
+{% block scripts %}
+<script>
+var total_num = {{len(course_code_name_list)}};
+for (i = 0; i < total_num; i++){
+    document.getElementById("rank_"+i).style.display = "none";
+}
+
+
+function expand_collapse(id){
+    for (i=0; i<total_num; i++){
+        if (id != i){
+            document.getElementById("rank_"+i).style.display = "none"
+        }
+        else{
+            if (document.getElementById("rank_"+i).style.display === "block"){
+                document.getElementById("rank_"+i).style.display = "none";
+            }
+            else{
+                document.getElementById("rank_"+i).style.display = "block";
+            }
+        }
+    }
+
+    var bar = document.getElementById("rank_bar_"+id);
+    var width = 0;
+    var maxwidth = {{position_list}}[id];
+
+    var id2 = setInterval(function(){
+        if (width >= maxwidth) {
+            clearInterval(id2);
+            document.getElementById("text_"+id).innerText = 'You have beaten ' + width * 1  + '%'+' members in this course';
+        }
+        else {
+            width++;
+            bar.style.width = width + '%';
+            bar.innerHTML =  width * 1  + '%';
+            document.getElementById("text_"+id).innerText = 'You have beaten ' + width * 1  + '%'+' members in this course';
+        }
+    }, 60);
+
+}
+
+</script>
+{% endblock %}
+
+{%- block body %}
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container w3-row">
@@ -135,51 +179,5 @@
       </div>
     {% endfor %}
   </div>
-
-  {% block scripts %}
-      <script>
-        var total_num = {{len(course_code_name_list)}};
-        for (i = 0; i < total_num; i++){
-            document.getElementById("rank_"+i).style.display = "none";
-        }
-
-
-        function expand_collapse(id){
-            for (i=0; i<total_num; i++){
-                if (id != i){
-                    document.getElementById("rank_"+i).style.display = "none"
-                }
-                else{
-                    if (document.getElementById("rank_"+i).style.display === "block"){
-                        document.getElementById("rank_"+i).style.display = "none";
-                    }
-                    else{
-                        document.getElementById("rank_"+i).style.display = "block";
-                    }
-                }
-            }
-
-            var bar = document.getElementById("rank_bar_"+id);
-            var width = 0;
-            var maxwidth = {{position_list}}[id];
-
-            var id2 = setInterval(function(){
-                if (width >= maxwidth) {
-                    clearInterval(id2);
-                    document.getElementById("text_"+id).innerText = 'You have beaten ' + width * 1  + '%'+' members in this course';
-                }
-                else {
-                    width++;
-                    bar.style.width = width + '%';
-                    bar.innerHTML =  width * 1  + '%';
-                    document.getElementById("text_"+id).innerText = 'You have beaten ' + width * 1  + '%'+' members in this course';
-                }
-            }, 60);
-
-        }
-
-      </script>
-  {%- endblock scripts %}
-
 </div>
 {% endblock body %}

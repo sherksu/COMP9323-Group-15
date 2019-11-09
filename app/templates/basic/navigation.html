@@ -1,13 +1,7 @@
 <nav class="navbar navbar-fixed-top">
-    <div style="background-color: black; height:50px">
+    <div style="background-color: #ffb42e; height:50px">
         <div class="container">
-            <p class="logo-center">
-                {%- if title_name is defined %}
-                {{title_name}}
-                {% else %}
-                Group15
-                {% endif %}
-            </p>
+{#            <p class="logo-center">Group15</p>#}
             <ul class="navbar-nav navbar-right nav-white">
                 {%- if current_user.is_authenticated %}
                 {%- if is_town%}
