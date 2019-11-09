@@ -4,39 +4,95 @@
 {{ super() }}
 <style>
 body {
+    padding:0;
     background-color: #100F16;
 }
 
 .cen_story {
+    position: absolute;
+    height:100%;
+    width:100%;
+}
+
+.inner_board {
+    position:relative;
+    height:100%;
+    width:100%;
+    padding:10%;
+    display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.inners {
     position: relative;
-    padding-top:100px;
-    padding-left:500px;
+    height:100%;
+    display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.logo {
+
 }
 
 .entry {
     position: absolute;
-    height:40px;
-    bottom:15px;
-    left: 620px;
+    height:8%;
+    left:12%;
+    bottom: 2%;
+}
+
+.copyright {
+    position:fixed;
+    color: rgba(255,255,255,0.3);
+    font-size: 8pt;
+    font-style: italic;
+    bottom:10px;
+}
+
+.story {
+    height:100%;
+    width:100%;
+    max-width: calc(100vh);
+    max-height: calc(100vh);
+}
+
+#start {
+    transition: all 0.3s ease;
 }
 
 #start:hover {
-    height:42px;
+    height:120%;
     cursor: pointer;
     opacity: 90%;
 }
+
 </style>
 {% endblock %}
 
 {% block content%}
     <div class="cen_story">
-        <div>
-            <img src="/static/welcome/bg1.png" height="650px" oncontextmenu="return false;" ondragstart="return false;">
-            <div class="entry">
-                <a href="{{ url_for('guide.login') }}">
-                    <img id="start" src="/static/welcome/bu.png" height="40px"
-                            oncontextmenu="return false;" ondragstart="return false;">
-                </a>
+        <div class="inner_board">
+            <!-- logo -->
+            <div class="logo">
+
+            </div>
+            <!-- copyright information -->
+            <div class="copyright">
+                @copyright: COMP9323 Group 15 - https://github.com/sherksu/COMP9323-Group-15/tree/master
+            </div>
+            <!-- inner story -->
+            <div class="inners">
+                <div style="position:relative;">
+                    <img class="story" src="/static/welcome/bg1.png" oncontextmenu="return false;" ondragstart="return false;">
+                    <div class="entry">
+                        <a href="{{ url_for('guide.login') }}">
+                            <img id="start" src="/static/welcome/bu.png" height="100%"
+                                    oncontextmenu="return false;" ondragstart="return false;">
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
