@@ -25,7 +25,7 @@ def detail():
 
 
 # so the ranking is url /ranking
-@ranking.route('/ranking')
+@profile.route('/ranking')
 def ranking():
     # then get the list of the course_id he is doing
     username = current_user.username
