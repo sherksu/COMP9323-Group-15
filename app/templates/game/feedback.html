@@ -1,0 +1,52 @@
+<div id="result" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;
+    background-color:rgba(0,0,0,0.1)">
+        <div style="position: absolute; margin:auto; left:0; top:0;
+        right:0; bottom:0; height:500px; width:800px; background-color: white; border: solid 1px gray;
+        border-radius:5px; padding:10px; z-index:10000">
+            <div id="question" style="height:400px; overflow: auto">
+                <p>Result</p>
+                <div class="panel-group" id="accordion">
+                    {%- for each in data %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 id="{{ each._id }}head" class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion"
+                                    href="#{{ each._id }}H">
+                                    question {{ loop.index }}
+                                    </a>
+                               </h4>
+                            </div>
+                            <div id="{{ each._id }}H" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    {{each.content}}
+                                    <ul class='list-group'>
+                                    {%- for i in each.option%}
+                                       <li class='list-group-item'>{{ chr(loop.index0 + 65) }}.    {{i}}</li>
+                                    {%- endfor %}
+                                    </ul>
+                                    <button id='tt' class='btn btn-primary' style="float:right"
+                                       value="{{each._id}}">look solutions</button>
+                               </div>
+                            </div>
+                        </div>
+                    {%- endfor %}
+                </div>
+            </div>
+            <div id="person_info">
+                <!--current_user的信息-->
+                <div class="col-lg-4">
+                    <p>Your level <span id="level"></span> (exp:<span id="exp"></span>)</p>
+                    <p>Gain exp <span id="gain_exp"></span></p>
+                </div>
+                <div class="col-lg-4">
+                    <p>Your next_level <span id="next_level"></span></p>
+                    <p>Your correct_rate <span id="correct_rate"></span></p>
+                </div>
+            </div>
+            <button style="position:absolute; right:10px; top:10px" id="result_close">exit</button>
+            <div style="position:absolute; right:10px; bottom:10px">
+                <button id="shows">show data</button>
+                <button id="error_save">save error</button>
+            </div>
+        </div>
+    </div>

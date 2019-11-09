@@ -2,6 +2,9 @@ from . import profile
 from flask import render_template
 from flask_login import current_user
 from app.MongoFunction import *
+from flask import render_template, session
+from . import ranking_function as function
+from flask_login import current_user;
 
 
 @profile.route('/', methods=['GET', 'POST'])
@@ -21,35 +24,39 @@ def detail():
                            img=img, get_chapter_name=get_chapter_name)
 
 
-@profile.route('/ranking/')
+# so the ranking is url /ranking
+@profile.route('/ranking')
 def ranking():
-    # use three functions, all from the MongoFunction.py
-    # first extract the username
-    username = current_user.username
     # then get the list of the course_id he is doing
-    user = db.users.find_one({"username": username})
-    user_id = user['_id']
-    course_id_list = get_user_course_list(user_id)
+    username = current_user.username
+    course_id_list = function.get_user_course_list(username)
 
-    if course_id_list:      # if the course list is not empty
+    # if the course list is not empty
+    if course_id_list:
         # extract the ranking
-        course_code_name_list = get_course_code_name_list(course_id_list)
+        course_code_name_list = function.get_course_code_name_list(course_id_list)
         total_rank_list = []
         for each_course in course_id_list:
-            total_rank_list.append(get_list_of_level_rank(each_course))
+            total_rank_list.append(function.get_list_of_level_rank(each_course))
+
+        # construct a list, indicating the user's rank above all other uses
+        position_list = function.get_position_list(username, total_rank_list)
 
         # render the template
         return render_template('/profile/ranking.html',
                                username=username,
-                               noCourse=False,
                                course_code_name_list=course_code_name_list,
                                total_rank_list=total_rank_list,
-                               enumerate=enumerate)
+                               position_list=position_list,
+                               enumerate=enumerate,
+                               len=len
+                               )
 
+    # if this person does no course, render another template
     else:
-        return render_template('/profile/ranking.html',
-                               username=username,
-                               noCourse=True)
+        return render_template('/profile/no_ranking.html',
+                               username=username
+                               )
 
 
 @profile.route('/question_set/')
