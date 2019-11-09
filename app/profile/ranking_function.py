@@ -8,7 +8,7 @@ client = pymongo.MongoClient("mongodb+srv://public:1234567890unsw@devdb-30fsv."
                              "mongodb.net/test?retryWrites=true&w=majority")
 db = client.main
 
-
+# get the ranks
 def get_list_of_level_rank(course_id):
     '''
     this function returns the list of level and rank
