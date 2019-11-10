@@ -10,18 +10,18 @@
 
 {% block styles %}
 {{ super() }}
-<link rel="stylesheet" href="{{url_for('static',filename='game/css/animate.css')}}">
-<link rel="stylesheet" href="{{url_for('static',filename='game/lib/FlipClock-master/compiled/flipclock.css')}}">
-<link rel="stylesheet" href="{{url_for('static',filename='game/lib/dist/loading-bar.min.css')}}">
-<link rel="stylesheet" href="{{url_for('static',filename='game/css/game.css') }}">
+<link rel="stylesheet" href="{{url_for('static',filename='style/game/animate.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='lib/game/FlipClock-master/compiled/flipclock.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='lib/game/dist/loading-bar.min.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='style/game/game.css') }}">
 {% endblock %}
 
 {% block head_scripts %}
 {{ super() }}
-<script src="{{url_for('static',filename='game/js/game.js')}}"></script>
-<script src="{{url_for('static',filename='game/js/game_feedback.js')}}"></script>
-<script src="{{url_for('static',filename='game/lib/FlipClock-master/compiled/flipclock.min.js')}}"></script>
-<script src="{{url_for('static',filename='game/lib/dist/loading-bar.min.js')}}"></script>
+<script src="{{url_for('static',filename='scripts/game/game.js')}}"></script>
+<script src="{{url_for('static',filename='scripts/game/game_feedback.js')}}"></script>
+<script src="{{url_for('static',filename='lib/game/FlipClock-master/compiled/flipclock.min.js')}}"></script>
+<script src="{{url_for('static',filename='lib/game/dist/loading-bar.min.js')}}"></script>
 {% endblock %}
 
 
@@ -102,18 +102,18 @@
                         <div class="col-lg-4" style="overflow: hidden;height: 300px">
                             <div class="corp">
                                 <img class="hero" id="avatar1"
-                                     src="{{url_for('static',filename='game/image/korra_static.png')}}">
+                                     src="{{url_for('static',filename='image/game/korra_static.png')}}">
                                 <img class="hero" id="avatar2"
-                                     src="{{url_for('static',filename='game/image/korra.gif')}}"
+                                     src="{{url_for('static',filename='image/game/korra.gif')}}"
                                      style="display: none;">
                             </div>
                         </div>
                         <div class="col-lg-4" style="margin-left: 120px">
-                            <img class="monster" id="m1" src="{{url_for('static',filename='game/image/m1.gif')}}">
-                            <img class="monster" id="m1_1" src="{{url_for('static',filename='game/image/m1_1.gif')}}"
+                            <img class="monster" id="m1" src="{{url_for('static',filename='image/game/m1.gif')}}">
+                            <img class="monster" id="m1_1" src="{{url_for('static',filename='image/game/m1_1.gif')}}"
                                  style="display: none;margin-left: 40%; float: right;">
-                            <img class="monster" id="m2" src="{{url_for('static',filename='game/image/m2.gif')}}" style="display: none">
-                            <img class="monster" id="m2_1" src="{{url_for('static',filename='game/image/m2_1.gif')}}"
+                            <img class="monster" id="m2" src="{{url_for('static',filename='image/game/m2.gif')}}" style="display: none">
+                            <img class="monster" id="m2_1" src="{{url_for('static',filename='image/game/m2_1.gif')}}"
                                  style="display: none;">
                         </div>
                         <div class="col-lg-2">

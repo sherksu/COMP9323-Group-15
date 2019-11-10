@@ -5,7 +5,7 @@ body{
 .containers{
     width: 1920px;
     height: 1204px;
-    background: url('/static/guide/bgd5.jpg') no-repeat center center;
+    background: url('/static/image/guide/bgd5.jpg') no-repeat center center;
 }
 
 .button {
