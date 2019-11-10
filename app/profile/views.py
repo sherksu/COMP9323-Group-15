@@ -60,12 +60,26 @@ def ranking():
 @profile.route('/question_set/')
 def question_set():
     dic = get_user_info(current_user.username)
-    print(dic)
     return render_template("/profile/question_set.html", **dic, get_question_content=get_question_content,
                            get_chapter_name=get_chapter_name, get_course_name=get_course_name,
                            get_course_code=get_course_code, get_question_course=get_question_course,
                            get_question_chapter=get_question_chapter,correct_answer = correct_answer)
 
+@profile.route('/question_set_solutions/<question_id>')
+def question_set_solutions(question_id):
+    question = get_question(question_id)
+    q_id = question['_id']
+    content = question['content']
+    option = question['option']
+    correct_answer = question['correct_answer']
+    solution = question['solutions']
+    dic = get_user_info(current_user.username)
+    for i in dic['error_set']:
+        if i['question'] == q_id:
+            user_answer = int(i['answer'])
+    print(user_answer)
+    return render_template("/profile/question_set_solutions.html",content=content, option=option, correct_answer=correct_answer,
+                           solutions=solution, chr=chr, id=q_id,user_answer = user_answer)
 
 @profile.route('/study_career/')
 def study_career():

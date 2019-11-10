@@ -21,27 +21,28 @@
                 <div id={{ "collapse" + get_course_code(i.course) }} class="panel-collapse collapse">
                     <div class="panel-body">
                         <div class = "row" align = "center">
-                            <div class = "col-md-4" align="center">
+                            <div class = "col-md-6" align="center">
                                 <h4 align="center">QUESTION</h4>
                             </div>
-                            <div class = "col-md-4" align="center">
-                                <h4 align="center">ANSWER</h4>
-                            </div>
-                            <div class = "col-md-4" align="center">
+                            
+                            <div class = "col-md-3" align="center">
                                 <h4 align="center">TIME</h4>
+                            </div>
+                            <div class = "col-md-3">
+                                <h4 align="center">CHECK</h4>
                             </div>
                         </div>
                         {% for j in error_set %}
                             {% if get_question_course(j.question) == i.course %}
                                 <div class="row" align="center">
-                                    <div class = "col-md-4" align="center">
+                                    <div class = "col-md-6" align="center">
                                         <h4 align="center">{{ get_question_content(j.question) }}</h4>
                                     </div>
-                                    <div class = "col-md-4" align="center">
-                                        <h4 align="center">{{ correct_answer(j.answer) }}</h4>
-                                    </div>
-                                    <div class = "col-md-4" align="center">
+                                    <div class = "col-md-3" align="center">
                                         <h4 align="center">{{ j.date }}</h4>
+                                    </div>
+                                    <div class = "col-md-3" align="center">
+                                        <button align="center" type="button" class="btn btn-info"><a href="{{url_for('profile.question_set_solutions',question_id = j.question,user_answer = j.answer)}}"> CLICK TO CHECK DETAIL </a></button>
                                     </div>
                                 </div>
                             {% endif %}

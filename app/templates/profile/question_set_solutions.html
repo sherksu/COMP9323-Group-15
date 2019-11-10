@@ -1,0 +1,82 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
+{% block head_scripts %}
+    {{ super() }}
+    <script src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    let E = window.wangEditor;
+    let editor = new E('#toolbar', '#editor');
+    editor.create();
+
+    $('#upload_solution').click(() => {
+        let id = '{{ id }}';
+        let content = editor.txt.text();
+        let name = $('#name').val();
+        let title = $('#title').val();
+        if (name && title && content) {
+            let data = {
+                "by": name,
+                "title": title,
+                "content": content,
+                "id": id,
+            };
+            $.post('solution_save', JSON.stringify(data), (res)=>{
+                alert(res)
+            })
+        }else{
+            alert('please complete the form!')
+        }
+    })
+</script>
+{% endblock%}
+
+{% block styles %}
+{{ super() }}
+<style type="text/css">
+    .toolbars {
+        border:1px solid #cccccc; overflow:auto;
+    }
+
+    .toolbars::-webkit-scrollbar {
+        display:none
+    }
+</style>
+{% endblock %}
+
+{% block content%}
+    <div class="container">
+        <div class = "row">
+            <h4>{{ content }}</h4>
+            <ul class="list-group">
+            {% for i in option %}
+                <li class="list-group-item">
+                    {% if loop.index0 == correct_answer %}
+                        <p style="color:greenyellow">{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                    {% elif loop.index0 == user_answer %}
+                        <p style="color:#ff4b2f">{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                    {% else %}
+                        <p>{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row"  align='center'>
+        <button type="button" class="btn btn-info">
+            <a href="{{url_for('profile.question_set',user_name = user_name)}}">RETURN TO ERROR_SET</a>
+        </button>
+    </div>
+    <div class="row"  align='center'>
+        <p>
+            RED represents the error you make, GREEN represents the right answer
+        </p>
+    </div>
+{% endblock %}
