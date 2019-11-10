@@ -57,7 +57,7 @@
     position: relative;
     top: 230px;
     z-index: 10;
-    background-image: url("/static/game/image/grass.png");
+    background-image: url("/static/image/game/grass.png");
     background-repeat: repeat-x;
     background-size: 30%;
 }
