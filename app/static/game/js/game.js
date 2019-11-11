@@ -1,7 +1,7 @@
 let timer;
 let heart;
 let aniP = new Promise(((resolve, reject) => {resolve()}));
-var tmp
+// var tmp
 $( document ).ready(function() {
     $(".question").on('animationend', function(e) {
         // console.log("animationed",e.currentTarget.nextElementSibling == null,e)

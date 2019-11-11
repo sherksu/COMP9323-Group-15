@@ -56,6 +56,9 @@
 
 {% block content%}
     <img src="../../static/image/town/town.png" width="1440" height="821" style="z-index:-100;position:absolute;left:0;top:0">
+    <div class="pop_pvp_wrapper">
+        {% include "/game/pop_pvp.html" ignore missing%}
+    </div>
 
     <div class="walk_show">
         <canvas  id = 'c1' width="1420" height="760"></canvas>

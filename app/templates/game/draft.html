@@ -1,0 +1,106 @@
+<script>
+
+///////////////////////////////////
+// let socket
+//
+// $( document ).ready(function() {
+//     // if(typeof socket === "undefined")
+//     socket = io.connect('/pvp');
+//     // socket = io.connect('http://' + document.domain + ':' + location.port + '/pvp')
+//     $("#pvp_Modal").on("show.bs.modal",function(e){
+//         console.log("show.bs.modal")
+//         if(typeof socket !== "undefined"){
+//             if(!socket.connected)
+//                 socket.connect()
+//         }else{
+//             socket = io.connect('/pvp');
+//         }
+//     })
+//     $("#pvp_Modal").on("hide.bs.modal",function(e){
+//         console.log("hide.bs.modal")
+//         socket.emit('disconnect_request');
+//     })
+//
+//     socket.on('response', function (msg, cb) {
+//         console.log("response")
+//         console.log(msg,cb)
+//     });
+//
+//     socket.on('my_response', function (msg, cb) {
+//         console.log("my_response")
+//         console.log(msg,cb)
+//     });
+//
+//     $("#pvp_Modal .btn-group a").on("click",function (e) {
+//         $("#room_span").text(e.target.innerText)
+//     })
+// })
+
+// function create_room(e){
+//     $(e).prop("disabled","disabled")
+//     let tpl = $("#room_tpl").clone()
+//     let time = new Date().getTime()
+//     tpl.find("#collapse1").prop("id","t-"+time)
+//     tpl.find(".room_header").prop("href","#t-"+time)
+//     tpl.find(".room_header").attr("data-parent","#"+user_name+"-"+time)
+//     tpl.prop("id","#"+user_name+"-"+time)
+//     tpl.find(".room-mode").text($("#room_span").text())
+//     tpl.find(".list-group").append(
+//         " <a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-info\">" +
+//         user_name +
+//         "</a>")
+//     tpl.show()
+//     $("#pvp_Modal .modal-body").append(tpl)
+//     $(".leave_room").prop('disabled', false);
+// }
+
+// function leave_room(e){
+//     $(e).prop("disabled","disabled")
+//     $(".create_room").prop('disabled', false);
+// }
+///////////////////////////////
+        // socket.on('disconnect_request', function (data) {
+    //     socket.emit('disconnect_request');
+    //     socket.disconnect()
+    // });
+    // socket.on('room_id', function (data) {
+    //     console.log("room_id",data)
+    // });
+    //
+    // socket.on('json_rooms', function (data) {
+    //     console.log("json_rooms",JSON.parse(data))
+    // });
+
+            // $.ajax({
+        //     url: window.location.origin + "/game/create_room",
+        //     method: "POST",
+        //     data: r.data(),
+        //     success: function (data) {
+        //         if(data){
+        //             r.id = data
+        //             rs.push_room(r.init(rs.user))
+        //         }
+        //     }
+        // })
+</script>
+<div class="panel-group" id="room_tpl" style="display: none">
+                    <div class="panel panel-primary default-room">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="room_header" data-toggle="collapse" data-parent="#room_tpl" href="#collapse1">
+                                    {{code}} —— <span class="room-mode"></span></a>
+                            </h4>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div class="list-group">
+<!--                                    <a href="#" class="list-group-item list-group-item-action list-group-item-info">This-->
+<!--                                        is a-->
+<!--                                        info list group item-->
+<!--                                    </a>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+

@@ -13,6 +13,8 @@ from flask_bcrypt import Bcrypt
 from app.config import nav
 from flask_cors import CORS
 from flask import Flask, render_template
+from flask_socketio import SocketIO
+from eventlet import event
 import pymongo
 
 # mongodb import ----------------
@@ -29,7 +31,9 @@ login_manager = LoginManager()
 secure = Bcrypt()
 mail = Mail()
 cors = CORS()
-
+#install package eventlet
+socketio = SocketIO(async_mode="eventlet")
+bg_task = {}
 
 # factory function
 def create_app():
@@ -45,7 +49,6 @@ def create_app():
     cors.init_app(app, supports_credentials=True)
 
     # blueprint register ----------------
-
     # guide
     from .guide import guide
     app.register_blueprint(guide, url_prefix='/guide')
@@ -82,4 +85,11 @@ def create_app():
     def test_bootstrap():
         return render_template('/welcome/bootstrap.html')
 
+    # if there is a error of "ValueError: Invalid async_mode specified"
+    # try to install eventlet package
+    socketio.init_app(app)
+    #events for each course namespave
+    cur = db.courses.find()
+    for doc in cur:
+        bg_task[doc["code"]] = event.Event()
     return app

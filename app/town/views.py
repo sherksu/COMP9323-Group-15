@@ -1,5 +1,5 @@
-from flask import render_template
-from flask_login import login_required
+from flask import render_template,request
+from flask_login import login_required,current_user
 from app import db
 from . import town
 
@@ -14,4 +14,5 @@ def entry_town(course):
     chapters = db.chapters.find({'course': course_id})
     get_node = db.knowledge_nodes.find
     return render_template('/town/my_town.html',  course=course, is_town=True,
-                           code=code, _id=course_id, name=name, chapters=list(chapters), get_node=get_node)
+                           code=code, _id=course_id, name=name, chapters=list(chapters), get_node=get_node,
+                           user_name=current_user.get_id())
