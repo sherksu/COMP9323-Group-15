@@ -14,7 +14,6 @@ from app.config import nav
 from flask_cors import CORS
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-from eventlet import event
 import pymongo
 
 # mongodb import ----------------
@@ -91,5 +90,6 @@ def create_app():
     #events for each course namespave
     cur = db.courses.find()
     for doc in cur:
-        bg_task[doc["code"]] = event.Event()
+        # bg_task[doc["code"]] = event.Event()
+        bg_task[doc["code"]] = 0
     return app

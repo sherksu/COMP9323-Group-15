@@ -2,11 +2,14 @@
 var tmp
 
 function equal(setA, setB) {
-    var _difference = new Set(setA);
+    setA = new Set(setA);
+    setB = new Set(setB);
+    if (setA.size != setB.size)
+        return 0
     for (var elem of setB) {
-        _difference.delete(elem);
+        setA.delete(elem);
     }
-    return !_difference.size;
+    return !setA.size ;
 }
 
 (function($){
@@ -26,15 +29,17 @@ function equal(setA, setB) {
         return r
     }
 
-    Room.prototype.init = function (user_name="") {
+    Room.prototype.init = function (user_name="",join_handler) {
         let tpl, time, tid, outterID
         time = new Date().getTime()
         tid = "#player-"+this.id
         outterID = "#room-" + this.id
         tpl = "<div class=\"panel-group\" id=\""+outterID.substring(1)+"\">\n" +
             "                    <div class=\"panel panel-primary default-room\">\n" +
-            "                        <div class=\"panel-heading\">\n" +
-            "                            <h4 class=\"panel-title\">\n" +
+            "                        <div class=\"panel-heading\">\n"
+        if(!this.player.includes(user_name))
+            tpl +="                          <button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>"
+        tpl +="                          <h4 class=\"panel-title\">\n" +
             "                                <a class=\"room_header\" data-toggle=\"collapse\" data-parent=\""+outterID+"\" href=\""+tid+"\">\n" +
             "                                    " + this.course + " —— <span class=\"room-mode\">"+this.type+"</span></a>\n" +
             "                            </h4>\n" +
@@ -49,6 +54,10 @@ function equal(setA, setB) {
             "                    </div>\n" +
             "                </div>"
         this.e = $(tpl)
+        let cb_val = this.id
+        this.e.on("click",".join-room", function (e,) {
+            join_handler(cb_val)
+        })
         return this
     }
     Room.prototype.data = function () {
@@ -76,14 +85,19 @@ function equal(setA, setB) {
     }
     Room.prototype.update = function (user_name) {
         this.e.find(".panel-collapse.collapse.in").html(this.players(user_name))
+        if(!this.player.includes(user_name) && !this.e.find(".join-room").length)
+            this.e.find(".panel-heading").prepend("<button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>")
+        else if (this.player.includes(user_name) && this.e.find(".join-room").length)
+            this.e.find(".join-room").remove()
     }
 
 
-    Rooms = function (container, user, course) {
+    Rooms = function (container, user, course,join_cb) {
         this.user = user
         this.container = container
         this.course = course
         this.rooms = {}
+        this.join_cb = join_cb
     };
     Rooms.prototype.new_room = function (...args) {
         let r = this.create_room(...args)
@@ -100,11 +114,45 @@ function equal(setA, setB) {
     }
     Rooms.prototype.push_room = function (room,focus) {
         if (!(room instanceof Room))
-            room = Room.from(room).init(this.user)
+            room = Room.from(room).init(this.user,join_cb)
         this.rooms[room.id] = room
         this.container.prepend(room.e)
         if (focus)
             room.e[0].scrollIntoView( {behavior: "smooth" })
+    }
+    Rooms.prototype.update_from = function (data, is_player_callback = null) {
+        let _difference = new Set(this.rooms ? Object.keys(this.rooms) : [])
+        // console.log("_difference",_difference)
+        let is_player = 0
+        rs = this
+        data.forEach(function (item) {
+            if (item && item.hasOwnProperty("_id")) {
+                if (rs.rooms.hasOwnProperty(item._id)) {
+                    if (!equal(item.player, rs.rooms[item._id].player)) {
+                        // console.log("\n",this.rooms[item._id].player)
+                        // console.log(item.player,"\n")
+                        rs.rooms[item._id].player = item.player
+                        rs.rooms[item._id].update(rs.user)
+                    }
+                } else {
+                    let r = Room.from(item).init(rs.user,join_cb)
+                    rs.push_room(r)
+                }
+                if (!is_player) {
+                    is_player = item.player.includes(rs.user)
+                }
+                _difference.delete(item._id);
+                // console.log("_difference",_difference)
+            }
+        })
+        // console.log("final _difference",_difference)
+        for (let i of _difference) {
+            rs.pop_room(i)
+        }
+        // console.log("rooms update is player",is_player)
+        // console.log("is_player_callback",is_player_callback)
+        if (is_player_callback)
+            is_player_callback(is_player)
     }
     Rooms.prototype.update = function (is_player_callback=null) {
         let rs = this
@@ -115,40 +163,7 @@ function equal(setA, setB) {
             datatype: "JSON",
             success: function (data) {
                 console.log("success", data, typeof data)
-                let _difference = new Set(rs.rooms?Object.keys(rs.rooms):[])
-                // console.log("_difference",_difference)
-                let is_player = 0
-                data.forEach(function (item) {
-                    if(item && item.hasOwnProperty("_id")){
-                        if (rs.rooms.hasOwnProperty(item._id)) {
-                            if(!equal(item.player,rs.rooms[item._id].player)){
-                                // console.log("\n",rs.rooms[item._id].player)
-                                // console.log(item.player,"\n")
-
-                                rs.rooms[item._id].player = item.player
-                                rs.rooms[item._id].update(rs.user)
-                            }
-                        }else{
-                            let r = Room.from(item).init(rs.user)
-                            rs.push_room(r)
-                        }
-                        if(!is_player){
-                            is_player = item.player.includes(rs.user)
-                        }
-                        _difference.delete(item._id);
-                        // console.log("_difference",_difference)
-                    }else{
-                        is_player = 1
-                    }
-                })
-                // console.log("final _difference",_difference)
-                for (let i of _difference){
-                    rs.pop_room(i)
-                }
-                // console.log("rooms update is player",is_player)
-                // console.log("is_player_callback",is_player_callback)
-                if(is_player_callback)
-                    is_player_callback(is_player)
+                rs.update_from(data,is_player_callback)
             }
         })
     }
@@ -164,7 +179,6 @@ function equal(setA, setB) {
         $.ajax({
             url: window.location.origin + "/game/leave_room",
             method: "POST",
-            data: {"user": rs.user},
             datatype: "JSON",
             success: function (data) {
                 console.log("success", data, typeof data)
@@ -183,15 +197,18 @@ function equal(setA, setB) {
 let socket
 let rooms
 $(document).ready(function () {
-    rooms = $("#pvp_Modal .modal-body").Rooms(user_name, c_code)
-    socket = io("/"+c_code).disconnect()
+    rooms = $("#pvp_Modal .modal-body").Rooms(user_name, c_code,join_cb)
+    socket = io.connect(window.location.origin+"/pvp?course="+(c_code?c_code:"''")).disconnect()
+    bind_event()
     $("#pvp_Modal").on("show.bs.modal", function (e) {
         console.log("show.bs.modal")
         if (typeof socket !== "undefined") {
             if (!socket.connected)
-                socket.connect("/"+c_code)
+                // socket.connect(window.location.origin+"/pvp?course="+(c_code?c_code:"''"))
+                socket.connect()
         } else {
-            socket = io.connect("/"+c_code);
+            socket = io.connect(window.location.origin+"/pvp?course="+(c_code?c_code:"''"))
+            bind_event()
         }
         rooms.update(in_room)
     })
@@ -201,21 +218,6 @@ $(document).ready(function () {
         socket.emit('disconnect_request');
         socket.disconnect()
     })
-
-    socket.on('connect', function (data) {
-        console.log("connect", data)
-    });
-    socket.on('disconnect', function (data) {
-        console.log("disconnect", data)
-    });
-    socket.on('message', function (data) {
-        console.log("message", data)
-    });
-    socket.on('new_room', function (data) {
-        console.log("on new_room", data)
-        rooms.push_room(data,1)
-    });
-
 
     $("#pvp_Modal .btn-group a").on("click", function (e) {
         $("#room_span").text(e.target.innerText)
@@ -240,8 +242,32 @@ function in_room(is) {
 
 }
 
-/*socket.emit("text","this is the message",ack=function(){
+function join_cb(id){
+    socket.emit("change_room",id)
+}
 
-console.log(arguments)
-
-});*/
+function bind_event(){
+    socket.on('connect', function () {
+        console.log("connect\n\n\n\n")
+        socket.emit("join",{"room":c_code},function (data) {
+            console.log("join",data)
+        })
+    });
+    socket.on('disconnect', function (data) {
+        console.log("disconnect", data)
+    });
+    socket.on('message', function (data) {
+        console.log("message", data)
+    });
+    socket.on('echo', function (data) {
+        console.log("echo", data)
+    });
+    socket.on('new_room', function (data) {
+        console.log("on new_room", data)
+        // rooms.push_room(data, 1)
+    });
+    socket.on('update_room', function (data) {
+        console.debug("on update_room", data)
+        rooms.update_from(JSON.parse(data), in_room)
+    });
+}
