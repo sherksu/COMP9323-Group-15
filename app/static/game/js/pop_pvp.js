@@ -102,7 +102,6 @@ function equal(setA, setB) {
     Room.prototype.update = function (user_name) {
         this.e.find(".panel-collapse.collapse.in").html(this.players(user_name))
         this.join_btn()
-        this.full_check()
     }
 
 
@@ -188,17 +187,22 @@ function equal(setA, setB) {
             delete this.rooms[id]
         }
     }
-    Rooms.prototype.leave_room = function(is_player_callback){
-        rs = this
-        $.ajax({
-            url: window.location.origin + "/game/leave_room",
-            method: "POST",
-            datatype: "JSON",
-            success: function (data) {
-                console.log("success", data, typeof data)
-                rs.update(is_player_callback)
-            }
-        })
+    Rooms.prototype.leave_room = function(socket,is_player_callback){
+        socket.emit("leave_room")
+        // rs = this
+        // let re = new RegExp('ab+c');
+        // $.ajax({
+        //     url: window.location.origin + "/game/leave_room",
+        //     headers: {
+        //         'sid': sid
+        //     },
+        //     method: "POST",
+        //     datatype: "JSON",
+        //     success: function (data) {
+        //         console.log("success", data, typeof data)
+        //         rs.update(is_player_callback)
+        //     }
+        // })
     }
 
     $.fn.Rooms = function (user, course) {
@@ -230,7 +234,7 @@ $(document).ready(function () {
     $("#pvp_Modal").on("hide.bs.modal", function (e) {
         console.log("hide.bs.modal")
         socket.emit('disconnect');
-        rooms.leave_room(in_room)
+        rooms.leave_room(socket,in_room)
         socket.disconnect()
     })
 
@@ -242,6 +246,10 @@ $(document).ready(function () {
 function new_room(e){
     in_room(1)
     rooms.new_room($("#room_span").text())
+}
+
+function leave_room(){
+    rooms.leave_room(socket,in_room())
 }
 
 function in_room(is) {

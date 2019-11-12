@@ -23,6 +23,7 @@ def bg_update_room(course):
         # print("bg_update_room",data)
         socketio.emit('update_room',
                       data,
+                      room=course,
                       namespace='/pvp',
                       broadcast = 1,
                       skip_sid=1)
@@ -34,7 +35,6 @@ def on_connect():
         print(request.args)
         if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
             bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room,request.args["course"])
-            bg_task[request.args["course"]] = 1
         print("\n")
     except Exception as e:
         pprint(e)
@@ -67,12 +67,18 @@ def on_message(message):
 
 @socketio.on('echo', namespace='/pvp')
 def on_echo(message):
-    print("\n\n\n\n","echo",message,"\n\n\n\n")
+    print("\n\n\n\n","echo",message,rooms(),"\n\n\n\n")
     if "room" in message:
         for r in message["room"]:
             emit("echo",{"data":message["s"],"room":r,"rooms":rooms()}, namespace='/pvp',room=r)
+    # elif "change" in message:
+    #     cur = db.rooms.watch([])
+    #     print("change")
+    #     pprint(json.dumps(list(cur),default=str))
+        # emit("echo", {"data": message["s"], "rooms": rooms()}, namespace='/pvp', room=request.sid)
     else:
-        emit("echo", {"data": message["s"], "rooms": rooms()}, namespace='/pvp')
+        emit("echo", {"data": message["s"], "rooms": rooms()}, namespace='/pvp',room=request.sid)
+    print("block?")
     return ("echo was received by server",rooms())
 
 @socketio.on('new_room', namespace='/pvp')
@@ -85,7 +91,7 @@ def on_new_room(data):
             "player": data["player"]
         }
         result = db.rooms.insert_one(room)
-        join_room(result.inserted_id)
+        join_room(str(result.inserted_id))
         return json.dumps({"status": result.acknowledged,
                            "new_room": result.inserted_id,
                            }, default=str)
@@ -106,14 +112,14 @@ def on_change_room(data):
             cur = db.rooms.find_one({"_id": ObjectId(data)}, {"type": 1})
             maxnum = type_num[cur["type"]] if cur["type"] in type_num else 1000
             for r in rooms():
-                if r != data or r != request.sid or r not in bg_task:
+                if r != data and r != request.sid and r not in bg_task:
                     leave_room(r)
             db.rooms.delete_many({"player": []})
             db.rooms.update({"_id": ObjectId(data)},
                             {"$push": {"player":
                             {"$each":[current_user.get_id()],
                              "$slice":maxnum}}})
-            join_room(data)
+            join_room(str(data))
             s.commit_transaction()
         return json.dumps({"status": 1,
                            # "new_room": result.inserted_id,
@@ -124,7 +130,7 @@ def on_change_room(data):
                            "msg": str(e),
                            }, default=str )
 
-@game.route('/leave_room', methods=['POST'])
+@socketio.on('leave_room', namespace='/pvp')
 def on_leave_room():
     try:
         with client.start_session() as s:
@@ -133,16 +139,33 @@ def on_leave_room():
                                      {"$pull": {"player": current_user.get_id()}})
             db.rooms.delete_many({"player": []})
             for r in rooms():
-                if r != request.sid or r not in bg_task:
+                if r != request.sid and r not in bg_task:
                     leave_room(r)
-            result = s.commit_transaction()
-        print(result,dir(result),"\n\n\n")
-        return Response(json.dumps({"status":1,
-                                    }, default=str), mimetype='application/json')
+            s.commit_transaction()
+        print("leave_room","\n\n\n")
+        return json.dumps({"status":1,}, default=str)
     except KeyError as e:
-        return Response(json.dumps({"status": 0,
-                                    "msg": "KeyError",
-                                    }, default=str), mimetype='application/json')
+        return json.dumps({"status": 0,"msg": "KeyError"})
+
+# @game.route('/leave_room', methods=['POST'])
+# def on_leave_room():
+#     try:
+#         with client.start_session() as s:
+#             s.start_transaction()
+#             db.rooms.update({"player": {"$in": [current_user.get_id()]}},
+#                                      {"$pull": {"player": current_user.get_id()}})
+#             db.rooms.delete_many({"player": []})
+#             for r in rooms():
+#                 if r != request.headers["sid"] and r not in bg_task:
+#                     leave_room(r)
+#             result = s.commit_transaction()
+#         print(result,dir(result),"\n\n\n")
+#         return Response(json.dumps({"status":1,
+#                                     }, default=str), mimetype='application/json')
+#     except KeyError as e:
+#         return Response(json.dumps({"status": 0,
+#                                     "msg": "KeyError",
+#                                     }, default=str), mimetype='application/json')
 
 @game.route('/get_rooms', methods=['GET'])
 def get_rooms():
