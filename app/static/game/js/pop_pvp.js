@@ -215,7 +215,8 @@ $(document).ready(function () {
 
     $("#pvp_Modal").on("hide.bs.modal", function (e) {
         console.log("hide.bs.modal")
-        socket.emit('disconnect_request');
+        socket.emit('disconnect');
+        rooms.leave_room(in_room)
         socket.disconnect()
     })
 

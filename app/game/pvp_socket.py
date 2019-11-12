@@ -53,6 +53,7 @@ def on_join(data):
 @socketio.on('disconnect', namespace='/pvp')
 def on_disconnect():
     print("pvp Client disconnected")
+    on_leave_room()
 
 @socketio.on('message', namespace='/pvp')
 def on_message(message):
@@ -79,6 +80,7 @@ def on_new_room(data):
             "player": data["player"]
         }
         result = db.rooms.insert_one(room)
+        join_room(result.inserted_id)
         return json.dumps({"status": result.acknowledged,
                            "new_room": result.inserted_id,
                            }, default=str)
@@ -98,8 +100,12 @@ def on_change_room(data):
             s.start_transaction()
             db.rooms.update({"player": {"$in": [current_user.get_id()]}},
                                      {"$pull": {"player": current_user.get_id()}})
+            for r in rooms():
+                if r != data or r != request.sid or r not in bg_task:
+                    leave_room(r)
             db.rooms.delete_many({"player": []})
             db.rooms.update({"_id": ObjectId(data)}, {"$push": {"player": current_user.get_id()}})
+            join_room(data)
             s.commit_transaction()
         return json.dumps({"status": 1,
                            # "new_room": result.inserted_id,
@@ -111,16 +117,16 @@ def on_change_room(data):
                            }, default=str )
 
 @game.route('/leave_room', methods=['POST'])
-def leave_room():
+def on_leave_room():
     try:
-        # affected = db.rooms.find({
-        #     "player":request.form.getlist("user"),
-        # }
         with client.start_session() as s:
             s.start_transaction()
             db.rooms.update({"player": {"$in": [current_user.get_id()]}},
                                      {"$pull": {"player": current_user.get_id()}})
             db.rooms.delete_many({"player": []})
+            for r in rooms():
+                if r != request.sid or r not in bg_task:
+                    leave_room(r)
             result = s.commit_transaction()
         print(result,dir(result),"\n\n\n")
         return Response(json.dumps({"status":1,
