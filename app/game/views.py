@@ -20,14 +20,9 @@ def is_obid(ids):
 @login_required
 def game_start(model, node):
     node = node.lower()
-    # num = int(request.args["num"])
     num = 10
-
-    # TODO -- validate num
     if not (node and num and is_obid(node)):
         abort(404)
-
-    # TODO -- DEFER --query timeout
     if model == "beginner":
         data = db.question_set.find({"knowledge_node": ObjectId(node)}).limit(num)
         node_name = db.knowledge_nodes.find_one({"_id": ObjectId(node)})

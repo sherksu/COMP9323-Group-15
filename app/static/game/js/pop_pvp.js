@@ -1,5 +1,4 @@
 // var Rooms
-var tmp
 
 function equal(setA, setB) {
     setA = new Set(setA);
@@ -37,8 +36,6 @@ function equal(setA, setB) {
         tpl = "<div class=\"panel-group\" id=\""+outterID.substring(1)+"\">\n" +
             "                    <div class=\"panel panel-primary default-room\">\n" +
             "                        <div class=\"panel-heading\">\n"
-        if(!this.player.includes(user_name))
-            tpl +="                          <button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>"
         tpl +="                          <h4 class=\"panel-title\">\n" +
             "                                <a class=\"room_header\" data-toggle=\"collapse\" data-parent=\""+outterID+"\" href=\""+tid+"\">\n" +
             "                                    " + this.course + " —— <span class=\"room-mode\">"+this.type+"</span></a>\n" +
@@ -58,6 +55,7 @@ function equal(setA, setB) {
         this.e.on("click",".join-room", function (e,) {
             join_handler(cb_val)
         })
+        this.join_btn()
         return this
     }
     Room.prototype.data = function () {
@@ -83,12 +81,28 @@ function equal(setA, setB) {
         })
         return tpl
     }
-    Room.prototype.update = function (user_name) {
-        this.e.find(".panel-collapse.collapse.in").html(this.players(user_name))
+    Room.prototype.join_btn = function(){
         if(!this.player.includes(user_name) && !this.e.find(".join-room").length)
             this.e.find(".panel-heading").prepend("<button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>")
         else if (this.player.includes(user_name) && this.e.find(".join-room").length)
             this.e.find(".join-room").remove()
+        //TODO -- 暂时先存在这里
+        let type_num = {
+            "1 vs 1": 2,
+            "2 vs 2": 4,
+            "Battlegrounds": 10,
+            "fake type":1000
+        }
+        if(this.player.length >= type_num[this.type]){
+            this.e.find(".join-room").prop("disabled","disabled").text("Full Room")
+        }else{
+            this.e.find(".join-room").prop("disabled",false).text("Join this room")
+        }
+    }
+    Room.prototype.update = function (user_name) {
+        this.e.find(".panel-collapse.collapse.in").html(this.players(user_name))
+        this.join_btn()
+        this.full_check()
     }
 
 

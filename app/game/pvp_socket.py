@@ -8,6 +8,11 @@ from flask_socketio import emit, join_room, leave_room, disconnect, Namespace, r
 import json
 from pprint import  pprint
 
+#TODO -- 暂时先存在这里
+type_num = {"1 vs 1":2,
+            "2 vs 2":4,
+            "Battlegrounds":10}
+
 #background green thread
 def bg_update_room(course):
     #每有新数据立即推送新数据，会导致多人操作时发送过于频繁，所以统一每秒更新数据
@@ -92,19 +97,22 @@ def on_new_room(data):
 @socketio.on('change_room', namespace='/pvp')
 def on_change_room(data):
     try:
-        print("\n\n\n\n","change_room",data,dir(current_user))
+        print("\n\n\n\n","change_room",data)
         print(current_user.get_id())
-        # emit("echo",data)
-
         with client.start_session() as s:
             s.start_transaction()
             db.rooms.update({"player": {"$in": [current_user.get_id()]}},
                                      {"$pull": {"player": current_user.get_id()}})
+            cur = db.rooms.find_one({"_id": ObjectId(data)}, {"type": 1})
+            maxnum = type_num[cur["type"]] if cur["type"] in type_num else 1000
             for r in rooms():
                 if r != data or r != request.sid or r not in bg_task:
                     leave_room(r)
             db.rooms.delete_many({"player": []})
-            db.rooms.update({"_id": ObjectId(data)}, {"$push": {"player": current_user.get_id()}})
+            db.rooms.update({"_id": ObjectId(data)},
+                            {"$push": {"player":
+                            {"$each":[current_user.get_id()],
+                             "$slice":maxnum}}})
             join_room(data)
             s.commit_transaction()
         return json.dumps({"status": 1,
