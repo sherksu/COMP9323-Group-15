@@ -92,4 +92,5 @@ def create_app():
     for doc in cur:
         # bg_task[doc["code"]] = event.Event()
         bg_task[doc["code"]] = 0
+    bg_task["bg_full_check"] = 0
     return app

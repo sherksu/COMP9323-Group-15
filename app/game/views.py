@@ -14,8 +14,26 @@ id_regex = re.compile("^[0-9a-fA-F]{24}$")
 def is_obid(ids):
     return id_regex.match(ids)
 
+# pvp game - main process
+@game.route('/pvp/<room>', methods=['GET'], strict_slashes=False)
+# @login_required
+def pvp_game(room):
+    print("\n\n\n\npvp_game")
+    # print(request.args)
+    print("\n\n\n\n")
+    return render_template('/game/pvp_game.html')
 
-# game - main process
+# development
+@game.route('/boostrap_example', methods=['GET'], strict_slashes=False)
+# @login_required
+def boostrap_example():
+    print("\n\n\n\nboostrap_example")
+    # print(request.args)
+    print("\n\n\n\n")
+    return render_template('/game/boostrap_example.html')
+    # return "<h1>HI</h1>"
+
+# pve game - main process
 @game.route('/<model>/<node>', methods=['GET'], strict_slashes=False)
 @login_required
 def game_start(model, node):
@@ -42,7 +60,6 @@ def game_start(model, node):
                                chr=chr, level_info=level_info)
     else:
         abort(404)
-
 
 # game_feedback save error set
 @game.route('/error_save', methods=['POST'])

@@ -25,6 +25,7 @@ function equal(setA, setB) {
         r .course = obj.course
         r .type = obj.type
         r .player = obj.player
+        r .game_start = typeof obj.game_start !== "undefined"
         return r
     }
 
@@ -35,7 +36,8 @@ function equal(setA, setB) {
         outterID = "#room-" + this.id
         tpl = "<div class=\"panel-group\" id=\""+outterID.substring(1)+"\">\n" +
             "                    <div class=\"panel panel-primary default-room\">\n" +
-            "                        <div class=\"panel-heading\">\n"
+            "                        <div class=\"panel-heading\">\n"+
+            "                            <button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>"
         tpl +="                          <h4 class=\"panel-title\">\n" +
             "                                <a class=\"room_header\" data-toggle=\"collapse\" data-parent=\""+outterID+"\" href=\""+tid+"\">\n" +
             "                                    " + this.course + " —— <span class=\"room-mode\">"+this.type+"</span></a>\n" +
@@ -52,7 +54,7 @@ function equal(setA, setB) {
             "                </div>"
         this.e = $(tpl)
         let cb_val = this.id
-        this.e.on("click",".join-room", function (e,) {
+        this.e.on("click",".join-room", function (e) {
             join_handler(cb_val)
         })
         this.join_btn()
@@ -82,10 +84,10 @@ function equal(setA, setB) {
         return tpl
     }
     Room.prototype.join_btn = function(){
-        if(!this.player.includes(user_name) && !this.e.find(".join-room").length)
-            this.e.find(".panel-heading").prepend("<button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>")
-        else if (this.player.includes(user_name) && this.e.find(".join-room").length)
-            this.e.find(".join-room").remove()
+        // if(!this.player.includes(user_name) && !this.e.find(".join-room").length)
+        //     this.e.find(".panel-heading").prepend("<button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>")
+        // else if (this.player.includes(user_name) && this.e.find(".join-room").length)
+        //     this.e.find(".join-room").remove()
         //TODO -- 暂时先存在这里
         let type_num = {
             "1 vs 1": 2,
@@ -93,10 +95,21 @@ function equal(setA, setB) {
             "Battlegrounds": 10,
             "fake type":1000
         }
-        if(this.player.length >= type_num[this.type]){
-            this.e.find(".join-room").prop("disabled","disabled").text("Full Room")
-        }else{
-            this.e.find(".join-room").prop("disabled",false).text("Join this room")
+
+        if (this.player.includes(user_name)) {
+            this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
+            if (this.game_start)
+                this.e.find(".join-room").prop("disabled", "disabled").text("Game Started")
+            else{
+                this.e.find(".join-room").prop("disabled", "disabled").text("Current Room")
+            }
+        } else {
+            this.e.find(".join-room").removeClass("btn-success").addClass("btn-warning")
+            if (this.player.length >= type_num[this.type]) {
+                this.e.find(".join-room").prop("disabled", "disabled").text("Full Room")
+            } else {
+                this.e.find(".join-room").prop("disabled", false).text("Join this room")
+            }
         }
     }
     Room.prototype.update = function (user_name) {
@@ -105,19 +118,19 @@ function equal(setA, setB) {
     }
 
 
-    Rooms = function (container, user, course,join_cb) {
+    Rooms = function (container, user, course,new_handler,join_handler,leave_handler) {
         this.user = user
         this.container = container
         this.course = course
         this.rooms = {}
-        this.join_cb = join_cb
+        this.new_handler = new_handler
+        this.join_handler = join_handler
+        this.leave_handler = leave_handler
     };
     Rooms.prototype.new_room = function (...args) {
         let r = this.create_room(...args)
         r.player.push(this.user)
-        socket.emit("new_room",r.data(),function (data) {
-            console.log("new_room callback",data)
-        })
+        this.new_handler(r.data())
     }
     Rooms.prototype.join_room = function (type) {
         //TODO -- join in database
@@ -127,7 +140,7 @@ function equal(setA, setB) {
     }
     Rooms.prototype.push_room = function (room,focus) {
         if (!(room instanceof Room))
-            room = Room.from(room).init(this.user,join_cb)
+            room = Room.from(room).init(this.user,this.join_handler)
         this.rooms[room.id] = room
         this.container.prepend(room.e)
         if (focus)
@@ -137,6 +150,7 @@ function equal(setA, setB) {
         let _difference = new Set(this.rooms ? Object.keys(this.rooms) : [])
         // console.log("_difference",_difference)
         let is_player = 0
+        let game_start = 0
         rs = this
         data.forEach(function (item) {
             if (item && item.hasOwnProperty("_id")) {
@@ -148,11 +162,14 @@ function equal(setA, setB) {
                         rs.rooms[item._id].update(rs.user)
                     }
                 } else {
-                    let r = Room.from(item).init(rs.user,join_cb)
+                    let r = Room.from(item).init(rs.user,rs.join_handler)
                     rs.push_room(r)
                 }
                 if (!is_player) {
                     is_player = item.player.includes(rs.user)
+                }
+                if (!game_start) {
+                    game_start = item.player.includes(rs.user)&&typeof item.game_start !== "undefined"
                 }
                 _difference.delete(item._id);
                 // console.log("_difference",_difference)
@@ -165,7 +182,7 @@ function equal(setA, setB) {
         // console.log("rooms update is player",is_player)
         // console.log("is_player_callback",is_player_callback)
         if (is_player_callback)
-            is_player_callback(is_player)
+            is_player_callback(is_player,game_start)
     }
     Rooms.prototype.update = function (is_player_callback=null) {
         let rs = this
@@ -187,26 +204,12 @@ function equal(setA, setB) {
             delete this.rooms[id]
         }
     }
-    Rooms.prototype.leave_room = function(socket,is_player_callback){
-        socket.emit("leave_room")
-        // rs = this
-        // let re = new RegExp('ab+c');
-        // $.ajax({
-        //     url: window.location.origin + "/game/leave_room",
-        //     headers: {
-        //         'sid': sid
-        //     },
-        //     method: "POST",
-        //     datatype: "JSON",
-        //     success: function (data) {
-        //         console.log("success", data, typeof data)
-        //         rs.update(is_player_callback)
-        //     }
-        // })
+    Rooms.prototype.leave_room = function(){
+        this.leave_handler()
     }
 
-    $.fn.Rooms = function (user, course) {
-        return new Rooms($(this), user, course);
+    $.fn.Rooms = function (...args) {
+        return new Rooms($(this),...args);
     }
 }(jQuery))
 
@@ -215,7 +218,7 @@ function equal(setA, setB) {
 let socket
 let rooms
 $(document).ready(function () {
-    rooms = $("#pvp_Modal .modal-body").Rooms(user_name, c_code,join_cb)
+    rooms = $("#pvp_Modal .modal-body").Rooms(user_name, c_code,new_socket,join_socket,leave_socket)
     socket = io.connect(window.location.origin+"/pvp?course="+(c_code?c_code:"''")).disconnect()
     bind_event()
     $("#pvp_Modal").on("show.bs.modal", function (e) {
@@ -234,13 +237,15 @@ $(document).ready(function () {
     $("#pvp_Modal").on("hide.bs.modal", function (e) {
         console.log("hide.bs.modal")
         socket.emit('disconnect');
-        rooms.leave_room(socket,in_room)
+        rooms.leave_room()
         socket.disconnect()
     })
 
     $("#pvp_Modal .btn-group a").on("click", function (e) {
         $("#room_span").text(e.target.innerText)
     })
+    //for development
+    // $("nav").hide()
 });
 
 function new_room(e){
@@ -248,11 +253,12 @@ function new_room(e){
     rooms.new_room($("#room_span").text())
 }
 
-function leave_room(){
-    rooms.leave_room(socket,in_room())
-}
-
-function in_room(is) {
+function in_room(is,game_start=0) {
+    if(!game_start){
+        $(".create_room").prop("disabled",false)
+        $(".room_type").prop("disabled",false)
+        $(".leave_room").addClass("btn-danger").removeClass("btn-default").prop("disabled",false)
+    }
     if(is){
         $(".create_room").prop("disabled","disabled")
         $(".room_type").prop("disabled","disabled")
@@ -262,11 +268,24 @@ function in_room(is) {
         $(".room_type").prop("disabled",false)
         $(".leave_room").addClass("btn-default").removeClass("btn-danger").prop("disabled","disabled")
     }
-
+    console.log("in_room",game_start)
+    if(game_start){
+        $(".create_room").prop("disabled","disabled")
+        $(".room_type").prop("disabled","disabled")
+        $(".leave_room").addClass("btn-default").removeClass("btn-danger").prop("disabled","disabled")
+    }
 }
 
-function join_cb(id){
+function join_socket(id){
     socket.emit("change_room",id)
+}
+function leave_socket(){
+    socket.emit("leave_room")
+}
+function new_socket(data){
+    socket.emit("new_room", data, function (data) {
+        console.log("new_room callback", data)
+    })
 }
 
 function bind_event(){

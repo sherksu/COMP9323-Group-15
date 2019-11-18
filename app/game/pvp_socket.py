@@ -11,13 +11,14 @@ from pprint import  pprint
 #TODO -- 暂时先存在这里
 type_num = {"1 vs 1":2,
             "2 vs 2":4,
-            "Battlegrounds":10}
+            "Battlegrounds":3}
 
 #background green thread
 def bg_update_room(course):
     #每有新数据立即推送新数据，会导致多人操作时发送过于频繁，所以统一每秒更新数据
     while True:
         socketio.sleep(1)
+        # cur = db.rooms.find({"course": course,"game_start":{"$exists":False}})
         cur = db.rooms.find({"course": course})
         data = json.dumps(list(cur), default=str)
         # print("bg_update_room",data)
@@ -28,6 +29,32 @@ def bg_update_room(course):
                       broadcast = 1,
                       skip_sid=1)
 
+#background green thread
+def bg_full_check():
+    while True:
+        socketio.sleep(1)
+        query = []
+        for k, v in type_num.items():
+            query.append({"type": k, "player": {"$size": v}})
+        cur = db.rooms.find({"game_start":{"$exists":False},"$or":query})
+        for r in cur:
+            if str(r["_id"]) not in bg_task:
+                db.rooms.update_one({"_id":r["_id"]},{"$set":{"game_start":True}})
+                bg_task[str(r["_id"])] = socketio.start_background_task(bg_game_thread, r["course"])
+
+#background green thread
+def bg_game_thread(course):
+    print("\n\n\n\nbg_game_thread\n\n\n\n")
+    # while True:
+    #     socketio.sleep(1)
+    #     query = []
+    #     for k, v in type_num.items():
+    #         query.append({"type": k, "player": {"$size": v}})
+    #     cur = db.rooms.find({"course": course,"game_start":{"$exists":False},"$or":query})
+    #     for r in cur:
+    #         if str(r["_id"]) not in bg_task:
+    #             bg_task[str(r["_id"])] = socketio.start_background_task(bg_update_room, request.args["course"])
+
 @socketio.on('connect',namespace="/pvp")
 def on_connect():
     try:
@@ -35,6 +62,9 @@ def on_connect():
         print(request.args)
         if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
             bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room,request.args["course"])
+        if bg_task["bg_full_check"] == 0:
+            bg_task["bg_full_check"] = socketio.start_background_task(bg_full_check)
+        print(bg_task["bg_full_check"])
         print("\n")
     except Exception as e:
         pprint(e)
@@ -107,7 +137,7 @@ def on_change_room(data):
         print(current_user.get_id())
         with client.start_session() as s:
             s.start_transaction()
-            db.rooms.update({"player": {"$in": [current_user.get_id()]}},
+            db.rooms.update_many({"player": {"$in": [current_user.get_id()]},"game_start":{"$exists":False}},
                                      {"$pull": {"player": current_user.get_id()}})
             cur = db.rooms.find_one({"_id": ObjectId(data)}, {"type": 1})
             maxnum = type_num[cur["type"]] if cur["type"] in type_num else 1000
@@ -115,7 +145,7 @@ def on_change_room(data):
                 if r != data and r != request.sid and r not in bg_task:
                     leave_room(r)
             db.rooms.delete_many({"player": []})
-            db.rooms.update({"_id": ObjectId(data)},
+            db.rooms.update_one({"_id": ObjectId(data),"game_start":{"$exists":False}},
                             {"$push": {"player":
                             {"$each":[current_user.get_id()],
                              "$slice":maxnum}}})
@@ -135,7 +165,7 @@ def on_leave_room():
     try:
         with client.start_session() as s:
             s.start_transaction()
-            db.rooms.update({"player": {"$in": [current_user.get_id()]}},
+            db.rooms.update_many({"player": {"$in": [current_user.get_id()]},"game_start":{"$exists":False}},
                                      {"$pull": {"player": current_user.get_id()}})
             db.rooms.delete_many({"player": []})
             for r in rooms():
