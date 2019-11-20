@@ -19,8 +19,7 @@ import pymongo
 # mongodb import ----------------
 # mongodb+srv://public:1234567890unsw@devdb-30fsv.mongodb.net/test
 
-client = pymongo.MongoClient("mongodb+srv://public:1234567890unsw@devdb-30fsv."
-                             "mongodb.net/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://public:1234567890unsw@devdb-30fsv.mongodb.net/test?retryWrites=true&w=majority")
 db = client.main
 
 # lib setting ----------------

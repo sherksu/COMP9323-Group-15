@@ -5,6 +5,7 @@ from flask_login import current_user, login_required
 import re
 from datetime import datetime
 from bson import ObjectId
+from pprint import pprint
 
 # TODO 1. 排版 2. 游戏规则
 
@@ -37,26 +38,31 @@ def boostrap_example():
 @game.route('/<model>/<node>', methods=['GET'], strict_slashes=False)
 @login_required
 def game_start(model, node):
+    print("\n",request.path,request.method)
     node = node.lower()
     num = 10
     if not (node and num and is_obid(node)):
         abort(404)
     if model == "beginner":
+        print("beginner")
         data = db.question_set.find({"knowledge_node": ObjectId(node)}).limit(num)
+        data = list(data)
+        # print(f"query",{"knowledge_node": ObjectId(node)})
+        # pprint(data)
         node_name = db.knowledge_nodes.find_one({"_id": ObjectId(node)})
     elif model == "random":
         data = db.question_set.aggregate([{"$match": {"chapter": ObjectId(node)}}, {"$sample": {"size": num}}])
         node_name = db.chapters.find_one({"_id": ObjectId(node)})
     else:
         abort(404)
-
+    # print("if",data and node_name)
     if data and node_name:
-        print(node_name)
         course_id = node_name['course']
         user_id = get_user_id(current_user.username)
         level_info = get_list_of_levels(user_id, course_id)['levels']
+        print("\n")
         return render_template('/game/game.html',
-                               data=list(data), node_name=node_name['name'], type=model.upper(),
+                               data=data, node_name=node_name['name'], type=model.upper(),
                                chr=chr, level_info=level_info)
     else:
         abort(404)

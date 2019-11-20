@@ -64,7 +64,7 @@ $( document ).ready(function() {
         })
     })
     // ---------------------------------
-    // timer.stop();
+
     cur_answer()
 });
 

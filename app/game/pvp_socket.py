@@ -1,6 +1,6 @@
 from . import game
 from flask_login import current_user, login_required
-from flask import render_template, abort, request, Response, session
+from flask import render_template, abort, request, Response
 from bson import ObjectId
 from app.MongoFunction import db
 from .. import socketio, bg_task,client
@@ -40,31 +40,32 @@ def bg_full_check():
         for r in cur:
             if str(r["_id"]) not in bg_task:
                 db.rooms.update_one({"_id":r["_id"]},{"$set":{"game_start":True}})
-                bg_task[str(r["_id"])] = socketio.start_background_task(bg_game_thread, r["course"])
+                bg_task[str(r["_id"])] = socketio.start_background_task(bg_gaming_thread, str(r["_id"]))
 
 #background green thread
-def bg_game_thread(course):
-    print("\n\n\n\nbg_game_thread\n\n\n\n")
-    # while True:
-    #     socketio.sleep(1)
-    #     query = []
-    #     for k, v in type_num.items():
-    #         query.append({"type": k, "player": {"$size": v}})
-    #     cur = db.rooms.find({"course": course,"game_start":{"$exists":False},"$or":query})
-    #     for r in cur:
-    #         if str(r["_id"]) not in bg_task:
-    #             bg_task[str(r["_id"])] = socketio.start_background_task(bg_update_room, request.args["course"])
+def bg_gaming_thread(room_id):
+    print(f"\nbg_gaming_thread started {room_id}\n")
+    while True:
+        socketio.sleep(1)
+        socketio.emit('gaming',
+                      {"id":room_id},
+                      room=room_id,
+                      namespace='/pvp',
+                      broadcast=1,
+                      skip_sid=1)
+        # query = []
+        # for k, v in type_num.items():
+        #     query.append({"type": k, "player": {"$size": v}})
+        # cur = db.rooms.find({"course": course,"game_start":{"$exists":False},"$or":query})
+        # for r in cur:
+        #     if str(r["_id"]) not in bg_task:
+        #         bg_task[str(r["_id"])] = socketio.start_background_task(bg_update_room, request.args["course"])
 
 @socketio.on('connect',namespace="/pvp")
 def on_connect():
     try:
         print("\nconnect to:",request.namespace)
         print(request.args)
-        if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
-            bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room,request.args["course"])
-        if bg_task["bg_full_check"] == 0:
-            bg_task["bg_full_check"] = socketio.start_background_task(bg_full_check)
-        print(bg_task["bg_full_check"])
         print("\n")
     except Exception as e:
         pprint(e)
@@ -79,8 +80,27 @@ def on_reconnect(data):
 @socketio.on('join', namespace='/pvp')
 def on_join(data):
     try:
-        print("\njoin to:",request.namespace,data["room"])
-        join_room(data["room"])
+        print(f"\n{current_user.get_id()} join to:")
+        print("query", {"player": {"$in": [current_user.get_id()]}, "game_start": True})
+        cur = db.rooms.find_one({"player": {"$in": [current_user.get_id()]}, "game_start": True})
+        # print(curL)
+        #run thread for the started game
+        if cur:
+            curL = dict(cur)
+            if str(curL["_id"]) not in bg_task:
+                bg_task[str(curL["_id"])] = socketio.start_background_task(bg_gaming_thread,str(curL["_id"]))
+            join_room(str(curL["_id"]))
+            print(str(curL["_id"]))
+        if request.args["course"] in bg_task:
+            join_room(data["room"])
+            print(data["room"])
+        #run thread for the course
+        if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
+            bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room, request.args["course"])
+        #run thread for full room checking
+        if bg_task["bg_full_check"] == 0:
+            bg_task["bg_full_check"] = socketio.start_background_task(bg_full_check)
+        print("\n")
         return {"status":1,"join":data["room"],"rooms":rooms()}
     except KeyError as e:
         return ""

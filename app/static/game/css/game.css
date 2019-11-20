@@ -72,10 +72,17 @@
     margin-top: 50%;
 }
 
-.mh-100vh{
-    min-height: 100vh!important;
+@media (min-width: 768px) {
+    .mh-100vh {
+        min-height: 100vh !important;
+    }
 }
 
+@media (max-width: 768px) {
+    .middle-col .row {
+        margin: auto !important;
+    }
+}
 .middle-col{
     max-width: 1000px;
     margin:auto;

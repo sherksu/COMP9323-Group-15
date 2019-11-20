@@ -88,14 +88,38 @@
 </div>
 {% endmacro %}
 
+{# Qid = Qloop.index, qid = loop.index #}
+{% macro mq(Qloop,d) %}
+<div class="row question"
+     {% if not Qloop.first %}
+     style="display: none"
+     {% endif%}
+     q-id="{{Qloop.index}}">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                Question {{Qloop.index}}:<br>{{d.content}}
+            </div>
+        </div>
+        <div class="row">
+            {# <!-- #TODO - Stop showing db id to user  -->#}
+            {% for o in d.option %}
+            {{ option(d._id,loop.index,o) }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+
 
 {% block content %}
 <div class="container-fluid vw-100" >
-    <div class="row">
-        <div class="col-lg-3 col-md-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-3 col-md-12">
             {{ timer() }}
         </div>
-        <div class="col-lg-8 col-md-9 mh-100vh middle-col">
+        <div class="col-lg-9 col-md-12 mh-100vh middle-col">
             <div class="row">
                 <div class="col-12">
                     <div class="row" style="margin-top: 20px;overflow: hidden">
@@ -117,7 +141,6 @@
                                  style="display: none;">
                         </div>
                         <div class="col-xs-2">
-                            {{progressbar()}}
                         </div>
                         <div class="w-100 grass">
                         </div>
@@ -126,32 +149,16 @@
             </div>
             <div class="row">
                 <div class="col-12 all-questions" q-num="{{data|length}}">
+
                     {% for d in data %}
-                    {% set Qloop = loop %}
-                    <div class="row question"
-                         {% if not loop.first %}
-                         style="display: none"
-                         {% endif%}
-                         q-id="{{Qloop.index}}">
-                        <div class="col">
-                            <div class="row">
-                                <div class="col">
-                                    Question {{loop.index}}:<br>{{d.content}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <!-- #TODO - Stop showing db id to user  -->
-                                {% for o in d.option %}
-                                    {{ option(d._id,loop.index,o) }}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
+                        {% set Qloop = loop %}
+<!--                        {{Qloop.index}}-->
+                        {{mq(Qloop,d)}}
                     {% endfor %}
                 </div>
             </div>
         </div>
-        <div class="col-lg-1 .d-md-none"></div>
+<!--        <div class="col-lg-1 .d-md-none"></div>-->
         <button class="btn btn-primary next" onclick="nextQ(this)">Next</button>
     </div>
 </div>

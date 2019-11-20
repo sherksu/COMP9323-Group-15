@@ -37,7 +37,7 @@ function equal(setA, setB) {
         tpl = "<div class=\"panel-group\" id=\""+outterID.substring(1)+"\">\n" +
             "                    <div class=\"panel panel-primary default-room\">\n" +
             "                        <div class=\"panel-heading\">\n"+
-            "                            <button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>"
+            "                            <a class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</a>"
         tpl +="                          <h4 class=\"panel-title\">\n" +
             "                                <a class=\"room_header\" data-toggle=\"collapse\" data-parent=\""+outterID+"\" href=\""+tid+"\">\n" +
             "                                    " + this.course + " —— <span class=\"room-mode\">"+this.type+"</span></a>\n" +
@@ -99,7 +99,7 @@ function equal(setA, setB) {
         if (this.player.includes(user_name)) {
             this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
             if (this.game_start)
-                this.e.find(".join-room").prop("disabled", "disabled").text("Game Started")
+                this.e.find(".join-room").prop("disabled", false).text("Game Started")
             else{
                 this.e.find(".join-room").prop("disabled", "disabled").text("Current Room")
             }
@@ -181,6 +181,12 @@ function equal(setA, setB) {
         }
         // console.log("rooms update is player",is_player)
         // console.log("is_player_callback",is_player_callback)
+        if(game_start){
+            rs.container.find(".join-room:contains('Join this room')").prop("disabled","disabled").attr("disabled","disabled")
+        }
+        // else{
+        //     this.container.find(".join-room").prop("disabled",false)
+        // }
         if (is_player_callback)
             is_player_callback(is_player,game_start)
     }
@@ -268,7 +274,7 @@ function in_room(is,game_start=0) {
         $(".room_type").prop("disabled",false)
         $(".leave_room").addClass("btn-default").removeClass("btn-danger").prop("disabled","disabled")
     }
-    console.log("in_room",game_start)
+    // console.log("in_room",game_start)
     if(game_start){
         $(".create_room").prop("disabled","disabled")
         $(".room_type").prop("disabled","disabled")
@@ -287,7 +293,7 @@ function new_socket(data){
         console.log("new_room callback", data)
     })
 }
-
+let showed = false
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
@@ -311,5 +317,36 @@ function bind_event(){
     socket.on('update_room', function (data) {
         console.debug("on update_room", data)
         rooms.update_from(JSON.parse(data), in_room)
+    });
+    socket.on('gaming', function (data) {
+        let modal = "<div class=\"modal fade message-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
+            "  <div class=\"modal-dialog\" role=\"document\">\n" +
+            "    <div class=\"modal-content\">\n" +
+            "      <div class=\"modal-header\">\n" +
+            "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+            "        <h4 class=\"modal-title\">Modal title</h4>\n" +
+            "      </div>\n" +
+            "      <div class=\"modal-body\">\n" +
+            "        <p>One fine body&hellip;</p>\n" +
+            "      </div>\n" +
+            "      <div class=\"modal-footer\">\n" +
+            "        <button type=\"button\" class=\"btn btn-default pull-left\" data-dismiss=\"modal\"> No </button>\n" +
+            "        <a type=\"button\" class=\"btn btn-success pull-right yes-btn\" href=''> Yes </a>\n" +
+            "      </div>\n" +
+            "    </div><!-- /.modal-content -->\n" +
+            "  </div><!-- /.modal-dialog -->\n" +
+            "</div><!-- /.modal -->"
+        if(!$(".message-pop").length)
+            $("body").append(modal)
+        if($("#pvp_Modal:visible").length && !showed){
+            console.log("in")
+            $(".message-pop").modal()
+            $(".message-pop").find(".modal-body").html("<h2>Redirect you to the game page</h2>")
+            $(".message-pop").find("a.yes-btn").prop("href","/game/pvp/"+data["id"])
+            $("message-pop").show()
+            $("#pvp_Modal .join-room:contains('Game Started')").prop("href","/game/pvp/"+data["id"])
+            showed = true
+        }
+        console.debug("gaming", data)
     });
 }
