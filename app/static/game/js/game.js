@@ -3,6 +3,13 @@ let heart;
 let aniP = new Promise(((resolve, reject) => {resolve()}));
 // var tmp
 $( document ).ready(function() {
+    $(".question .download-btn").click(function (e) {
+        console.log(this)
+        // tmp = this
+        window.open(this.getAttribute("data-file"))
+        return false
+    })
+
     $(".question").on('animationend', function(e) {
         // console.log("animationed",e.currentTarget.nextElementSibling == null,e)
         $(e.currentTarget).css("display","none");
@@ -16,7 +23,7 @@ $( document ).ready(function() {
         cur_answer()
     });
 
-    timer = $('.timer').FlipClock(100, {
+    timer = $('.timer').FlipClock(600, {
         clockFace: 'MinuteCounter',
         countdown: true,
         callbacks: {
@@ -112,7 +119,7 @@ function feedback(){
 }
 
 function getAnswers(){
-    return $(".all-questions input").serializeArray()
+    return $(".all-questions input.answer").serializeArray()
 }
 
 jQuery.fn.m_restart = function () {
@@ -149,3 +156,14 @@ function correct(resolve){
     }, 2000);
 }
 
+function file_change(e){
+    console.log('onchange');
+    $(e).parent('form')[0].submit();
+    $(e).parent('form').find(".game_submit").prop("disabled","disabled").attr("disabled","disabled")
+}
+
+
+function onload_fn(e) {
+    response = $(e.contentWindow.document).find("body").text()?$(e.contentWindow.document).find("body").text():$(e.contentDocument).find("body").text()
+    $(e).parent("form").find(".answer").val(response)
+}

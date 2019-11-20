@@ -99,16 +99,16 @@ function equal(setA, setB) {
         if (this.player.includes(user_name)) {
             this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
             if (this.game_start)
-                this.e.find(".join-room").prop("disabled", false).text("Game Started")
+                this.e.find(".join-room").prop("disabled", false).attr("disabled", false).text("Game Started")
             else{
-                this.e.find(".join-room").prop("disabled", "disabled").text("Current Room")
+                this.e.find(".join-room").prop("disabled", "disabled").attr("disabled", "disabled").text("Current Room")
             }
         } else {
             this.e.find(".join-room").removeClass("btn-success").addClass("btn-warning")
             if (this.player.length >= type_num[this.type]) {
-                this.e.find(".join-room").prop("disabled", "disabled").text("Full Room")
+                this.e.find(".join-room").prop("disabled", "disabled").attr("disabled", "disabled").text("Full Room")
             } else {
-                this.e.find(".join-room").prop("disabled", false).text("Join this room")
+                this.e.find(".join-room").prop("disabled", false).attr("disabled", false).text("Join this room")
             }
         }
     }

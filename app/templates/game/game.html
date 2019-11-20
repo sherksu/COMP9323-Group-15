@@ -1,5 +1,5 @@
 {% extends '/basic/BasicConfig.html' %}
-{% from 'game/marco.html' import option,timer,mcq %}
+{% from 'game/marco.html' import option,timer,mcq,csv %}
 {% block title%}
     {% if type and node_name %}
     {{type}}-{{node_name}}!
@@ -37,7 +37,7 @@
 <script>
     let x = {
         {%- for x in data %}
-            "{{x._id}}":{{x.correct_answer}},
+            "{{x._id}}": {% if x.correct_answer is number %}{{x.correct_answer}}{% else %}"{{x.correct_answer}}"{% endif %},
         {%- endfor %}
     };
 
@@ -94,11 +94,13 @@
             </div>
             <div class="row">
                 <div class="col-12 all-questions" q-num="{{data|length}}">
-
                     {% for d in data %}
                         {% set Qloop = loop %}
-<!--                        {{Qloop.index}}-->
-                        {{mcq(Qloop,d)}}
+                        {% if d['type'] == 'mcq' %}
+                            {{mcq(Qloop,d)}}
+                        {% elif d['type'] == 'csv' %}
+                            {{csv(Qloop,d)}}
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

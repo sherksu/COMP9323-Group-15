@@ -78,11 +78,10 @@
     }
 }
 
-@media (max-width: 768px) {
-    .middle-col .row {
-        margin: auto !important;
-    }
+.middle-col .row {
+    margin: auto !important;
 }
+
 .middle-col{
     max-width: 1000px;
     margin:auto;
@@ -90,4 +89,8 @@
 
 .all-questions{
     font-size: 1.5em;
+}
+
+.download-btn{
+    width: auto!important;
 }
