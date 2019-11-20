@@ -1,0 +1,301 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
+
+{%- block content %}
+<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+
+<style>
+.w3-bar-item:hover{
+transform: scale(1.2)
+}
+.w3-left, .w3-right, .w3-badge {cursor:pointer}
+.w3-badge {height:13px;width:13px;padding:0}
+
+
+.square {
+height: 200px;
+width: 200px;
+}
+
+.square:hover{
+transform: scale(1.2)
+}
+
+div.scrollmenu {
+
+  overflow: auto;
+  white-space: nowrap;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: grey;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+div.scrollmenu a:hover {
+  background-color: teal;
+}
+
+
+#backgroundimage
+{
+   height: auto;
+   left: 0;
+   margin: 0;
+   min-height: 100%;
+   min-width: 674px;
+   padding: 0;
+   position: fixed;
+   top: 0;
+   width: 100%;
+   z-index: -1;
+}
+
+.tangerine {
+  font-family: "Tangerine", serif;
+}
+
+.nunito{
+font-family: 'Nunito', sans-serif;
+}
+
+.titillium{
+font-family: 'Titillium Web', sans-serif;
+}
+
+p{
+font-family: 'Titillium Web', sans-serif;
+font-size: 18px;
+font-weight: bold;
+}
+
+header{
+font-family: 'Titillium Web', sans-serif;
+font-size: 20px;
+font-weight: bold;
+}
+
+.content{
+}
+
+</style>
+
+<script>
+    function button_click(id){
+        document.getElementById("intro").style.display = "none";
+        var content_list = document.getElementsByClassName("content");
+        for (var i = 0; i < content_list.length; i++){
+            content_list[i].style.display = "none";
+        }
+
+        document.getElementById(id+"_content").style.display="block";
+    }
+
+</script>
+
+<body>
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:250px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s8 w3-bar w3-pale-blue" align="center">
+      <h2><strong>Welcome {{user_name}}</strong></h2><br>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="w3-container w3-aqua">
+    <h3>Project lists</h3>
+  </div>
+  <div class="w3-bar-block w3-sand" id="ranking_node">
+
+    {% for project in project_list %}
+      <button class="w3-bar-item w3-button w3-padding" align="center" id="{{project}}" onclick="button_click(this.id)">{{project}}</button>
+    {% endfor %}
+
+  </div>
+</nav>
+
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px; margin-top:43px; position:relative; height:auto; min-height:100%">
+    <img id="backgroundimage" style="opacity:0.1" src="../../static/image/profile/background.jpg"/>
+    <h2 id="main_content_header" class="tangerine w3-jumbo">Data projects</h2>
+
+    <div id="intro" style="display:block" class="w3-container">
+        <h3 class="nunito">
+            Please select one of the projects on the left to begin.
+        </h3>
+    </div>
+
+    <div id="Olympic_medals_content" style="display:none" class="w3-container content">
+        <h3 class="nunito">The assignment data was extracted from the Wikipedia entry on All Time Olympic Games Medals ,
+            with some minor modification to make things interesting.
+            The dataset is split into two CSV files one of summer games and the other for the winter games and combined total.
+            Here you can find the datasets: Summer Games and Winter Games .
+            Use the datasets to answer the following questions:
+        </h3><br>
+
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 1 </header>
+            <p>
+                (based on the both datasets)
+                Merge the two datasets Olympics_dataset1.csv and Olympics_dataset2.csv (do not concatenate the datasets and ignore the first row of each of the datasets). And rename columns of the result dataframe as follow (remove the rest of columns from the result dataset):
+                Country, summer_rubbish, summer_participation, summer_gold, summer_silver, summer_bronze, summer_total, winter_ participation , winter_gold, winter_silver, winter_bronze, winter_total
+                Remove the "Totals" row from the dataframe.
+                Display the first five rows of the dataframe.
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 2 </header>
+            <p>
+                (based on the dataframe created in Question-1).
+                Rename country to only keep the name of the country without the abbreviations (Afghanistan (AFG) --> Afghanistan) .
+                Set the index as the country name, remove below columns and then display the first 5 rows in the Dataframe :
+                summer_rubbish, summer_total , winter _total
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 3 </header>
+            <p>
+                (based on the dataframe created in Question-2).
+                Remove the rows with NaN fields and display the last 10 rows .
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 10 </header>
+            <p>
+                (based on the dataframe created in Question-3).
+                Calculate and display which country has won the most gold medals in summer games? (Just print the country name)
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 5 </header>
+            <p>
+                (based on the dataframe created in Question-3)
+                Calculate and display which country name had the biggest difference between their summer and winter gold medal?
+                (Just print the country name and the difference)
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 6 </header>
+            <p>
+                (based on the dataframe created in Question-3).
+                Sort the countries in descending order, according to the number of total of medals (summer and winter)
+                and display the first and last 5 rows of the dataframe (including a column showing the total number of medals) .
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 7 </header>
+            <p>
+                (based on the dataframe created in Question-3).
+                Plot a bar chart of the top 10 countries ordered by the number of total of medals (summer and winter).
+                For each country use a stacked bar chart showing for each county the total medals for winter and summer games.
+                See example chart below:
+            </p><br>
+            <img src="../../static/image/profile/olympic_q7_question.png"/><br><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 8 </header>
+            <p>
+                (based on the dataframe created in Question-3)
+                Plot a bar chart of the countries (United States, Australia, Great Britain, Japan, New Zealand).
+                For each county you need to show the gold, silver and bronze medals for winter games.
+                See example below of the chart:
+            </p><br>
+            <img src="../../static/image/profile/olympic_q8_question.png"/><br><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 9 </header>
+            <p>
+                (based on the dataframe created in Question-3)
+                Assume that there countries are ranked based on a new ranking scheme for the summer games.
+                In the new ranking scheme, a Gold, Silver, and Bronze medals have 5, 3, and 1 points respectively.
+                And countries are ranked based on the points eared per participation (total points divided by total number of participations in games).
+                Based on this scheme, rank the countries and print the name of top 5 countries having the best rate (points per participation ).
+                Print both country names and rates.
+                Example: Imagine that a country has 1 gold medal, and 1 silver (5 + 3 points = totally 8 points);
+                and this country had 10 participation in the summer games.
+                The rate of points per participation will be 8 / 10 = 0.8 for this country.
+                (if per participation is 0, the rate should be 0; )
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 10 </header>
+            <p>
+                (based on the dataframe created in Question-3)
+                Based on the raking scheme in Question 9, also calculate the points per participation for each country in
+                the Winter Games. Next plot a scatter chart with x = "points per participation for summer games" ,
+                and y = "points per participation for winter games". Here is an example of such a chart:
+            </p><br>
+            <img src="../../static/image/profile/olympic_q10_question.png"/><br><br>
+            <p>
+                however, you also need to ink bubbles based on the their continents (e.g, Asia red, Africa blue, ..).
+                You may use the Country-Continent dataset to colour the counties,
+                and use a default color (Gray) for countries which are not listed in the dataset.
+                You chart must also have legends and labels showing the name of countries beside the points inside the chart.
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+    </div>
+
+       <div id="Speed_dating_content" style="display:none" class="w3-container content">
+        <h3 class="nunito">
+            Speed dating dataset
+        </h3><br>
+
+
+        <div class="w3-container w3-padding-16">
+            <header> Question 1 </header>
+            <p>
+                sdafdfkhsakl dfhvskadfhasksjfhsakfhks hakshfks
+            </p><br>
+            <button class="w3-btn w3-border">Result</button>
+            <button class="w3-btn w3-border">Code</button>
+        </div>
+    </div>
+
+</div>
+</body>
+{% endblock content %}

@@ -81,9 +81,14 @@ def question_set_solutions(question_id):
     return render_template("/profile/question_set_solutions.html",content=content, option=option, correct_answer=correct_answer,
                            solutions=solution, chr=chr, id=q_id,user_answer = user_answer)
 
-@profile.route('/study_career/')
-def study_career():
-    return render_template("/profile/study_career.html", user_name=current_user.username)
+
+@profile.route('/data_project/')
+def data_project():
+    return render_template(
+        "/profile/data_project.html",
+        user_name=current_user.username,
+        project_list = ['Speed_dating', 'Olympic_medals']
+    )
 
 
 def get_user_info(user_name):
