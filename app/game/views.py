@@ -22,16 +22,19 @@ def pvp_game(room):
     print("\n\n\n\npvp_game")
     # print(request.args)
     print("\n\n\n\n")
-    return render_template('/game/pvp_game.html')
+    cur = db.question_set.find({})
+    data = list(cur)
+    return render_template('/game/pvp_game.html',data=data)
 
 # development
-@game.route('/boostrap_example', methods=['GET'], strict_slashes=False)
+@game.route('/draft', methods=['GET'], strict_slashes=False)
 # @login_required
 def boostrap_example():
     print("\n\n\n\nboostrap_example")
     # print(request.args)
     print("\n\n\n\n")
-    return render_template('/game/boostrap_example.html')
+    cur = db.question_set.find({})
+    return render_template('/game/draft_tpl.html',data=list(cur))
     # return "<h1>HI</h1>"
 
 # pve game - main process

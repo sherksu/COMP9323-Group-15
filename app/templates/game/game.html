@@ -1,5 +1,5 @@
 {% extends '/basic/BasicConfig.html' %}
-
+{% from 'game/marco.html' import option,timer,mcq %}
 {% block title%}
     {% if type and node_name %}
     {{type}}-{{node_name}}!
@@ -24,7 +24,6 @@
 <script src="{{url_for('static',filename='game/lib/dist/loading-bar.min.js')}}"></script>
 {% endblock %}
 
-
 {% if type and node_name %}
     {%set title_name=type+"-"+node_name %}
 {% else %}
@@ -33,21 +32,6 @@
 {% block navbar %}
     {% include('/basic/navigation.html') %}
 {% endblock %}
-
-{% macro progressbar() %}
-<div
-        class="heart ldBar label-center"
-        data-type="fill"
-        data-value="100"
-        data-path="M90.5,23.2c0-12.5-10.2-22.7-22.7-22.7
-    c-13.6,0-20.9,8.6-22.3,13.8C44.3,8.9,
-    35.1,0.5,23.2,0.5C10.7,0.5,0.5,10.7,
-    0.5,23.2c0,22.2,36.5,45.3,45,55.9
-    C53.5,67.3,90.5,46.3,90.5,23.2z"
-        data-fill="data:ldbar/res,bubble(#F08080,	#FFFF00,50,1)"
-        data-pattern-size="50"
-></div>
-{% endmacro %}
 
 {% block scripts %}
 <script>
@@ -73,45 +57,6 @@
     let exp = level_info.exp;
 </script>
 {% endblock %}
-
-{# take option for mutiple select #}
-{% macro option(key1, key2,option) %}
-<div class="radio">
-    <label>
-        <input type="radio" value="{{key2-1}}" name="{{key1}}" aria-label="Checkbox for option">{{option}}
-    </label>
-</div>
-{% endmacro %}
-
-{% macro timer() %}
-<div class="timer">
-</div>
-{% endmacro %}
-
-{# Qid = Qloop.index, qid = loop.index #}
-{% macro mq(Qloop,d) %}
-<div class="row question"
-     {% if not Qloop.first %}
-     style="display: none"
-     {% endif%}
-     q-id="{{Qloop.index}}">
-    <div class="col-12">
-        <div class="row">
-            <div class="col-12">
-                Question {{Qloop.index}}:<br>{{d.content}}
-            </div>
-        </div>
-        <div class="row">
-            {# <!-- #TODO - Stop showing db id to user  -->#}
-            {% for o in d.option %}
-            {{ option(d._id,loop.index,o) }}
-            {% endfor %}
-        </div>
-    </div>
-</div>
-{% endmacro %}
-
-
 
 {% block content %}
 <div class="container-fluid vw-100" >
@@ -153,7 +98,7 @@
                     {% for d in data %}
                         {% set Qloop = loop %}
 <!--                        {{Qloop.index}}-->
-                        {{mq(Qloop,d)}}
+                        {{mcq(Qloop,d)}}
                     {% endfor %}
                 </div>
             </div>

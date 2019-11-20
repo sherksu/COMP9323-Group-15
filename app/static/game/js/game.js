@@ -78,6 +78,7 @@ function nextQ(e) {
         return false
     }
     let chose = $(".question:visible input").serializeArray()[0];
+    $(".question:visible").addClass('animated bounceOutLeft')
     if(x[chose.name] == chose.value){
         aniP = aniP.then(()=>{
             return new Promise(correct);
@@ -87,7 +88,6 @@ function nextQ(e) {
     }else{
         $(".monster:visible").m_restart()
     }
-    $(".question:visible").addClass('animated zoomOutLeft')
 }
 
 // function updateHeart(){

@@ -37,7 +37,7 @@ var tmp
             let inViewPort = 0
             sn.e.find(".nav-link").removeClass("active")
             sn.contents.each(function (k, item) {
-                // item = $(item)
+                tmp = $(item)
                 let domRect = item.getBoundingClientRect()
                 if ((domRect.top < 0 && domRect.bottom >= 50)
                     || (domRect.top >= 0 && domRect.top < (window.innerHeight - 50))) {
@@ -79,10 +79,10 @@ var tmp
 
 let pvpNavBar
 $(document).ready(function () {
-    pvpNavBar = $(".question").ScrollNav($(".side-wrapper"))
+    pvpNavBar = $(".question-block").ScrollNav($(".side-wrapper"))
     console.log("pvp_game.js", pvpNavBar)
     //for development
-    $(".question").each(function (k,item) {
-        $(item).text(item.getAttribute("id"))
-    })
+    // $(".question").each(function (k,item) {
+    //     $(item).text(item.getAttribute("id"))
+    // })
 })
