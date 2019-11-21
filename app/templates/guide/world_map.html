@@ -7,25 +7,9 @@
 {% block styles %}
 {{ super() }}
 <link href="/static/style/guide/world_map.css" rel="stylesheet">
-<link href="/static/style/HUD.css" rel="stylesheet">
-<link href="/static/style/font.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <div class="HUD">
-        <div class="HUD-avatar">
-        </div>
-        <div class="HUD-status">
-            <div class="offset">
-                <div class="HUD-heading">XIN YUAN</div>
-                <div class="HUD-level">Lv <span id="level">6</span></div>
-            </div>
-            <div class="HUD-exp">
-                <span class="HUD-p-content">next exp: <span id="next_exp">100</span></span>
-                <div class="HUD-process"></div>
-            </div>
-        </div>
-    </div>
     <div id="popView">
         <img src="/static/image/guide/111.jpg" height="320" width="500">
         <div class="tb-rl pop_bar" data-toggle="#popView">
@@ -117,5 +101,3 @@
         </div>
     </div>
 {% endblock %}
-
-
