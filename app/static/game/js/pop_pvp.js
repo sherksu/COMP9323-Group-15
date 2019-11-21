@@ -37,7 +37,7 @@ function equal(setA, setB) {
         tpl = "<div class=\"panel-group\" id=\""+outterID.substring(1)+"\">\n" +
             "                    <div class=\"panel panel-primary default-room\">\n" +
             "                        <div class=\"panel-heading\">\n"+
-            "                            <a class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</a>"
+            "                           <a class='redirect pull-right'> <button class='btn btn-warning  join-room' style='margin-top: -8px;'>Join this room</button></a>"
         tpl +="                          <h4 class=\"panel-title\">\n" +
             "                                <a class=\"room_header\" data-toggle=\"collapse\" data-parent=\""+outterID+"\" href=\""+tid+"\">\n" +
             "                                    " + this.course + " —— <span class=\"room-mode\">"+this.type+"</span></a>\n" +
@@ -55,7 +55,7 @@ function equal(setA, setB) {
         this.e = $(tpl)
         let cb_val = this.id
         this.e.on("click",".join-room", function (e) {
-            join_handler(cb_val)
+            join_handler(cb_val,e)
         })
         this.join_btn()
         return this
@@ -282,7 +282,7 @@ function in_room(is,game_start=0) {
     }
 }
 
-function join_socket(id){
+function join_socket(id,e){
     socket.emit("change_room",id)
 }
 function leave_socket(){
@@ -315,7 +315,7 @@ function bind_event(){
         // rooms.push_room(data, 1)
     });
     socket.on('update_room', function (data) {
-        console.debug("on update_room", data)
+        // console.debug("on update_room", data)
         rooms.update_from(JSON.parse(data), in_room)
     });
     socket.on('gaming', function (data) {
@@ -344,7 +344,7 @@ function bind_event(){
             $(".message-pop").find(".modal-body").html("<h2>Redirect you to the game page</h2>")
             $(".message-pop").find("a.yes-btn").prop("href","/game/pvp/"+data["id"])
             $("message-pop").show()
-            $("#pvp_Modal .join-room:contains('Game Started')").prop("href","/game/pvp/"+data["id"])
+            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href","/game/pvp/"+data["id"])
             showed = true
         }
         console.debug("gaming", data)

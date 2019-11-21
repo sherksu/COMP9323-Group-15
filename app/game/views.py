@@ -54,7 +54,7 @@ def pvp_game(room):
     cur = db.question_set.find({})
     data = list(cur)
     print("\n")
-    return render_template('/game/pvp_game.html',data=data)
+    return render_template('/game/pvp_game.html',data=data,name=current_user.get_id())
 
 # development
 @game.route('/draft', methods=['GET'], strict_slashes=False)
