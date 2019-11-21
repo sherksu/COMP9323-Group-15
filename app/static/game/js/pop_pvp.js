@@ -297,6 +297,7 @@ let showed = false
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
+        //TODO  -- if start_game lock all button or rediect to game page
         socket.emit("join",{"room":c_code},function (data) {
             console.log("join",data)
         })
@@ -318,6 +319,7 @@ function bind_event(){
         // console.debug("on update_room", data)
         rooms.update_from(JSON.parse(data), in_room)
     });
+
     socket.on('gaming', function (data) {
         console.log("gaming")
         let modal = "<div class=\"modal fade message-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
@@ -349,5 +351,9 @@ function bind_event(){
             showed = true
         }
         console.debug("gaming", data)
+
+    socket.on('start_game', function (data) {
+        console.debug("on start_game", data)
+
     });
 }
