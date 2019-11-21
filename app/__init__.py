@@ -12,13 +12,13 @@ from app.config import Config
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask import Flask, render_template
+from flask_socketio import SocketIO
 import pymongo
 
 # mongodb import ----------------
 # mongodb+srv://public:1234567890unsw@devdb-30fsv.mongodb.net/test
 
-client = pymongo.MongoClient("mongodb+srv://public:1234567890unsw@devdb-30fsv."
-                             "mongodb.net/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://public:1234567890unsw@devdb-30fsv.mongodb.net/test?retryWrites=true&w=majority")
 db = client.main
 
 # lib setting ----------------
@@ -28,7 +28,9 @@ login_manager = LoginManager()
 secure = Bcrypt()
 mail = Mail()
 cors = CORS()
-
+#install package eventlet
+socketio = SocketIO(async_mode="eventlet")
+bg_task = {}
 
 # factory function
 def create_app():
@@ -43,7 +45,6 @@ def create_app():
     cors.init_app(app, supports_credentials=True)
 
     # blueprint register ----------------
-
     # guide
     from .guide import guide
     app.register_blueprint(guide, url_prefix='/guide')
@@ -80,4 +81,13 @@ def create_app():
     def test_bootstrap():
         return render_template('/welcome/bootstrap.html')
 
+    # if there is a error of "ValueError: Invalid async_mode specified"
+    # try to install eventlet package
+    socketio.init_app(app)
+    #events for each course namespave
+    cur = db.courses.find()
+    for doc in cur:
+        # bg_task[doc["code"]] = event.Event()
+        bg_task[doc["code"]] = 0
+    bg_task["bg_full_check"] = 0
     return app

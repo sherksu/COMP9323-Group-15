@@ -72,8 +72,14 @@
     margin-top: 50%;
 }
 
-.mh-100vh{
-    min-height: 100vh!important;
+@media (min-width: 768px) {
+    .mh-100vh {
+        min-height: 100vh !important;
+    }
+}
+
+.middle-col .row {
+    margin: auto !important;
 }
 
 .middle-col{
@@ -83,4 +89,8 @@
 
 .all-questions{
     font-size: 1.5em;
+}
+
+.download-btn{
+    width: auto!important;
 }
