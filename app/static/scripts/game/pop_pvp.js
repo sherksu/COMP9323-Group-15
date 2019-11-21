@@ -95,7 +95,6 @@ function equal(setA, setB) {
             "Battlegrounds": 10,
             "fake type":1000
         }
-
         if (this.player.includes(user_name)) {
             this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
             if (this.game_start)
@@ -294,6 +293,8 @@ function new_socket(data){
     })
 }
 let showed = false
+let start_gamelog = 0
+let gaminglog = 0
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
@@ -321,7 +322,6 @@ function bind_event(){
     });
 
     socket.on('gaming', function (data) {
-        console.log("gaming")
         let modal = "<div class=\"modal fade message-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
             "  <div class=\"modal-dialog\" role=\"document\">\n" +
             "    <div class=\"modal-content\">\n" +
@@ -350,10 +350,12 @@ function bind_event(){
             $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href", "/game/pvp/" + data["id"])
             showed = true
         }
-        console.debug("gaming", data)
+        if(gaminglog)
+            console.debug("gaming", data)
     })
     socket.on('start_game', function (data) {
-        console.debug("on start_game", data)
+        if(start_gamelog)
+            console.debug("on start_game", data)
 
     });
 }

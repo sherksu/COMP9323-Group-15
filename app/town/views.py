@@ -19,6 +19,9 @@ def entry_town(course):
 
     # level = get_list_of_levels(user_id, course_id)['levels'][0]
     level = 1
-    return render_template('/town/my_town.html',  username=current_user.username, level=level, course=course,
+    print("\nentry_town")
+    print(current_user,current_user.get_id())
+    print("\n")
+    return render_template('/town/my_town.html',  user_name=current_user.get_id(),  username=current_user.get_id(), level=level, course=course,
                            is_town=True, code=code, _id=course_id, name=name, chapters=list(chapters),
                            get_node=get_node)

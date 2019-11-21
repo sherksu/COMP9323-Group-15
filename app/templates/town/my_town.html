@@ -58,10 +58,10 @@
 
 {% block scripts %}
 <script>
-let username = '{{ username }}';
-let level = {{ level.level }};
-let exp = {{ level.exp }};
-let next_level = {{ level.next_level }};
+let username = "{{username}}"
+let level = Number("{{ level.level }}");
+let exp = Number("{{ level.exp }}");
+let next_level = Number("{{ level.next_level }}");
 let rate = exp / next_level * 100;
 $('.HUD-process').css('width', exp.toString()+'%');
 $('.HUD-heading').text(username);
