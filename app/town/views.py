@@ -3,7 +3,7 @@ from flask import render_template,request
 from flask_login import login_required, current_user
 from app.MongoFunction import *
 from app import db
-. import town
+from . import town
 
 
 @town.route('/<course>')
