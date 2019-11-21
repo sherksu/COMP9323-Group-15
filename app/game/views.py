@@ -41,6 +41,9 @@ def upload_csv():
         submited = pd.read_csv(request.files['fileToUpload'])
         pprint(submited)
         print(answer.equals(submited))
+        if answer.equals(submited) and "room" in request:
+            db.rooms.update({"_id":ObjectId(request.form['room']),ObjectId(request.form['room']):{"$exists":0}},
+                            {"$set":{ObjectId(request.form['room']):1}})
         return data['correct_answer'] if answer.equals(submited) else "0"
     else:
         return "0"

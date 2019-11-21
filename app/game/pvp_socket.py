@@ -43,7 +43,7 @@ def bg_full_check():
         socketio.sleep(1)
         query = []
         for k, v in type_num.items():
-            query.append({"type": k, "player": { "$lt": {"$size": 5 }} })
+            query.append({"type": k, "player": {"$size": v }} )
         cur = db.rooms.find({"game_start":{"$exists":False},"$or":query})
         for r in cur:
             if str(r["_id"]) not in bg_task:
@@ -55,13 +55,14 @@ def bg_gaming_thread(room_id):
     start_time = time()
     print(f"\nbg_gaming_thread started {room_id}\n")
     while True:
-        socketio.sleep(3)
+        socketio.sleep(1)
         cur = db.rooms.find_one({"_id":ObjectId(room_id)})
         if cur:
             data = dict(cur)
             socketio.emit('gaming',
                           json.dumps({"id": room_id,
-                           "data":data},default=str),
+                           "data":data},
+                          default=str),
                           room=room_id,
                           namespace='/pvp',
                           broadcast=1,
@@ -153,7 +154,7 @@ def on_echo(message):
         # emit("echo", {"data": message["s"], "rooms": rooms()}, namespace='/pvp', room=request.sid)
     else:
         emit("echo", {"data": message, "rooms": rooms()}, namespace='/pvp',room=request.sid)
-    print("block?")
+    print(bg_task)
     return ("echo was received by server",rooms())
 
 @socketio.on('new_room', namespace='/pvp')
@@ -190,8 +191,8 @@ def on_change_room(data):
                 if r != data and r != request.sid and r not in bg_task:
                     leave_room(r)
             db.rooms.delete_many({"player": []})
-            cond = getNotFull()
-            cur = db.rooms.update_one({"_id": ObjectId(data),"game_start":{"$exists":False},"$and":cond},
+            # cond = getNotFull()
+            cur = db.rooms.update_one({"_id": ObjectId(data),"game_start":{"$exists":False}},
                             {"$push": {"player":
                             {"$each":[current_user.get_id()],
                              "$slice":maxnum}}})

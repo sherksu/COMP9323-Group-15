@@ -319,6 +319,7 @@ function bind_event(){
         rooms.update_from(JSON.parse(data), in_room)
     });
     socket.on('gaming', function (data) {
+        console.log("gaming")
         let modal = "<div class=\"modal fade message-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
             "  <div class=\"modal-dialog\" role=\"document\">\n" +
             "    <div class=\"modal-content\">\n" +
