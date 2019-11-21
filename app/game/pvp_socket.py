@@ -28,13 +28,33 @@ def bg_update_room(course):
         # cur = db.rooms.find({"course": course,"game_start":{"$exists":False}})
         cur = db.rooms.find({"course": course})
         data = json.dumps(list(cur), default=str)
-        # print("bg_update_room",data)
         socketio.emit('update_room',
                       data,
                       room=course,
                       namespace='/pvp',
                       broadcast = 1,
                       skip_sid=1)
+        query = []
+        for k,v in type_num.items():
+            query.append({"type":k,"player":{"$size":v},"start_game":{"$exists":False}})
+        cur = list(db.rooms.find({"$or": query}))
+        for r in cur:
+            db.rooms.update({"_id": r["_id"]},
+                            {"$set": {"start_game": True}})
+            socketio.start_background_task(bg_game, r)
+
+
+def bg_game(r):
+    while True:
+        socketio.sleep(1)
+        cur = db.rooms.find_one({"_id":r["_id"]})
+        # print(cur)
+        # socketio.emit("start_game",
+        #           json.dumps(r, default=str),
+        #           room=r["course"],
+        #           namespace='/pvp',
+        #           broadcast=1,
+        #           skip_sid=1)
 
 #background green thread
 def bg_full_check():
@@ -84,6 +104,10 @@ def on_connect():
     try:
         print("\nconnect to:",request.namespace)
         print(request.args)
+        if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
+            bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room,request.args["course"])
+        #TODO -- check start_game field, if t spawn game thread
+
         print("\n")
     except Exception as e:
         pprint(e)
@@ -144,6 +168,7 @@ def on_message(message):
 @socketio.on('echo', namespace='/pvp')
 def on_echo(message):
     print("\n\n\n\n","echo",message,rooms(),"\n\n\n\n")
+    return ""
     if "room" in message:
         for r in message["room"]:
             emit("echo",{"data":message["s"],"room":r,"rooms":rooms()}, namespace='/pvp',room=r)

@@ -297,6 +297,7 @@ let showed = false
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
+        //TODO  -- if start_game lock all button or rediect to game page
         socket.emit("join",{"room":c_code},function (data) {
             console.log("join",data)
         })
@@ -318,6 +319,7 @@ function bind_event(){
         // console.debug("on update_room", data)
         rooms.update_from(JSON.parse(data), in_room)
     });
+
     socket.on('gaming', function (data) {
         console.log("gaming")
         let modal = "<div class=\"modal fade message-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
@@ -337,17 +339,21 @@ function bind_event(){
             "    </div><!-- /.modal-content -->\n" +
             "  </div><!-- /.modal-dialog -->\n" +
             "</div><!-- /.modal -->"
-        if(!$(".message-pop").length)
+        if (!$(".message-pop").length)
             $("body").append(modal)
-        if($("#pvp_Modal:visible").length && !showed){
+        if ($("#pvp_Modal:visible").length && !showed) {
             console.log("in")
             $(".message-pop").modal()
             $(".message-pop").find(".modal-body").html("<h2>Redirect you to the game page</h2>")
-            $(".message-pop").find("a.yes-btn").prop("href","/game/pvp/"+data["id"])
+            $(".message-pop").find("a.yes-btn").prop("href", "/game/pvp/" + data["id"])
             $("message-pop").show()
-            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href","/game/pvp/"+data["id"])
+            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href", "/game/pvp/" + data["id"])
             showed = true
         }
         console.debug("gaming", data)
+    })
+    socket.on('start_game', function (data) {
+        console.debug("on start_game", data)
+
     });
 }
