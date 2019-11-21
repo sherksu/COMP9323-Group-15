@@ -47,8 +47,8 @@ def bg_update_room(course):
 def bg_game(r):
     while True:
         socketio.sleep(1)
-        cur = dir(db.rooms.find_one({"_id":r["_id"]}))
-        print(cur)
+        cur = db.rooms.find_one({"_id":r["_id"]})
+        # print(cur)
         # socketio.emit("start_game",
         #           json.dumps(r, default=str),
         #           room=r["course"],
@@ -236,7 +236,7 @@ def on_change_room(data):
                            }, default=str )
 
 @socketio.on('leave_room', namespace='/pvp')
-def on_leave_room(data):
+def on_leave_room():
     try:
         with client.start_session() as s:
             s.start_transaction()

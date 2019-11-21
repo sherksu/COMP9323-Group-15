@@ -339,19 +339,19 @@ function bind_event(){
             "    </div><!-- /.modal-content -->\n" +
             "  </div><!-- /.modal-dialog -->\n" +
             "</div><!-- /.modal -->"
-        if(!$(".message-pop").length)
+        if (!$(".message-pop").length)
             $("body").append(modal)
-        if($("#pvp_Modal:visible").length && !showed){
+        if ($("#pvp_Modal:visible").length && !showed) {
             console.log("in")
             $(".message-pop").modal()
             $(".message-pop").find(".modal-body").html("<h2>Redirect you to the game page</h2>")
-            $(".message-pop").find("a.yes-btn").prop("href","/game/pvp/"+data["id"])
+            $(".message-pop").find("a.yes-btn").prop("href", "/game/pvp/" + data["id"])
             $("message-pop").show()
-            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href","/game/pvp/"+data["id"])
+            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href", "/game/pvp/" + data["id"])
             showed = true
         }
         console.debug("gaming", data)
-
+    })
     socket.on('start_game', function (data) {
         console.debug("on start_game", data)
 
