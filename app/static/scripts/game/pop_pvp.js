@@ -95,7 +95,10 @@ function equal(setA, setB) {
             "Battlegrounds": 10,
             "fake type":1000
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1bd37a36e86039fdc5d7ac25c702cf2af83f3936
         if (this.player.includes(user_name)) {
             this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
             if (this.game_start)
@@ -294,9 +297,18 @@ function new_socket(data){
     })
 }
 let showed = false
+<<<<<<< HEAD
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
+=======
+let start_gamelog = 0
+let gaminglog = 0
+function bind_event(){
+    socket.on('connect', function () {
+        console.log("connect\n\n\n\n")
+        //TODO  -- if start_game lock all button or rediect to game page
+>>>>>>> 1bd37a36e86039fdc5d7ac25c702cf2af83f3936
         socket.emit("join",{"room":c_code},function (data) {
             console.log("join",data)
         })
@@ -318,8 +330,13 @@ function bind_event(){
         // console.debug("on update_room", data)
         rooms.update_from(JSON.parse(data), in_room)
     });
+<<<<<<< HEAD
     socket.on('gaming', function (data) {
         console.log("gaming")
+=======
+
+    socket.on('gaming', function (data) {
+>>>>>>> 1bd37a36e86039fdc5d7ac25c702cf2af83f3936
         let modal = "<div class=\"modal fade message-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
             "  <div class=\"modal-dialog\" role=\"document\">\n" +
             "    <div class=\"modal-content\">\n" +
@@ -337,6 +354,7 @@ function bind_event(){
             "    </div><!-- /.modal-content -->\n" +
             "  </div><!-- /.modal-dialog -->\n" +
             "</div><!-- /.modal -->"
+<<<<<<< HEAD
         if(!$(".message-pop").length)
             $("body").append(modal)
         if($("#pvp_Modal:visible").length && !showed){
@@ -351,3 +369,25 @@ function bind_event(){
         console.debug("gaming", data)
     });
 }
+=======
+        if (!$(".message-pop").length)
+            $("body").append(modal)
+        if ($("#pvp_Modal:visible").length && !showed) {
+            console.log("in")
+            $(".message-pop").modal()
+            $(".message-pop").find(".modal-body").html("<h2>Redirect you to the game page</h2>")
+            $(".message-pop").find("a.yes-btn").prop("href", "/game/pvp/" + data["id"])
+            $("message-pop").show()
+            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href", "/game/pvp/" + data["id"])
+            showed = true
+        }
+        if(gaminglog)
+            console.debug("gaming", data)
+    })
+    socket.on('start_game', function (data) {
+        if(start_gamelog)
+            console.debug("on start_game", data)
+
+    });
+}
+>>>>>>> 1bd37a36e86039fdc5d7ac25c702cf2af83f3936
