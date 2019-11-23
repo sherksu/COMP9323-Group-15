@@ -1,209 +1,155 @@
-.containers {
+body{
+    user-select: none;
+}
+
+.containers{
+    width: 1920px;
+    height: 1204px;
+    background: url('/static/image/guide/bgd5.jpg') no-repeat center center;
+}
+
+.button {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(102, 0, 204, 0.85), rgba(166, 77, 255, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.button1 {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;text-align: left;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(102, 0, 204, 0.85), rgba(166, 77, 255, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button1:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.button2 {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;text-align: left;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(0, 51, 0, 0.85), rgba(102, 255, 102, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button2:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.button3 {
+  display: inline-block;
+  padding: 60px 10px 65px 10px;
+  font-size: 12px;
+  cursor: pointer;text-align: left;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background: linear-gradient(500deg, rgba(204, 51, 0, 0.85), rgba(255, 179, 153, 0.85));
+    box-shadow: 0 0 7.5px rgb(180, 154, 255);
+  border: none;
+  border-radius: 15px;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); transition: 1s clip-path; width: 80px; height: 100px;
+}
+.button3:active {
+  background-color: rgb(102, 0, 204);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.b1{
+    margin: 150px 10px 20px 290px;
+}
+.b2{
+    margin: -30px 100px 50px 650px;
+}
+.b3{
+    margin: -120px 10px 20px 1080px;
+}
+.b4{
+    margin: 140px 10px 20px 1100px;
+}
+.b5{
+    margin: -110px 10px 20px 730px;
+}
+.b6{
+    margin: -240px 10px 20px 450px;
+}
+.b7{
+    margin: -25px 10px 20px 160px;
+}
+.b8{
+    margin: 150px 10px 20px 450px;
+}
+.b9{
+    margin: -140px 10px 20px 900px;
+}
+.b10{
+    margin: -140px 10px 20px 1650px;
+}
+.b11{
+    margin: -420px 10px 20px 1380px;
+}
+
+.pop_bar{
+    margin-top:-370px;
+    margin-left: 565px;
+    font-size: 20px
+}
+
+.tb-rl{
+    -webkit-writing-mode: vertical-lr;
+    writing-mode:vertical-lr;
+}
+
+#popView{
+    margin-top: 50px;
+    height: 500px;
+    width: 600px;
+    border-radius: 0 10px 10px 0;
+    background: linear-gradient(1000deg, rgba(204, 51, 0, 0.85), rgba(255, 179, 153, 0.85));
+    color: #ffffff;
+    -webkit-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
+    -moz-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
+    box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
+    transition: all .30s ease;
     position:absolute;
-    top:0;
-    left:0;
-    z-index: -1;
-    height: 100%;
-    width: 100%;
-    min-height: 605px;
-    min-width: 1024px;
-    background-image: url('/static/image/guide/map-06.png');
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    background-size: auto 100%;
-    overflow: scroll;
-}
-
-.containers::-webkit-scrollbar {
-    display: none;
-}
-
-.layout {
-    height:100%;
-    width:calc(20% + 70vh);
-    min-width: 600px;
-    margin-left: auto;
-    margin-right:auto;
-}
-
-.col-main {
-    position: relative;
-    height: 100%;
-    width: 80%;
-    float: left;
-}
-
-.col-pad {
-    position: relative;
-    height: 100%;
-    width: 10%;
-    float: left;
-}
-
-.cities {
-    position: absolute;
-    bottom: 17%;
-    height: 35%;
-    width: 100%;
-}
-
-/* ------- selectors ------- */
-.selectors-l {
-    position: absolute;
-    color: white;
-    font-size: calc(5vmin);
-    top: 40%;
-    left: -5%;
-}
-
-.selectors-r {
-    position: absolute;
-    color: white;
-    font-size: calc(5vmin);
-    top: 40%;
-    right: -5%;
-}
-
-/* ------- course-pic-container ------- */
-.courses {
-    position: absolute;
-    bottom: 0;
-    transition: all 0.5s ease;
-}
-
-/* ------- Two HUD ------- */
-.HUD {
-    font-family: 'Barlow Semi Condensed', sans-serif;
-    background-color: white;
-    border-radius: calc(0.5vmin);
-    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
-    padding: 2%;
-}
-
-.course-HUD {
-    position: absolute;
-    width: calc(300px + 2vmin);
-    bottom: -10%;
-    right: -10%;
-    opacity: 0;
-}
-
-.course-HUD .description {
-    margin-bottom: 5%;
-}
-
-.course-HUD b {
-    font-size: 16pt;
-}
-
-.course-req {
-    position: absolute;
-    width: calc(150px + 2vmin);
-    top: -5%;
-    left: -5%;
-    opacity: 0;
-}
-
-.course-req .heading {
-    font-size: 14pt;
-    margin-bottom: 5%;
-}
-
-.process {
-    display: flex;
-    align-items: center;
-}
-
-.process-body {
-    border-radius: 15px;
-    height: 10px;
-    width:80%;
-    background-color: #E6E6E6;
-    float: left;
-}
-
-.process-body .bar{
-    border-radius: 15px;
-    height: 10px;
-    width:30%;
-    background-color: #ACDBE4;
-}
-
-.process-status {
-    float: right;
-    width: 10%;
-    margin-left: 2%;
-}
-
-/* ------- buttons ------- */
-/* stander button inherit from basic.css*/
-.buttons {
-    font-family: 'Barlow Semi Condensed', sans-serif;
-}
-
-/* btn list */
-.btn-list {
-    position: fixed;
-    bottom: 2%;
-    right: 2%;
-    list-style-type:none;
-}
-
-.btn-list li {
-    margin-bottom: 30%;
-}
-
-/* recommend */
-#recommend {
-    position: fixed;
-    top: 2%;
-    left: 2%;
-    padding:0;
-    margin:0;
-}
-
-.icn {
-    display:inline-block;
-    font-size: calc(16px + 1vmin);
-    color:white;
+    z-index:2;
+    left:-560px;
     text-align: center;
 }
 
-.illustration {
-    visibility: hidden;
-    background-color: white;
-    border-radius: calc(0.5vmin);
-    box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-    position: absolute;
-    width: 120px;
-    padding: 5px;
-    color: black;
-    font-size: 8pt;
-    left: 60px;
-    top: 12px;
-    opacity: 0;
-    transition: all 0.5s ease;
+#popView img{
+    margin: 90px 20px 0 0;
+
 }
 
-/* ------- change town ------- */
-#course-pic:hover {
-    transform: scale(1.05);
-}
-
-#courseHUD {
-    animation: moves 1s forwards ease;
-    animation-delay: 1s;
-}
-
-#preHUD {
-    animation: moves2 1s forwards ease;
-    animation-delay: 1s;
-}
-
-@keyframes moves {
-    from{transform:translateX(-20%); opacity: 0} to {opacity: 1}
-}
-
-@keyframes moves2 {
-    from{transform:translateX(30%); opacity: 0} to {opacity: 1}
+#popView:hover {
+    left:0;
 }

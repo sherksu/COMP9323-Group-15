@@ -14,34 +14,3 @@
     background-image:
         repeating-linear-gradient(45deg, red 0px, yellow 10px, transparent 10px, transparent 20px);
 }
-
-
-/* stander button */
-.stn-button {
-    position: relative;
-    height: calc(40px + 1vmin);
-    width: calc(40px + 1vmin);
-    color: white;
-    border-radius: 100%;
-    background-color: #FF931E;
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.stn-button div:first-child {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 70%;
-    width: 70%;
-    transform: translate(-50%, -50%);
-}
-
-.stn-button:hover {
-    transform: scale(1.2);
-}
-
-.stn-button:hover .illustration {
-    visibility: visible;
-    opacity: 1;
-}

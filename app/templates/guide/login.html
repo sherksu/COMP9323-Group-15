@@ -1,38 +1,72 @@
 {% extends '/basic/BasicConfig.html' %}
 
+{% import "bootstrap/wtf.html" as wtf %}
+
 {% block navbar %}
     {% include('/basic/navigation.html') %}
 {% endblock %}
 
 {% block content %}
     <style>
-        body{
-            {#background: url("../../static/image/guide/bgd3.jpg") no-repeat center center;#}
-            {#background-size: cover; #}
-            padding: 80px;
-            background-attachment:fixed;
-            user-select: none;
+        .out{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
         }
         .containers{
-            width: 450px;
-            height: 480px;
+            position: relative;
+            width: 900px;
+            height: 550px;
             margin: auto;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            -webkit-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
-            -moz-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
-            box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
+            background: #ffffff;
+            color: #000000;
+            border-radius: 15px;
+            margin-top: 110px;
+        }
+        .form-control{
+            width: 300px;
+        }
+        .submit{
+            background-color: rgb(0, 102, 204);
+            color: white;
+            height: 45px;
+            margin-top: 35px;
             border-radius: 10px;
-            transition: box-shadow .30s;
-            padding: 20px;
         }
-        .containers:hover{
-            box-shadow: #444444 5px 5px 25px;
+        .form{
+            margin-top: 30px;
         }
+        .profile{
+            float: left;
+            margin-left: 90px;
+            margin-top: 60px;
+            width: 500px;
+        }
+        .img{
+            position: absolute;
+            background: url("../../static/image/guide/big.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 350px;
+            height: 450px;
+            top: 55px;
+            left: 480px;
+        }
+        .flash{
+            position: fixed;
+            top: 53px;
+            width: 700px;
+            text-align: center;
+            left: 500px;
+        }
+
     </style>
     <body>
-        <div class="row" style="text-align: center;align-content:center; padding-left: 30px; margin:30px 70px 10px 450px; height:20px; width: 830px">
-            <div class="col-md-6">
+        <div class="out">
+            <div class="row flash">
+            <div class="col-md-8">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -45,22 +79,33 @@
             </div>
         </div>
         <div class="containers">
-            <h1 style="text-align: center">Log In</h1>
-            <div class="row">
-                <div class="col-md-8" style="align-content:center; padding-left: 10px; margin:30px 70px 10px 70px">
-                    {% import 'bootstrap/wtf.html' as wtf %}
-                    {{ wtf.quick_form(form) }}
+            <div class="profile row">
+                <div class="">
+                    <h2 style="font-family: 'Roboto Light'; font-size: 30px; font-weight: bold; margin-left: 35px; margin-bottom: 55px">Log In To Play</h2>
+                    <form class="form" method="POST" enctype=multipart/form-data>
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_field(form.username, class="form-control name") }}
+                        {{ wtf.form_field(form.password, class="form-control password") }}
+                        {{ wtf.form_field(form.submit, class="form-control submit") }}
+                        {{ wtf.form_field(form.rem, class="form-control rem") }}
+                    </form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            Password forget?
+                            <a href="{{ url_for('guide.password_reset') }}">
+                                Click here
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6" style="padding: 20px; margin: 3px 10px 140px 60px">
-                    Password forget?
-                    <a href="{{ url_for('guide.password_reset') }}">
-                        Click here
-                    </a>
-                </div>
+
+            <div class="img">
+
             </div>
         </div>
+        </div>
+
     </body>
 
 {% endblock %}

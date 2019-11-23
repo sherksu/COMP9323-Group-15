@@ -36,7 +36,7 @@ def insert_users():
 
 
 if __name__ == "__main__":
-    manager.run()
+    app.run(debug=True)
     # python SevManager.py runserver -d -r
     # d: debug
     # r: reload !

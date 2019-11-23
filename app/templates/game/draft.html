@@ -1,0 +1,56 @@
+<p>
+  <strong>
+   Description
+  </strong>
+  : There are times that you need to merge/join two or more datasets to get information you need. In this activity, using a new toy dataset, you will find publication count by country (
+  <em>
+   how many books are published in each country)
+  </em>
+  .  Since the given dataset dose not provide the country of publication, we use
+  <a href="https://github.com/mysilver/COMP9321-Data-Services/blob/master/Week3_Data_Cleansing/City.csv" target="_blank">
+   City.csv
+  </a>
+  to map cities to countries.
+ </p><p>
+  <strong>
+   Steps
+  </strong>
+  :
+ </p><ol>
+  <li>
+   Load the Books dataset into a dataframe
+  </li>
+  <li>
+   Apply the cleansing methods discussed in Activity-2 to the dataframe
+  </li>
+  <li>
+   Replace the spaces in the column names with the underline character  ('_')
+  </li>
+  <li>
+   Load the City dataset into a dataframe
+  </li>
+  <li>
+   <a href="https://stackoverflow.com/questions/25888207/pandas-join-dataframes-on-field-with-different-names/25888471#25888471" target="_blank">
+    Merge two datasets based on the name of city
+   </a>
+  </li>
+  <li>
+   <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.groupby.html" target="_blank">
+    Group by the resultant dataframe based on the country column
+   </a>
+   <br>
+   While grouping by,
+   <a href="https://stackoverflow.com/questions/41236370/what-is-as-index-in-groupby-in-pandas" target="_blank">
+    to keep the name of countries set as_index=False
+   </a>
+   <br>
+   Use
+   <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.core.groupby.GroupBy.count.html" target="_blank">
+    count()
+   </a>
+   to calculate the number of publications by country.
+  </li>
+  <li>
+   Print the dataframe
+  </li>
+ </ol>
