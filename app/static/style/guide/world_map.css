@@ -54,6 +54,9 @@
     font-size: calc(5vmin);
     top: 40%;
     left: -5%;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    z-index: 10000;
 }
 
 .selectors-r {
@@ -62,12 +65,24 @@
     font-size: calc(5vmin);
     top: 40%;
     right: -5%;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.selectors-l:hover {
+    transform: scale(1.1);
+}
+
+.selectors-r:hover {
+    transform: scale(1.1);
 }
 
 /* ------- course-pic-container ------- */
 .courses {
     position: absolute;
     bottom: 0;
+    cursor: pointer;
     transition: all 0.5s ease;
 }
 
@@ -186,7 +201,7 @@
 }
 
 /* ------- change town ------- */
-#course-pic:hover {
+.courses:hover {
     transform: scale(1.05);
 }
 

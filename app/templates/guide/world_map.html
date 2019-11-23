@@ -45,38 +45,15 @@
             <div class="col-pad"></div>
             <div class="col-main">
                 <div class="cities">
-                    <div id="next_course" class="selectors-l">
+                    <div id="pre_course" class="selectors-l">
                         <i class="icon-angle-left"></i>
                     </div>
-                    <div id="pre-course" class="selectors-r">
+                    <div id="next_course" class="selectors-r">
                         <i class="icon-angle-right"></i>
                     </div>
-                    <div id="course-pic" class="courses">
-                        <img src="/static/image/guide/demo.png" alt="" height="100%" width="100%">
-                    </div>
-                    <div id="courseHUD" class="HUD course-HUD">
-                        <div class="description">
-                            <b id="course_name">COMP9020</b><br />
-                            <span id="course_description">This course will give you a overall view of db</span>
-                        </div>
-                        <div>
-                            <div><i>Your complete:</i></div>
-                            <div class="process">
-                                <div class="process-body">
-                                    <div id="complete_bar" class="bar"></div>
-                                </div>
-                                <div id="complete_detail" class="process-status">
-                                    <i>5/10</i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="preHUD" class="HUD course-req">
-                        <div>
-                            <div class="heading"><b>Prerequisite</b></div>
-                            <span id="pre_req">COMP 9020 | COMP9024</span>
-                        </div>
-                    </div>
+                    {%- for i in course %}
+                        {{ city(i.code, i.name, i.overall, loop.index0) }}
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-pad"></div>
@@ -84,8 +61,77 @@
     </div>
 {% endblock %}
 
+{% macro city(course_code, course_name, course_complete, i) %}
+<div id="switch_{{ i }}" style="display: {%- if i == 0 %}block{%- else %}none{% endif %}">
+    <div id="{{ course_code }}" class="courses">
+        <img src="/static/image/guide/demo.png" alt="" height="100%" width="100%">
+    </div>
+    <div id="courseHUD" class="HUD course-HUD">
+        <div class="description">
+            <b id="course_name">{{ course_code }}</b><br />
+            <span id="course_description">{{ course_name }}</span>
+        </div>
+        <div>
+            <div><i>Your complete:</i></div>
+            <div class="process">
+                <div class="process-body">
+                    <div id="complete_bar" class="bar" style="width: {{ course_complete }}0%"></div>
+                </div>
+                <div id="complete_detail" class="process-status">
+                    <i>{%- if course_complete  %}{{ course_complete }}{%- else %}0{%- endif %}/10</i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="preHUD" class="HUD course-req">
+        <div>
+            <div class="heading"><b>Prerequisite</b></div>
+            <span id="pre_req">comp9020 | comp9024</span>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
 {% block scripts %}
     <script>
+        let i = 0;
+        let length = {{ lengths }};
+        let is_click = true;
+        $('#next_course').on('click', () => {
+            if (is_click) {
+                is_click = false;
+                let name = "#switch\_"+i.toString();
+                $(name).fadeOut();
+                i++;
+                if (i >= length) {
+                    i = 0;
+                }
+                name = "#switch\_"+i.toString();
+                setTimeout(function(){$(name).fadeIn()}, 500);
+                setTimeout(function(){is_click = true}, 1000);
+            }
+        });
+
+         $('#pre_course').on('click', () => {
+             if (is_click) {
+                is_click = false;
+                let name = "#switch\_"+i.toString();
+                $(name).fadeOut();
+                i--;
+                if (i < 0) {
+                    i = length - 1;
+                }
+                name = "#switch\_"+i.toString();
+                setTimeout(function(){$(name).fadeIn()}, 500);
+                setTimeout(function(){is_click = true}, 1000);
+             }
+        });
+
+         $('.courses').on('click', function(){
+             let course_code = $(this).attr('id');
+             console.log(course_code);
+             window.open('/town/'+course_code.toString())
+         })
     </script>
 {% endblock %}
 
