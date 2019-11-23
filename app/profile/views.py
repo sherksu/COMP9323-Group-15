@@ -3,7 +3,7 @@ from app.MongoFunction import *
 from flask import render_template
 from . import ranking_function as function
 from flask_login import current_user
-
+import datetime
 
 @profile.route('/', methods=['GET', 'POST'])
 def personal_profile():
@@ -63,7 +63,9 @@ def question_set():
     return render_template("/profile/question_set.html", **dic, get_question_content=get_question_content,
                            get_chapter_name=get_chapter_name, get_course_name=get_course_name,
                            get_course_code=get_course_code, get_question_course=get_question_course,
-                           get_question_chapter=get_question_chapter,correct_answer = correct_answer)
+                           get_question_chapter=get_question_chapter,correct_answer = correct_answer,
+                           get_question_option=get_question_option,get_question_correct_answer=get_question_correct_answer,
+                           chr=chr,int=int,str=str)
 
 @profile.route('/question_set_solutions/<question_id>')
 def question_set_solutions(question_id):
@@ -108,6 +110,10 @@ def get_chapter_name(chapter_id):
     if chapter:
         return chapter['name']
 
+def get_question_option(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['option']
 
 def get_question_content(question_id):
     question = db.question_set.find_one({"_id": question_id})
@@ -119,6 +125,11 @@ def get_question_course(question_id):
     question = db.question_set.find_one({"_id": question_id})
     if question:
         return question['course']
+
+def get_question_correct_answer(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['correct_answer']
 
 
 def get_question_chapter(question_id):
