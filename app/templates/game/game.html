@@ -1,5 +1,5 @@
 {% extends '/basic/BasicConfig.html' %}
-{% from 'game/marco.html' import option,timer,mcq,csv %}
+
 {% block title%}
     {% if type and node_name %}
     {{type}}-{{node_name}}!
@@ -24,6 +24,7 @@
 <script src="{{url_for('static',filename='lib/game/dist/loading-bar.min.js')}}"></script>
 {% endblock %}
 
+
 {% if type and node_name %}
     {%set title_name=type+"-"+node_name %}
 {% else %}
@@ -33,11 +34,26 @@
     {% include('/basic/navigation.html') %}
 {% endblock %}
 
+{% macro progressbar() %}
+<div
+        class="heart ldBar label-center"
+        data-type="fill"
+        data-value="100"
+        data-path="M90.5,23.2c0-12.5-10.2-22.7-22.7-22.7
+    c-13.6,0-20.9,8.6-22.3,13.8C44.3,8.9,
+    35.1,0.5,23.2,0.5C10.7,0.5,0.5,10.7,
+    0.5,23.2c0,22.2,36.5,45.3,45,55.9
+    C53.5,67.3,90.5,46.3,90.5,23.2z"
+        data-fill="data:ldbar/res,bubble(#F08080,	#FFFF00,50,1)"
+        data-pattern-size="50"
+></div>
+{% endmacro %}
+
 {% block scripts %}
 <script>
     let x = {
         {%- for x in data %}
-            "{{x._id}}": {% if x.correct_answer is number %}{{x.correct_answer}}{% else %}"{{x.correct_answer}}"{% endif %},
+            "{{x._id}}":{{x.correct_answer}},
         {%- endfor %}
     };
 
@@ -58,17 +74,32 @@
 </script>
 {% endblock %}
 
+{# take option for mutiple select #}
+{% macro option(key1, key2,option) %}
+<div class="radio">
+    <label>
+        <input type="radio" value="{{key2-1}}" name="{{key1}}" aria-label="Checkbox for option">{{option}}
+    </label>
+</div>
+{% endmacro %}
+
+{% macro timer() %}
+<div class="timer">
+</div>
+{% endmacro %}
+
+
 {% block content %}
 <div class="container-fluid vw-100" >
-    <div class="row justify-content-center">
-        <div class="col-lg-3 col-md-12">
+    <div class="row">
+        <div class="col-lg-3 col-md-3">
             {{ timer() }}
         </div>
-        <div class="col-lg-9 col-md-12 mh-100vh middle-col">
+        <div class="col-lg-8 col-md-9 mh-100vh middle-col">
             <div class="row">
                 <div class="col-12">
                     <div class="row" style="margin-top: 20px;overflow: hidden">
-                        <div class="col-xs-4" style="overflow: hidden;height: 300px">
+                        <div class="col-lg-4" style="overflow: hidden;height: 300px">
                             <div class="corp">
                                 <img class="hero" id="avatar1"
                                      src="{{url_for('static',filename='image/game/korra_static.png')}}">
@@ -77,15 +108,16 @@
                                      style="display: none;">
                             </div>
                         </div>
-                        <div class="col-xs-4" style="margin-left: 120px">
-                            <img class="monster" id="m1" src="{{url_for('static',filename='game/image/m1.gif')}}">
-                            <img class="monster" id="m1_1" src="{{url_for('static',filename='game/image/m1_1.gif')}}"
+                        <div class="col-lg-4" style="margin-left: 120px">
+                            <img class="monster" id="m1" src="{{url_for('static',filename='image/game/m1.gif')}}">
+                            <img class="monster" id="m1_1" src="{{url_for('static',filename='image/game/m1_1.gif')}}"
                                  style="display: none;margin-left: 40%; float: right;">
                             <img class="monster" id="m2" src="{{url_for('static',filename='image/game/m2.gif')}}" style="display: none">
                             <img class="monster" id="m2_1" src="{{url_for('static',filename='image/game/m2_1.gif')}}"
                                  style="display: none;">
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-lg-2">
+                            {{progressbar()}}
                         </div>
                         <div class="w-100 grass">
                         </div>
@@ -95,19 +127,34 @@
             <div class="row">
                 <div class="col-12 all-questions" q-num="{{data|length}}">
                     {% for d in data %}
-                        {% set Qloop = loop %}
-                        {% if d['type'] == 'mcq' %}
-                            {{mcq(Qloop,d)}}
-                        {% elif d['type'] == 'csv' %}
-                            {{csv(Qloop,d)}}
-                        {% endif %}
+                    {% set Qloop = loop %}
+                    <div class="row question"
+                         {% if not loop.first %}
+                         style="display: none"
+                         {% endif%}
+                         q-id="{{Qloop.index}}">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    Question {{loop.index}}:<br>{{d.content}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- #TODO - Stop showing db id to user  -->
+                                {% for o in d.option %}
+                                    {{ option(d._id,loop.index,o) }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
-<!--        <div class="col-lg-1 .d-md-none"></div>-->
+        <div class="col-lg-1 .d-md-none"></div>
         <button class="btn btn-primary next" onclick="nextQ(this)">Next</button>
     </div>
 </div>
 {% include "/game/feedback.html" ignore missing%}
 {% endblock %}
+

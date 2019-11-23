@@ -160,22 +160,11 @@ function set_update_interval(room_id){
         $("#navbarNavAltMarkup .nav-item.active").each(function () {
             focus_q.push($(this).text())
         })
-<<<<<<< HEAD
         // console.debug("focus",focus)
         socket.emit("update_focus",{"focus":focus_q,"room":room_id})
     }, 1000);
 }
 
-=======
-        if(focuslog)
-            console.debug("focus",focus_q)
-        socket.emit("update_focus",{"focus":focus_q,"room":room_id})
-    }, 1000);
-}
-let gaminglog = 0
-let positionlog = 0
-let focuslog = 0
->>>>>>> 1bd37a36e86039fdc5d7ac25c702cf2af83f3936
 function bind_event() {
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
@@ -202,12 +191,7 @@ function bind_event() {
     });
     socket.on('gaming', function (data) {
         data =JSON.parse(data)
-<<<<<<< HEAD
         console.debug("gaming", data)
-=======
-        if(gaminglog)
-            console.debug("gaming", data)
->>>>>>> 1bd37a36e86039fdc5d7ac25c702cf2af83f3936
         if(!update_interval_id){
             // console.debug("update_interval_id")
             set_update_interval(data.id,data["data"]["player"])
@@ -217,12 +201,7 @@ function bind_event() {
         // pvpNavBar.showPlayers(data["data"]["player"],data["data"])
     });
     socket.on("position",function(data){
-<<<<<<< HEAD
         // console.log("position",data)
-=======
-        if(positionlog)
-            console.log("position",data)
->>>>>>> 1bd37a36e86039fdc5d7ac25c702cf2af83f3936
         pvpNavBar.showPlayer(data)
     })
 }

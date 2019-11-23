@@ -1,15 +1,8 @@
 let timer;
 let heart;
 let aniP = new Promise(((resolve, reject) => {resolve()}));
-// var tmp
+var tmp
 $( document ).ready(function() {
-    $(".question .download-btn").click(function (e) {
-        console.log(this)
-        // tmp = this
-        window.open(this.getAttribute("data-file"))
-        return false
-    })
-
     $(".question").on('animationend', function(e) {
         // console.log("animationed",e.currentTarget.nextElementSibling == null,e)
         $(e.currentTarget).css("display","none");
@@ -23,7 +16,7 @@ $( document ).ready(function() {
         cur_answer()
     });
 
-    timer = $('.timer').FlipClock(600, {
+    timer = $('.timer').FlipClock(100, {
         clockFace: 'MinuteCounter',
         countdown: true,
         callbacks: {
@@ -71,7 +64,7 @@ $( document ).ready(function() {
         })
     })
     // ---------------------------------
-
+    // timer.stop();
     cur_answer()
 });
 
@@ -85,7 +78,6 @@ function nextQ(e) {
         return false
     }
     let chose = $(".question:visible input").serializeArray()[0];
-    $(".question:visible").addClass('animated bounceOutLeft')
     if(x[chose.name] == chose.value){
         aniP = aniP.then(()=>{
             return new Promise(correct);
@@ -95,6 +87,7 @@ function nextQ(e) {
     }else{
         $(".monster:visible").m_restart()
     }
+    $(".question:visible").addClass('animated zoomOutLeft')
 }
 
 // function updateHeart(){
@@ -119,7 +112,7 @@ function feedback(){
 }
 
 function getAnswers(){
-    return $(".all-questions input.answer").serializeArray()
+    return $(".all-questions input").serializeArray()
 }
 
 jQuery.fn.m_restart = function () {
@@ -156,14 +149,3 @@ function correct(resolve){
     }, 2000);
 }
 
-function file_change(e){
-    console.log('onchange');
-    $(e).parent('form')[0].submit();
-    $(e).parent('form').find(".game_submit").prop("disabled","disabled").attr("disabled","disabled")
-}
-
-
-function onload_fn(e) {
-    response = $(e.contentWindow.document).find("body").text()?$(e.contentWindow.document).find("body").text():$(e.contentDocument).find("body").text()
-    $(e).parent("form").find(".answer").val(response)
-}
