@@ -43,7 +43,7 @@
 {% macro city(course_code, course_name, course_complete, i) %}
 <div id="switch_{{ i }}" style="display: {%- if i == 0 %}block{%- else %}none{% endif %}">
     <div id="{{ course_code }}" class="courses">
-        <img src="/static/image/guide/demo.png" alt="" height="100%" width="100%">
+        <img src="/static/image/guide/town_{{ i }}.png" alt="" height="100%" width="100%">
     </div>
     <div id="courseHUD" class="HUD course-HUD">
         <div class="description">

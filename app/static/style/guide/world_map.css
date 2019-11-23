@@ -99,7 +99,7 @@
     position: absolute;
     width: calc(300px + 2vmin);
     bottom: -10%;
-    right: -10%;
+    right: -25%;
     opacity: 0;
 }
 
