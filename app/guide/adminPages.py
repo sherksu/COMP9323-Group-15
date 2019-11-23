@@ -169,7 +169,7 @@ def world_map():
         else:
             i.update({"overall": ""})
             result.append(i)
-    return render_template('/guide/world_map.html', course=result, lengths=len(result))
+    return render_template('/guide/world_map.html', course=result, lengths=len(result), title="map")
 
 
 @guide.route('/user_page', methods=['GET', 'POST'])
