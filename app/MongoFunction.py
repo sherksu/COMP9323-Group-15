@@ -77,6 +77,7 @@ def get_list_of_level_rank(course_id):
 
 
 # 获取用户的关于course_id的用户名和complete
+
 @show_db_data()
 def get_list_of_complete(user_id, course_id):
     result = db.users.aggregate(
@@ -96,6 +97,24 @@ def get_list_of_complete(user_id, course_id):
 
     return [i for i in result][0]
 
+@show_db_data()
+def get_list_of_complete_username(username, course_id):
+    result = db.users.aggregate(
+        [{"$project": {
+                "username": 1,
+                "complete": {
+                    "$filter": {
+                        "input": "$complete",
+                        "as": "x",
+                        "cond": {
+                            "$eq": ["$$x.course", course_id]
+                        }
+                    }
+                }
+            }}, {"$match": {"username": username}}]
+        )
+
+    return [i for i in result][0]
 
 # 获取关于course_id和user_id的levels
 @show_db_data()

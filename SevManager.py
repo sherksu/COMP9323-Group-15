@@ -10,7 +10,7 @@ from app import create_app, db
 
 # basic config
 host = "localhost"
-port = 5000
+port = 5005
 server = Server(host, port)
 
 # bind app % manager

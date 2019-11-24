@@ -1,14 +1,15 @@
 from . import guide
-from flask import render_template, flash, redirect, url_for,request
+from flask import render_template, flash, redirect, url_for, request
 from app import secure
 from app import db as pydb
+from app.MongoFunction import get_list_of_complete_username
 from app.models import User
 from .forms import RegisterForm, LoginForm, PasswordResetForm, ResetPasswordForm
 from flask_login import login_required, login_user, current_user, logout_user
 from .email import send_reset_password_mail
+from bson import ObjectId
 from werkzeug.utils import secure_filename
 import os
-import wtforms as wtf
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -16,6 +17,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @guide.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -114,15 +116,19 @@ def reset_password(token):
 
 @guide.route('/world_map', methods=['GET', 'POST'])
 def world_map():
-    x = pydb.courses.find()
-    course_code_list = []
-    course_name_list = []
-    for z in x:
-        course_code_list.append(z['code'])
-        course_name_list.append(z['name'])
-
-    cour_list = list(zip(course_code_list, course_name_list))
-    return render_template('/guide/world_map.html', cour_list=cour_list)
+    courses = pydb.courses.find()
+    course_ids = [x for x in courses]
+    result = []
+    for i in course_ids:
+        complete = get_list_of_complete_username(current_user.username, i['_id'])
+        del i['_id']
+        if complete['complete']:
+            i.update({"overall": complete['complete'][0]['overall']})
+            result.append(i)
+        else:
+            i.update({"overall": ""})
+            result.append(i)
+    return render_template('/guide/world_map.html', course=result, lengths=len(result), title="map")
 
 
 @guide.route('/user_page', methods=['GET', 'POST'])
@@ -135,6 +141,4 @@ def user_page():
     rolename = user['rolename']
     return render_template('/guide/user_profile.html', avatar=avatar, slogan=slogan, gender=gender, rolename=rolename)
 
-@guide.route('/course_stru', methods=['GET', 'POST'])
-def course_stru():
-    return render_template('/guide/course_stru.html')
+

@@ -1,8 +1,8 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
+{#{% block navbar %}#}
+{#    {% include('/basic/navigation.html') %}#}
+{#{% endblock %}#}
 
 {% block content%}
 <div class="dropdown">
@@ -19,9 +19,6 @@
 		</li>
 		<li role="presentation">
 			<a role="menuitem" tabindex="-1" href="{{url_for('profile.question_set',user_name = user_name)}}">QUESTION SET</a>
-		</li>
-		<li role="presentation">
-			<a role="menuitem" tabindex="-1" href="{{url_for('profile.study_career',user_name = user_name)}}">STUDY CAREER</a>
 		</li>
 		<li role="presentation" class="divider"></li>
 		<li role="presentation">

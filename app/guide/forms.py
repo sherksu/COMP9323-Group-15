@@ -46,5 +46,3 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=30)])
     confirm = PasswordField('Repeat', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset')
-
-

@@ -16,3 +16,4 @@ def send_reset_password_mail(user, token):
                   recipients=[user.find_email()],
                   html=render_template('/guide/send_mail.html', user=user, token=token))
     Thread(target=send_asunc_mail, args=(app, msg, )).start()
+
