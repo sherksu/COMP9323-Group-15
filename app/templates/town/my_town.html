@@ -52,13 +52,10 @@
 <script src="../../static/scripts/town/pop_page.js"></script>
 {% endblock %}
 
-{#{% block navbar %}#}
-{#    {% include('/basic/navigation.html')%}#}
-{#{% endblock %}#}
-
 {% block scripts %}
 <script>
 let username = '{{ username }}';
+{%- if level %}
 let level = {{ level.level }};
 let exp = {{ level.exp }};
 let next_level = {{ level.next_level }};
@@ -67,10 +64,17 @@ $('.HUD-process').css('width', exp.toString()+'%');
 $('.HUD-heading').text(username);
 $('#level').text(level);
 $('#next_exp').text(next_level);
+{%- else %}
+$('.HUD-process').css('width', '0');
+$('.HUD-heading').text(username);
+$('#level').text(1);
+$('#next_exp').text(100);
+{%- endif %}
 </script>
 {% endblock %}
 
 {% block content%}
+    {% include('/basic/nav_buttons.html')%}
     <img src="../../static/image/town/town.png" width="1440" height="821" style="z-index:-100;position:absolute;left:0;top:0">
     <div class="pop_pvp_wrapper">
         {% include "/game/pop_pvp.html" ignore missing%}
