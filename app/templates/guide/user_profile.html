@@ -1,8 +1,10 @@
+<!--
+ Project           : COMP9323
+ Author            : Heping Zhao
+ Date created      : 25/10/2019
+ Description       : user profile page
+-->
 {% extends '/basic/BasicConfig.html' %}
-
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
 
 {% block content %}
     <style>
@@ -14,9 +16,15 @@
             font-family: "Helvetica Neue", Helvetica, Microsoft Yahei;
             user-select: none;
         }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
         *{
             margin: 0;
         }
+
         .panel {
             margin: 250px auto 60px;
             text-align: center;
