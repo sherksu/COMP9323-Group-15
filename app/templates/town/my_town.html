@@ -2,6 +2,8 @@
 
 {% block styles%}
 {{ super() }}
+<link href="/static/style/HUD.css" rel="stylesheet">
+<link href="/static/style/font.css" rel="stylesheet">
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font: 13px Helvetica, Arial; }
@@ -50,14 +52,46 @@
 <script src="../../static/scripts/town/pop_page.js"></script>
 {% endblock %}
 
-{% block navbar %}
-    {% include('/basic/navigation.html')%}
+{#{% block navbar %}#}
+{#    {% include('/basic/navigation.html')%}#}
+{#{% endblock %}#}
+
+{% block scripts %}
+<script>
+let username = '{{ username }}';
+let level = {{ level.level }};
+let exp = {{ level.exp }};
+let next_level = {{ level.next_level }};
+let rate = exp / next_level * 100;
+$('.HUD-process').css('width', exp.toString()+'%');
+$('.HUD-heading').text(username);
+$('#level').text(level);
+$('#next_exp').text(next_level);
+</script>
 {% endblock %}
 
 {% block content%}
     <img src="../../static/image/town/town.png" width="1440" height="821" style="z-index:-100;position:absolute;left:0;top:0">
     <div class="pop_pvp_wrapper">
         {% include "/game/pop_pvp.html" ignore missing%}
+    </div>
+
+    <div class="HUD">
+        <div class="HUD-avatar">
+        </div>
+        <div class="HUD-status">
+            <div class="offset">
+                <div class="HUD-heading">XIN YUAN</div>
+                <div class="HUD-level">Lv <span id="level">6</span></div>
+            </div>
+            {%- if course %}
+            <div class="HUD-exp">
+                <div class="HUD-exp-shadow"></div>
+                <span class="HUD-p-content"><b>next exp: <span id="next_exp">100</span></b></span>
+                <div class="HUD-process"></div>
+            </div>
+            {%- endif %}
+        </div>
     </div>
 
     <div class="walk_show">

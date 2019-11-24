@@ -1,0 +1,107 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{%- block content %}
+<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+
+<style>
+
+.tangerine {
+    font-family: "Roboto", sans-serif;
+}
+
+.use_color{
+    color: #662D91;
+}
+
+.use_color2{
+    color:#f15a24;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.clip_css {
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+    max-height: 90%;
+    max-width: 90%;
+}
+
+.bottom_image{
+    position: absolute;
+    bottom: 0;
+}
+
+.container {
+    padding: 0;
+    margin: 0;
+}
+
+.left-element {
+    background: green;
+    display: inline-block;
+    float: left;
+}
+
+.right-element {
+    padding-left: 150px;
+    display: inline-block;
+    float: left;
+}
+
+tr{
+    height:50px;
+}
+
+</style>
+
+<script>
+var total_num = {{len(course_code_name_list)}};
+for (i = 0; i < total_num; i++){
+    document.getElementById("rank_"+i).style.display = "none";
+}
+
+
+function expand_collapse(id){
+    for (i=0; i<total_num; i++){
+        if (id != i){
+            document.getElementById("rank_"+i).style.display = "none"
+
+        }
+        else{
+            if (document.getElementById("rank_"+i).style.display === "block"){
+                document.getElementById("rank_"+i).style.display = "none";
+            }
+            else{
+                document.getElementById("rank_"+i).style.display = "block";
+            }
+        }
+    }
+}
+
+</script>
+
+<body>
+
+<div style="position: absolute; width: 840px; height: 700px; top: 10px; left: 100px" class="tangerine">
+    <img style="z-index:1" src="{{url_for('static',filename='image/profile/clip.png')}}" width="840px" height="700px" alt="clip board picture"/>
+    <img style="position:absolute; z-index:2; margin-top:450px; margin-left:-850px" src="{{url_for('static', filename='image/profile/c_rank.png')}}" width="300" height="250"/>
+    <div style="position:absolute; z-index:3; margin-top:-600px; margin-left:30px">
+        <h1 class="tangerine use_color2"><b>Rank</b></h1>
+        <h3 class="tangerine use_color">Currently you have not enrolled into courses.<br>Please head to the town.</h3>
+    </div>
+</div>
+
+
+</body>
+{% endblock content %}

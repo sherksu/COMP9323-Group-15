@@ -5,7 +5,7 @@ body {
 
 .logo-center {
     position: fixed;
-    color: white;
+    color: #ba3a13;
     font-size: 50px;
     left: calc(50% - 95px);
     top: 10px;
@@ -13,12 +13,12 @@ body {
 }
 
 .nav-white {
-    color: white;
+    color: #ba3a13;
     padding: 0;
 }
 
 .nav-white > li > a {
-    color: white;
+    color: #ba3a13;
     text-decoration: none;
     padding: 15px;
 }
@@ -31,5 +31,5 @@ body {
 }
 
 .nav-white >li:hover {
-    background-color: orangered;
+    background-color: wheat;
 }

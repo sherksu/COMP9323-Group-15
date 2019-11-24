@@ -2,6 +2,7 @@ from . import guide
 from flask import render_template, flash, redirect, url_for
 from app import secure
 from app import db as pydb
+from app.MongoFunction import get_list_of_complete_username
 from app.models import User
 from .forms import RegisterForm, LoginForm, PasswordResetForm, ResetPasswordForm, RoleCreateForm
 from flask_login import login_required, login_user, current_user, logout_user
@@ -91,23 +92,26 @@ def signup():
 
 @guide.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        rem = form.rem.data
-        user = pydb.users.find_one({'username': username})
-        if user and secure.check_password_hash(user['password'].replace("b'", "").replace("'", ""), password):
-            user_obj = User(user['username'])
-            login_user(user_obj, remember=rem)
-            try:
-                role = user['rolename']
-                if role:
-                    return redirect(url_for('guide.world_map'))
-            except KeyError:
-                return redirect(url_for('guide.index'))
-        flash('User does not exist or password is incorrect', category='danger')
-    return render_template('/guide/login.html', form=form)
+    if not current_user.is_authenticated:
+        form = LoginForm()
+        if form.validate_on_submit():
+            username = form.username.data
+            password = form.password.data
+            rem = form.rem.data
+            user = pydb.users.find_one({'username': username})
+            if user and secure.check_password_hash(user['password'].replace("b'", "").replace("'", ""), password):
+                user_obj = User(user['username'])
+                login_user(user_obj, remember=rem)
+                try:
+                    role = user['rolename']
+                    if role:
+                        return redirect(url_for('guide.world_map'))
+                except KeyError:
+                    return redirect(url_for('guide.index'))
+            flash('User does not exist or password is incorrect', category='danger')
+        return render_template('/guide/login.html', form=form)
+    else:
+        return redirect(url_for('guide.world_map'))
 
 
 @guide.route('/logout')
@@ -153,7 +157,19 @@ def reset_password(token):
 
 @guide.route('/world_map', methods=['GET', 'POST'])
 def world_map():
-    return render_template('/guide/world_map.html')
+    courses = pydb.courses.find()
+    course_ids = [x for x in courses]
+    result = []
+    for i in course_ids:
+        complete = get_list_of_complete_username(current_user.username, i['_id'])
+        del i['_id']
+        if complete['complete']:
+            i.update({"overall": complete['complete'][0]['overall']})
+            result.append(i)
+        else:
+            i.update({"overall": ""})
+            result.append(i)
+    return render_template('/guide/world_map.html', course=result, lengths=len(result), title="map")
 
 
 @guide.route('/user_page', methods=['GET', 'POST'])

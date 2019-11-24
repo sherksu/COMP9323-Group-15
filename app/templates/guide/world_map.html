@@ -1,108 +1,123 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
-
 {% block styles %}
 {{ super() }}
-<link href="/static/style/guide/world_map.css" rel="stylesheet">
+    <link href="/static/style/guide/world_map.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/lib/font-awesome/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:300,400,600,700&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <body style="padding: 0px">
-       <body style="padding: 0px">
-        <div id="popView">
-            <img src="/static/guide/111.jpg" height="320" width="500">
-            <div class="tb-rl pop_bar" data-toggle="#popView">
-                <span>Here to access Course Structure</span>
+    <div class="buttons">
+        <div id="recommend">
+            <div style="position:relative">
+                <div class="stn-button">
+                    <div class="icn"><i class="icon-reorder"></i></div>
+                    <div class="illustration">Find a good way to learn!</div>
+                </div>
             </div>
         </div>
-        <div class="containers" style="position:absolute; top:0; z-index: -1">
-            <div class="b1">
-                    <button class="button" type="button" onclick="pp()">
-                            Structure
-                    </button>
+        {% include('/basic/nav_buttons.html')%}
+    </div>
+    <iframe src="/profile/ranking" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="rank_hover"></iframe>
+    <div class="containers">
+        <div class="layout">
+            <div class="col-pad"></div>
+            <div class="col-main">
+                <div class="cities">
+                    <div id="pre_course" class="selectors-l">
+                        <i class="icon-angle-left"></i>
+                    </div>
+                    <div id="next_course" class="selectors-r">
+                        <i class="icon-angle-right"></i>
+                    </div>
+                    {%- for i in course %}
+                        {{ city(i.code, i.name, i.overall, loop.index0) }}
+                    {% endfor %}
+                </div>
             </div>
-            <div class="b2">
-                <a href="{{ url_for('town.entry_town', course='COMP9020') }}">
-                    <button class="button1" type="button">
-                            COMP9020
-                    </button>
-                </a>
-            </div>
-            <div class="b3">
-                <a href="{{ url_for('town.entry_town', course='COMP9323') }}">
-                    <button class="button1" type="button">
-                            COMP9323
-                    </button>
-                </a>
-            </div>
-            <div class="b4">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button2" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b5">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button2" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b6">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button2" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b7">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button2" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b8">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button3" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b9">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button3" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b10">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button3" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b10">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button3" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
-            <div class="b11">
-                <a href="{{ url_for('guide.world_map') }}">
-                    <button class="button3" type="button">
-                            COMP9311
-                    </button>
-                </a>
-            </div>
+            <div class="col-pad"></div>
         </div>
-    </body>
+    </div>
 {% endblock %}
 
+{% macro city(course_code, course_name, course_complete, i) %}
+<div id="switch_{{ i }}" style="display: {%- if i == 0 %}block{%- else %}none{% endif %}">
+    <div id="{{ course_code }}" class="courses">
+        <img src="/static/image/guide/town_{%- if i <= 5 %}{{ i }}{%- else %}{{ i - 5 }}{%- endif %}.png" alt="" height="100%" width="100%">
+    </div>
+    <div id="courseHUD" class="HUD course-HUD">
+        <div class="description">
+            <b id="course_name">{{ course_code }}</b><br />
+            <span id="course_description">{{ course_name }}</span>
+        </div>
+        <div>
+            <div><i>Your complete:</i></div>
+            <div class="process">
+                <div class="process-body">
+                    <div id="complete_bar" class="bar" style="width: {{ course_complete }}0%"></div>
+                </div>
+                <div id="complete_detail" class="process-status">
+                    <i>{%- if course_complete  %}{{ course_complete }}{%- else %}0{%- endif %}/10</i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="preHUD" class="HUD course-req">
+        <div>
+            <div class="heading"><b>Prerequisite</b></div>
+            <span id="pre_req">comp9020 | comp9024</span>
+        </div>
+    </div>
+</div>
+{% endmacro %}
 
+{% block scripts %}
+{{ super() }}
+    <script>
+        let i = 0;
+        let length = {{ lengths }};
+        let is_click = true;
+        $('#next_course').on('click', () => {
+            if (is_click) {
+                is_click = false;
+                let name = "#switch\_"+i.toString();
+                $(name).fadeOut();
+                i++;
+                if (i >= length) {
+                    i = 0;
+                }
+                name = "#switch\_"+i.toString();
+                setTimeout(function(){$(name).fadeIn()}, 500);
+                setTimeout(function(){is_click = true}, 1000);
+            }
+        });
+
+         $('#pre_course').on('click', () => {
+             if (is_click) {
+                is_click = false;
+                let name = "#switch\_"+i.toString();
+                $(name).fadeOut();
+                i--;
+                if (i < 0) {
+                    i = length - 1;
+                }
+                name = "#switch\_"+i.toString();
+                setTimeout(function(){$(name).fadeIn()}, 500);
+                setTimeout(function(){is_click = true}, 1000);
+             }
+        });
+
+         $('.courses').on('click', function(){
+             let course_code = $(this).attr('id');
+             console.log(course_code);
+             window.open('/town/'+course_code.toString())
+         })
+    </script>
+{% endblock %}
+
+{# id #}
+{# API: course-HUD: course_name(text), course_description(text), complete_bar(width:%), complete_detail(5/10) #}
+{# API: pre-HUD: pre_req(text: course1 | course2) #}
+{# redirect API: profile_btn | rank_btn | error_btn | recommend #}
+{#pic_id: course-pic#}

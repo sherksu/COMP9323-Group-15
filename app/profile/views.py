@@ -1,7 +1,8 @@
 from . import profile
-from flask import render_template
-from flask_login import current_user
 from app.MongoFunction import *
+from flask import render_template
+from . import ranking_function as function
+from flask_login import current_user
 
 
 @profile.route('/', methods=['GET', 'POST'])
@@ -21,50 +22,73 @@ def detail():
                            img=img, get_chapter_name=get_chapter_name)
 
 
-@profile.route('/ranking/')
+# so the ranking is url /ranking
+@profile.route('/ranking')
 def ranking():
-    # use three functions, all from the MongoFunction.py
-    # first extract the username
-    username = current_user.username
     # then get the list of the course_id he is doing
-    user = db.users.find_one({"username": username})
-    user_id = user['_id']
-    course_id_list = get_user_course_list(user_id)
+    username = current_user.username
+    course_id_list = function.get_user_course_list(username)
 
-    if course_id_list:      # if the course list is not empty
+    # if the course list is not empty
+    if course_id_list:
         # extract the ranking
-        course_code_name_list = get_course_code_name_list(course_id_list)
+        course_code_name_list = function.get_course_code_name_list(course_id_list)
         total_rank_list = []
         for each_course in course_id_list:
-            total_rank_list.append(get_list_of_level_rank(each_course))
+            total_rank_list.append(function.get_list_of_level_rank(each_course))
+
+        # construct a list, indicating the user's rank above all other uses
+        position_list = function.get_position_list(username, total_rank_list)
 
         # render the template
         return render_template('/profile/ranking.html',
                                username=username,
-                               noCourse=False,
                                course_code_name_list=course_code_name_list,
                                total_rank_list=total_rank_list,
-                               enumerate=enumerate)
+                               position_list=position_list,
+                               enumerate=enumerate,
+                               len=len
+                               )
 
+    # if this person does no course, render another template
     else:
-        return render_template('/profile/ranking.html',
-                               username=username,
-                               noCourse=True)
+        return render_template('/profile/no_ranking.html',
+                               username=username
+                               )
 
 
 @profile.route('/question_set/')
 def question_set():
     dic = get_user_info(current_user.username)
-    print(dic)
     return render_template("/profile/question_set.html", **dic, get_question_content=get_question_content,
                            get_chapter_name=get_chapter_name, get_course_name=get_course_name,
                            get_course_code=get_course_code, get_question_course=get_question_course,
                            get_question_chapter=get_question_chapter,correct_answer = correct_answer)
 
+@profile.route('/question_set_solutions/<question_id>')
+def question_set_solutions(question_id):
+    question = get_question(question_id)
+    q_id = question['_id']
+    content = question['content']
+    option = question['option']
+    correct_answer = question['correct_answer']
+    solution = question['solutions']
+    dic = get_user_info(current_user.username)
+    for i in dic['error_set']:
+        if i['question'] == q_id:
+            user_answer = int(i['answer'])
+    print(user_answer)
+    return render_template("/profile/question_set_solutions.html",content=content, option=option, correct_answer=correct_answer,
+                           solutions=solution, chr=chr, id=q_id,user_answer = user_answer)
 
-@profile.route('/study_career/')
-def study_career():
-    return render_template("/profile/study_career.html", user_name=current_user.username)
+
+@profile.route('/data_project/')
+def data_project():
+    return render_template(
+        "/profile/data_project.html",
+        user_name=current_user.username,
+        project_list = ['Speed_dating', 'Olympic_medals']
+    )
 
 
 def get_user_info(user_name):

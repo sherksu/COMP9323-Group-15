@@ -1,18 +1,98 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{% block navbar %}
-    {% include '/basic/navigation.html' %}
+{% block styles %}
+{{ super() }}
+<style>
+body {
+    padding:0;
+    background-color: #100F16;
+}
+
+.cen_story {
+    position: absolute;
+    height:100%;
+    width:100%;
+}
+
+.inner_board {
+    position:relative;
+    height:100%;
+    width:100%;
+    padding:10%;
+    display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.inners {
+    position: relative;
+    height:100%;
+    display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.logo {
+
+}
+
+.entry {
+    position: absolute;
+    height:8%;
+    left:12%;
+    bottom: 2%;
+}
+
+.copyright {
+    position:fixed;
+    color: rgba(255,255,255,0.3);
+    font-size: 8pt;
+    font-style: italic;
+    bottom:10px;
+}
+
+.story {
+    height:100%;
+    width:100%;
+    max-width: calc(100vh);
+    max-height: calc(100vh);
+}
+
+#start {
+    transition: all 0.3s ease;
+}
+
+#start:hover {
+    height:120%;
+    cursor: pointer;
+    opacity: 90%;
+}
+
+</style>
 {% endblock %}
 
 {% block content%}
-    <div class="container" style="margin-top: 50px">
-        <div class="row">
-            <div id='box' class="col-lg-8 text-box">
-                <h2>Welcome!</h2>
-                <p>The XX is a online platform for students to learn data science efficiently.</p>
+    <div class="cen_story">
+        <div class="inner_board">
+            <!-- logo -->
+            <div class="logo">
+
             </div>
-            <div class="col-lg-4 text-box">
-                <h4>Guiding</h4>
+            <!-- copyright information -->
+            <div class="copyright">
+                @copyright: COMP9323 Group 15 - https://github.com/sherksu/COMP9323-Group-15/tree/master
+            </div>
+            <!-- inner story -->
+            <div class="inners">
+                <div style="position:relative;">
+                    <img class="story" src="/static/image/welcome/bg1.png" oncontextmenu="return false;" ondragstart="return false;">
+                    <div class="entry">
+                        <a href="{{ url_for('guide.login') }}">
+                            <img id="start" src="/static/image/welcome/bu.png" height="100%"
+                                    oncontextmenu="return false;" ondragstart="return false;">
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
