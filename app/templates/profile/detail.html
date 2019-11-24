@@ -1,8 +1,9 @@
 {% extends '/basic/BasicConfig.html' %}
 
 {% block content%}
-<body>
+<body style="background: none;">
 
+<<<<<<< Updated upstream
 <div style="position:absolute;width:840px;height:700px;top:10px;left:100px;">
         <img src="{{url_for('static', filename='image/profile/book.png')}}" width="840px" height="700px" style="z-index:1;">
         <img src="{{url_for('static', filename='image/profile/c_question.png')}}" width="360px" height="300px" style="position:absolute;z-index:2;margin-top:450px;margin-left:-850px;">
@@ -12,6 +13,18 @@
                     <div class="col-md-2"><img src = "{{ img }}" style="width:115px;height:190px;margin-top:0px;margin-left:-53px;"></div>
                     <div class="col-md-6" style="width:270px;">
                         <div class="panel-group" id="accordion" style="margin-left:5px;">
+=======
+<div style="position:absolute;width:840px;height:700px;bottom:0px;left:0px;">
+        <img src="{{url_for('static', filename='image/profile/book.png')}}" width="100%" height="100%" style="z-index:1;">
+        <img src="{{url_for('static', filename='image/profile/c_question.png')}}" width="360px" height="300px" style="position:absolute;z-index:2;margin-top:450px;margin-left:-850px;">
+        <div style="position:absolute;z-index:3;margin-top:-600px;margin-left:100px;">
+            <div class="row">
+                <div class="col-xs-6" style="margin-top:20px;">
+                <div class="row">
+                    <div class="col-xs-2"><img src = "{{ img }}" style="width:130px;height:190px;margin-top:0px;margin-left:-53px;"></div>
+                    <div class="col-xs-8" style="margin-left:5px;">
+                        <div class="panel-group" id="accordion" style="margin-left:9px;width:250px;">
+>>>>>>> Stashed changes
                             <div class="panel panel-info">
                                 <div class="panel-heading" style="background-color:#F14A25;color:white;">
                                     <p class="panel-title" >
@@ -27,16 +40,29 @@
                                     <p class="panel-title">
                                             EMAIL : 
                                     </p>
+<<<<<<< Updated upstream
                                 </div>
                                 <div class="panel-body" style="color:#F14A25;">
                                     {{ email }}
                                 </div>
+=======
+                                </div>
+                                <div class="panel-body" style="color:#F14A25;">
+                                    {{ email }}
+                                </div>
+>>>>>>> Stashed changes
                             </div>
                         </div>
                     </div>
                 </div>
+<<<<<<< Updated upstream
                 <div class="col-md-6" style="margin-top:-50px;margin-left:-14px;">
                     <div class="panel panel-info">
+=======
+                </div>
+                <div class="col-xs-6" style="margin-top:-20px;">
+                    <div class="panel panel-info" style="margin-left:-20px;width:340px;">
+>>>>>>> Stashed changes
                         <div class="panel-heading" style="background-color:#F14A25;color:white;">
                             <p class="panel-title">
                                     COURSE CAREER : 
@@ -44,6 +70,7 @@
                         </div>
                         <div class="panel-body" style="color:#F14A25;">
                             <div class = "row" align = "center">
+<<<<<<< Updated upstream
                                 <div class = "col-md-3" align="center">
                                     CODE
                                 </div>
@@ -51,11 +78,21 @@
                                     NAME
                                 </div>
                                 <div class = "col-md-3" align="center">
+=======
+                                <div class = "col-xs-3" align="center">
+                                    CODE
+                                </div>
+                                <div class = "col-xs-6" align="center">
+                                    NAME
+                                </div>
+                                <div class = "col-xs-3" align="center">
+>>>>>>> Stashed changes
                                     FINISHED
                                 </div>
                             </div>
                                 {% for i in complete%}
                                     <div class = "row" align="center" style="margin-top:10px;">
+<<<<<<< Updated upstream
                                         <div class = "col-md-3" align="center">
                                             <p align="center">{{ get_course_code(i.course) }}</p>
                                         </div>
@@ -63,13 +100,26 @@
                                             <p align="center">{{ get_course_name(i.course) }}</p>
                                         </div>
                                         <div class = "col-md-3" align="center">
+=======
+                                        <div class = "col-xs-3" align="center">
+                                            <p align="center">{{ get_course_code(i.course) }}</p>
+                                        </div>
+                                        <div class = "col-xs-6" align="center">
+                                            <p align="center">{{ get_course_name(i.course) }}</p>
+                                        </div>
+                                        <div class = "col-xs-3" align="center">
+>>>>>>> Stashed changes
                                             <p align="center">{{ i.overall }}</p>
                                         </div>
                                     </div>
                                 {% endfor %}
                         </div>
                     </div>
+<<<<<<< Updated upstream
                     <div class="panel panel-info">
+=======
+                    <div class="panel panel-info" style="margin-left:-20px;width:340px;">
+>>>>>>> Stashed changes
                         <div class="panel-heading" style="background-color:#F14A25;color:white;">
                             <p class="panel-title">
                                     LEVEL : 
@@ -77,6 +127,7 @@
                         </div>
                         <div class="panel-body" style="color:#F14A25;">
                             <div class = "row" align = "center">
+<<<<<<< Updated upstream
                                 <div class = "col-md-3" align="center">
                                 CODE
                                 </div>
@@ -84,11 +135,21 @@
                                 NAME
                                 </div>
                                 <div class = "col-md-3" align="center">
+=======
+                                <div class = "col-xs-3" align="center">
+                                CODE
+                                </div>
+                                <div class = "col-xs-6" align="center">
+                                NAME
+                                </div>
+                                <div class = "col-xs-3" align="center">
+>>>>>>> Stashed changes
                                 LEVEL
                                 </div>
                             </div>
                             {% for i in levels%}
                                 <div class = "row" align="center" style="margin-top:10px;">
+<<<<<<< Updated upstream
                                     <div class = "col-md-3" align="center">
                                         <p align="center">{{ get_course_code(i.course) }}</p>
                                     </div>
@@ -96,6 +157,15 @@
                                         <p align="center">{{ get_course_name(i.course) }}</p>
                                     </div>
                                     <div class = "col-md-3" align="center">
+=======
+                                    <div class = "col-xs-3" align="center">
+                                        <p align="center">{{ get_course_code(i.course) }}</p>
+                                    </div>
+                                    <div class = "col-xs-6" align="center">
+                                        <p align="center">{{ get_course_name(i.course) }}</p>
+                                    </div>
+                                    <div class = "col-xs-3" align="center">
+>>>>>>> Stashed changes
                                         <p align="center">{{ i.level }}</p>
                                     </div>
                                 </div>

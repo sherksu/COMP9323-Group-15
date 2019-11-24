@@ -18,11 +18,34 @@
                 <span>Here to access Course Structure</span>
             </div>
         </div>
+<<<<<<< Updated upstream
         <div class="containers" style="position:absolute; top:0; z-index: -1">
             <div class="b1">
                     <button class="button" type="button" onclick="pp()">
                             Structure
                     </button>
+=======
+        {% include('/basic/nav_buttons.html')%}
+    </div>
+    <iframe src="/profile/ranking" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="rank_hover"></iframe>
+    <iframe src="/profile/detail" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="detail_hover"></iframe>
+    <iframe src="/profile/question_set" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="question_set_hover"></iframe>
+    <div class="containers">
+        <div class="layout">
+            <div class="col-pad"></div>
+            <div class="col-main">
+                <div class="cities">
+                    <div id="pre_course" class="selectors-l">
+                        <i class="icon-angle-left"></i>
+                    </div>
+                    <div id="next_course" class="selectors-r">
+                        <i class="icon-angle-right"></i>
+                    </div>
+                    {%- for i in course %}
+                        {{ city(i.code, i.name, i.overall, loop.index0) }}
+                    {% endfor %}
+                </div>
+>>>>>>> Stashed changes
             </div>
             <div class="b2">
                 <a href="{{ url_for('town.entry_town', course='COMP9020') }}">
