@@ -57,3 +57,24 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+
+.detail_hover {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    height: 700px;
+    width: 840px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.question_set_hover {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    height: 700px;
+    width: 840px;
+    left: 50%;
+    transform: translateX(-50%);
+}
