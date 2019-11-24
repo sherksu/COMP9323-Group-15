@@ -1,0 +1,56 @@
+{% from 'game/marco.html' import option,timer,mcq,csv %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PVP</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='style/game/pvp_game.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+</head>
+<body>
+<div class="container-fluid middle-wrapper">
+    <div class="row">
+        <div class="col-12 col-md-3 side-wrapper">
+        </div>
+        <div class="col col-md-9 question-wrapper">
+            {% for d in data %}
+            {% set Qloop = loop %}
+            <div class="question-block" data-label="question{{Qloop.index}}" id="question{{Qloop.index}}">
+                <div class=" opacity-block question{{Qloop.index}}">
+                {% if d['type'] == 'mcq' %}
+                {{mcq(Qloop,d,0)}}
+                {% elif d['type'] == 'csv' %}
+                {{csv(Qloop,d,0)}}
+                {% endif %}
+                </div>
+                <div class="blocker question{{Qloop.index}}" style="display: none">
+                    <div class="alert alert-success" role="alert">
+                        <strong>Oops~~ !</strong> <span class="textspan"></span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    var username="{{name}}"
+    var q_dict =  {
+        {% for d in data %}
+            "{{d._id}}":"question{{loop.index}}",
+        {% endfor %}
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+<script src="{{url_for('static',filename='scripts/game/pvp_game.js')}}"></script>
+</body>
+</html>

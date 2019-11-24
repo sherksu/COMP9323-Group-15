@@ -1,0 +1,21 @@
+#pvp_Modal .modal-body{
+    max-height: 70vh;
+    overflow: scroll;
+}
+
+
+#pvp_Modal .panel-body{
+    padding: 0;
+}
+
+#pvp_Modal .btn-group a{
+    text-align: center;
+}
+
+#pvp_Modal .btn-group a:hover {
+    border-color: #eee #eee #ddd;
+    text-decoration: none;
+    background-color: #eee;
+    text-decoration: underline;
+    outline: 0;
+}

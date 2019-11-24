@@ -124,3 +124,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/app/game/draft.py
+/app/templates/game/boostrap_example.html
