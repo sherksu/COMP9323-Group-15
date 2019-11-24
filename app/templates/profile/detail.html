@@ -1,187 +1,110 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
-
 {% block content%}
 <body>
 
-<div class="container">
-    <h1> {{ username }}   detail</h1>
-   <div class="row">
-      <div class="col-md-6">
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion in" 
-                        href="#collapseOne">
-                            ROLENAME : 
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapseOne" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        {{ username }}
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion in" 
-                        href="#collapseTwo">
-                            EMAIL : 
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapseTwo" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        {{ email }}
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion in" 
-                        href="#collapseThree">
-                            COURSE CAREER : 
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapseThree" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div class = "row" align = "center">
-                            <div class = "col-md-3" align="center">
-                            COURSE CODE
+<div style="position:absolute;width:840px;height:700px;top:10px;left:100px;">
+        <img src="{{url_for('static', filename='image/profile/book.png')}}" width="840px" height="700px" style="z-index:1;">
+        <img src="{{url_for('static', filename='image/profile/c_question.png')}}" width="360px" height="300px" style="position:absolute;z-index:2;margin-top:450px;margin-left:-850px;">
+        <div style="position:absolute;z-index:3;margin-top:-600px;margin-left:100px;">
+            <div class="row" >
+                <div class="col-xs-6" style="margin-top:20px;">
+                    <div class="col-md-2"><img src = "{{ img }}" style="width:115px;height:190px;margin-top:0px;margin-left:-53px;"></div>
+                    <div class="col-md-6" style="width:270px;">
+                        <div class="panel-group" id="accordion" style="margin-left:5px;">
+                            <div class="panel panel-info">
+                                <div class="panel-heading" style="background-color:#F14A25;color:white;">
+                                    <p class="panel-title" >
+                                            ROLENAME : 
+                                    </p>
+                                </div>
+                                    <div class="panel-body" style="color:#F14A25;">
+                                        {{ username }}
+                                    </div>
                             </div>
-                             <div class = "col-md-6" align="center">
-                            COURSE NAME
-                            </div>
-                            <div class = "col-md-3" align="center">
-                            FINISHED
+                            <div class="panel panel-info">
+                                <div class="panel-heading" style="background-color:#F14A25;color:white;">
+                                    <p class="panel-title">
+                                            EMAIL : 
+                                    </p>
+                                </div>
+                                <div class="panel-body" style="color:#F14A25;">
+                                    {{ email }}
+                                </div>
                             </div>
                         </div>
-                        {% for i in complete%}
-                            <div class="panel panel-info">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion in" 
-                                        href="#collapse{{ get_course_code(i.course) + '999' }}">
-                                            <div class = "row" align="center">
-                                                <div class = "col-md-3" align="center">
-                                                    <h4 align="center">{{ get_course_code(i.course) }}</h4>
-                                                </div>
-                                                <div class = "col-md-6" align="center">
-                                                    <h4 align="center">{{ get_course_name(i.course) }}</h4>
-                                                </div>
-                                                <div class = "col-md-3" align="center">
-                                                    <h4 align="center">{{ i.overall }}</h4>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </h4>
+                    </div>
+                </div>
+                <div class="col-md-6" style="margin-top:-50px;margin-left:-14px;">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" style="background-color:#F14A25;color:white;">
+                            <p class="panel-title">
+                                    COURSE CAREER : 
+                            </p>
+                        </div>
+                        <div class="panel-body" style="color:#F14A25;">
+                            <div class = "row" align = "center">
+                                <div class = "col-md-3" align="center">
+                                    CODE
                                 </div>
-                                <div id={{ "collapse" + get_course_code(i.course) + '999' }} class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class = "row" align = "center">
-                                            <div class = "col-md-12" align="center">
-                                                    <div class = "col-md-8" align="center">
-                                                        <h4 align="center">CHAPTER NAME</h4>
-                                                    </div>
-                                                    <div class = "col-md-4" align="center">
-                                                        <h4 align="center">FINISHED</h4>
-                                                    </div>
-                                                {% for j in i.chapters %}
-                                                    <div class = "col-md-8" align="center">
-                                                        <h4 align="center">{{ get_chapter_name(j.chapter) }}</h4>
-                                                    </div>
-                                                    <div class = "col-md-4" align="center">
-                                                        <h4 align="center">{{ j.extent }}</h4>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
+                                <div class = "col-md-6" align="center">
+                                    NAME
+                                </div>
+                                <div class = "col-md-3" align="center">
+                                    FINISHED
+                                </div>
+                            </div>
+                                {% for i in complete%}
+                                    <div class = "row" align="center" style="margin-top:10px;">
+                                        <div class = "col-md-3" align="center">
+                                            <p align="center">{{ get_course_code(i.course) }}</p>
+                                        </div>
+                                        <div class = "col-md-6" align="center">
+                                            <p align="center">{{ get_course_name(i.course) }}</p>
+                                        </div>
+                                        <div class = "col-md-3" align="center">
+                                            <p align="center">{{ i.overall }}</p>
                                         </div>
                                     </div>
-                                </div>
-                            </div>      
-                        {% endfor %}
+                                {% endfor %}
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion in" 
-                        href="#collapseFour">
-                            level : 
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapseFour" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div class = "row" align = "center">
-                            <div class = "col-md-3" align="center">
-                            COURSE CODE
-                            </div>
-                             <div class = "col-md-6" align="center">
-                            COURSE NAME
-                            </div>
-                            <div class = "col-md-3" align="center">
-                            LEVEL
-                            </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading" style="background-color:#F14A25;color:white;">
+                            <p class="panel-title">
+                                    LEVEL : 
+                            </p>
                         </div>
-                        {% for i in levels%}
-                            <div class="panel panel-info">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion in" 
-                                        href="#collapse{{ get_course_code(i.course) }}">
-                                            <div class = "row" align="center">
-                                                <div class = "col-md-3" align="center">
-                                                    <h4 align="center">{{ get_course_code(i.course) }}</h4>
-                                                </div>
-                                                <div class = "col-md-6" align="center">
-                                                    <h4 align="center">{{ get_course_name(i.course) }}</h4>
-                                                </div>
-                                                <div class = "col-md-3" align="center">
-                                                    <h4 align="center">{{ i.level }}</h4>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </h4>
+                        <div class="panel-body" style="color:#F14A25;">
+                            <div class = "row" align = "center">
+                                <div class = "col-md-3" align="center">
+                                CODE
                                 </div>
-                                <div id={{ "collapse" + get_course_code(i.course) }} class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class = "row" align = "center">
-                                            <div class = "col-md-12" align="center">
-                                                <h4>EXPERIENCE BAR：REQUEST {{ i.next_level - i.exp }} TO THE NEXT LEVEL</h4>
-                                                <div class="progress progress-striped">
-                                                    <div class="progress-bar progress-bar-info" role="progressbar"
-                                                        aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: {{ 100 * i.exp/i.next_level }}%;">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div class = "col-md-6" align="center">
+                                NAME
+                                </div>
+                                <div class = "col-md-3" align="center">
+                                LEVEL
+                                </div>
+                            </div>
+                            {% for i in levels%}
+                                <div class = "row" align="center" style="margin-top:10px;">
+                                    <div class = "col-md-3" align="center">
+                                        <p align="center">{{ get_course_code(i.course) }}</p>
+                                    </div>
+                                    <div class = "col-md-6" align="center">
+                                        <p align="center">{{ get_course_name(i.course) }}</p>
+                                    </div>
+                                    <div class = "col-md-3" align="center">
+                                        <p align="center">{{ i.level }}</p>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
-      <div class="col-md-3">
-         <h4 align="center">AVATAR</h4>
-         <img src = "{{ img }}">
-         <div class="row">
-         </div>
-      </div>
-   </div>
+        </div>
 </div>
 </body>
 {% endblock %}

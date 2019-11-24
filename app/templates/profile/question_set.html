@@ -9,13 +9,13 @@
         <img src="{{url_for('static', filename='image/profile/c_question.png')}}" width="360px" height="300px" style="position:absolute;z-index:2;margin-top:450px;margin-left:-850px;">
         <div style="position:absolute;z-index:3;margin-top:-600px;margin-left:100px;">
             <div class="row">
-                <div class="col-xs-6" style="width:320px;">
+                <div class="col-xs-6" style="width:320px;margin-left:-10px;">
                     <h1 style="color:#F15A24"><strong>Error Set</strong></h1>
                     <ul class="nav nav-tab vertical-tab" role="tablist" id="vtab" style="background-color:F15A24;">
                     {% for i in levels %}
-                        <li role="presentation" style="background-color: #F15A24; border-radius: 8px;margin-top:20px;padding:15px;display: inline-block;">
+                        <li role="presentation" style="background-color: #F15A24;width:300px; border-radius: 8px;margin-top:20px;padding:20px;display: inline-block;">
                             <a href="#tab{{ get_course_code(i.course) }}" aria-controls="inbox" role="tab" align='center'
-                            data-toggle="tab" style="background-color:F15A24;color:white;">{{ get_course_code(i.course) + "    " + get_course_name(i.course) }}</a>
+                            data-toggle="tab" style="background-color:F15A24;color:white;">{{ get_course_code(i.course) }}</a>
                         </li>
                     {% endfor %}
                     </ul>
