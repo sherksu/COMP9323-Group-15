@@ -1,56 +1,72 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
-
 {% block content%}
-<div class="container">
-    <h1>{{ name }} question_set </h1>
-    {% for i in levels %}
-        <div class='row'>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion in" 
-                        href="#collapse{{ get_course_code(i.course) }}">
-                            <h1>{{ get_course_code(i.course) + "    " + get_course_name(i.course) }}</h1>
-                        </a>
-                    </h4>
+<body style="background: none;">
+    <div style="position:absolute;width:840px;height:700px;bottom:0px;left:0px;background-color: rgba(255,255,255,0.2);">
+        <img src="{{url_for('static', filename='image/profile/book.png')}}" width="840px" height="700px" style="z-index:1;">
+        <img src="{{url_for('static', filename='image/profile/c_question.png')}}" width="360px" height="300px" style="position:absolute;z-index:2;margin-top:450px;margin-left:-850px;">
+        <div style="position:absolute;z-index:3;margin-top:-600px;margin-left:100px;">
+            <div class="row">
+                <div class="col-xs-6" style="width:320px;margin-left:-10px;">
+                    <h1 style="color:#F15A24"><strong>Error Set</strong></h1>
+                    <ul class="nav nav-tab vertical-tab" role="tablist" id="vtab" style="background-color:F15A24;">
+                    {% for i in levels %}
+                        <li role="presentation" style="background-color: #F15A24;width:300px; border-radius: 8px;margin-top:20px;padding:20px;display: inline-block;">
+                            <a href="#tab{{ get_course_code(i.course) }}" aria-controls="inbox" role="tab" align='center'
+                            data-toggle="tab" style="background-color:F15A24;color:white;">{{ get_course_code(i.course) }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
                 </div>
-                <div id={{ "collapse" + get_course_code(i.course) }} class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class = "row" align = "center">
-                            <div class = "col-md-6" align="center">
-                                <h4 align="center">QUESTION</h4>
-                            </div>
-                            
-                            <div class = "col-md-3" align="center">
-                                <h4 align="center">TIME</h4>
-                            </div>
-                            <div class = "col-md-3">
-                                <h4 align="center">CHECK</h4>
-                            </div>
-                        </div>
-                        {% for j in error_set %}
-                            {% if get_question_course(j.question) == i.course %}
-                                <div class="row" align="center">
-                                    <div class = "col-md-6" align="center">
-                                        <h4 align="center">{{ get_question_content(j.question) }}</h4>
-                                    </div>
-                                    <div class = "col-md-3" align="center">
-                                        <h4 align="center">{{ j.date }}</h4>
-                                    </div>
-                                    <div class = "col-md-3" align="center">
-                                        <button align="center" type="button" class="btn btn-info"><a href="{{url_for('profile.question_set_solutions',question_id = j.question,user_answer = j.answer)}}"> CLICK TO CHECK DETAIL </a></button>
+                <div class="tab-content vertical-tab-content col-xs-6" style="width:450px;margin-top:-100px;">
+                    {% for i in levels %}
+                        <div role="tabpanel" class="tab-pane" id={{ "tab" + get_course_code(i.course) }} style="list-style-type:none;margin:70px;">
+                            {% for j in error_set %}
+                                {% if get_question_course(j.question) == i.course %}
+                                <a data-toggle="collapse" data-parent="#accordion"  href="#collapse{{loop.index}}">
+                                <div class='row'>
+                                    <div class="panel" style="background-color: #F15A24;">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">
+                                            <div>
+                                                <p align="center" style="color:white;">QUESTION  {{loop.index}}</p>
+                                            </div>
+                                            </h3>
+                                        </div>
+                                        </a>
+                                        <div id={{ "collapse" + str(loop.index) }} class="panel-collapse collapse" style="color:white;">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                <p align="center">{{ get_question_content(j.question) }}</p>
+                                                </div>
+                                                <ul class="list-group" style="background-color: #F15A24;">
+                                                    {% for i in get_question_option(j.question) %}
+                                                        {% if loop.index0 == get_question_correct_answer(j.question) %}
+                                                        <li class="list-group-item" style="background-color: green;">
+                                                            <p style="color:white">{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                                                        </li>
+                                                        {% elif loop.index0 == int(j.answer) %}
+                                                        <li class="list-group-item" style="background-color: #BE002F;">
+                                                            <p style="color:white">{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                                                        </li>
+                                                        {% else %}
+                                                        <li class="list-group-item" style="background-color: #F15A24;">
+                                                            <p style="color:white;">{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                                                        </li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    {% endfor %}
-</div>
+    </div>
+</body>
 {% endblock %}
