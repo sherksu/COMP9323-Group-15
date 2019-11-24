@@ -1,6 +1,13 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{%- block content %}
+{% block head_scripts %}
+{{ super() }}
+<script src="{{url_for('static',filename='scripts/profile/html2canvas.min.js')}}"></script>
+<script src="{{url_for('static',filename='scripts/profile/canvas2image.js')}}"></script>
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
 <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -8,8 +15,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
 <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
-
 <style>
+body {
+    background: none;
+}
 
 .tangerine {
     font-family: "Roboto", sans-serif;
@@ -64,9 +73,9 @@ tr{
 }
 
 </style>
+{% endblock %}
 
-<script src="{{url_for('static',filename='scripts/profile/html2canvas.min.js')}}"></script>
-<script src="{{url_for('static',filename='scripts/profile/canvas2image.js')}}"></script>
+{% block scripts %}
 <script>
 function makeScreenshot() {
     html2canvas(document.getElementById("screenshot"), {scale: 1}).then(canvas => {
@@ -101,11 +110,11 @@ function expand_collapse(id){
 }
 
 </script>
+{% endblock %}
 
-<body>
-
-<div style="position: absolute; width: 840px; height: 700px; top: 10px; left: 100px" class="tangerine" id="screenshot">
-    <img style="z-index:1" src="{{url_for('static',filename='image/profile/clip.png')}}" width="840px" height="700px" alt="clip board picture"/>
+{%- block content %}
+<div style="position: absolute; width: 1200px; height: 700px; bottom:0; left:0;" class="tangerine" id="screenshot">
+    <img style="z-index:1" src="{{url_for('static',filename='image/profile/clip.png')}}" width="100%" height="100%px" alt="clip board picture"/>
     <img style="position:absolute; z-index:2; margin-top:450px; margin-left:-850px" src="{{url_for('static', filename='image/profile/c_rank.png')}}" width="300" height="250"/>
     <div style="position:absolute; z-index:3; margin-top:-600px; margin-left:30px">
         <h1 class="tangerine use_color2"><b>Rank</b></h1>
@@ -163,5 +172,4 @@ function expand_collapse(id){
         </div>
     </div>
 </div>
-</body>
 {% endblock content %}

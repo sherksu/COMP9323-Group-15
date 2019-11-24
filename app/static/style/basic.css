@@ -26,6 +26,7 @@
     background-color: #FF931E;
     box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .stn-button div:first-child {
@@ -44,4 +45,15 @@
 .stn-button:hover .illustration {
     visibility: visible;
     opacity: 1;
+}
+
+/* ------- hover page ------- */
+.rank_hover {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    height: 800px;
+    width: 840px;
+    left: 50%;
+    transform: translateX(-50%);
 }

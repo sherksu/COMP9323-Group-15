@@ -19,6 +19,7 @@
         </div>
         {% include('/basic/nav_buttons.html')%}
     </div>
+    <iframe src="/profile/ranking" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="rank_hover"></iframe>
     <div class="containers">
         <div class="layout">
             <div class="col-pad"></div>
@@ -43,7 +44,7 @@
 {% macro city(course_code, course_name, course_complete, i) %}
 <div id="switch_{{ i }}" style="display: {%- if i == 0 %}block{%- else %}none{% endif %}">
     <div id="{{ course_code }}" class="courses">
-        <img src="/static/image/guide/town_{{ i }}.png" alt="" height="100%" width="100%">
+        <img src="/static/image/guide/town_{%- if i <= 5 %}{{ i }}{%- else %}{{ i - 5 }}{%- endif %}.png" alt="" height="100%" width="100%">
     </div>
     <div id="courseHUD" class="HUD course-HUD">
         <div class="description">
@@ -72,6 +73,7 @@
 {% endmacro %}
 
 {% block scripts %}
+{{ super() }}
     <script>
         let i = 0;
         let length = {{ lengths }};
