@@ -1,0 +1,29 @@
+{% extends '/basic/BasicConfig.html' %}
+
+{% block head_scripts %}
+<script></script>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .error {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    min-height: 605px;
+    min-width: 1024px;
+    background-image: url('/static/image/error/500-12.png');
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: auto 100%;
+    overflow: scroll;
+    }
+</style>
+{% endblock %}
+
+{% block content%}
+<div class="error"></div>
+{% endblock %}
