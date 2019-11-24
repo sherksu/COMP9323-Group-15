@@ -66,8 +66,6 @@ def question_set():
                            get_question_chapter=get_question_chapter,correct_answer = correct_answer,
                            get_question_option=get_question_option,get_question_correct_answer=get_question_correct_answer,
                            chr=chr,int=int,str=str)
-<<<<<<< Updated upstream
-=======
 
 @profile.route('/question_set_solutions/<question_id>')
 def question_set_solutions(question_id):
@@ -84,7 +82,6 @@ def question_set_solutions(question_id):
     print(user_answer)
     return render_template("/profile/question_set_solutions.html",content=content, option=option, correct_answer=correct_answer,
                            solutions=solution, chr=chr, id=q_id,user_answer = user_answer)
->>>>>>> Stashed changes
 
 @profile.route('/study_career/')
 def study_career():
