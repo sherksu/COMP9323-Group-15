@@ -1,20 +1,19 @@
 $(document).ready(() => {
     $('#rank_btn').on('click', () => {
-        console.log(1);
-        $('.rank_hover').fadeToggle();
+        $('#error_page').fadeOut();
+        $('#detail_page').fadeOut();
+        $('#rank_page').fadeToggle();
     });
-});
 
-$(document).ready(() => {
     $('#profile_btn').on('click', () => {
-        console.log(1);
-        $('.detail_hover').fadeToggle();
+        $('#error_page').fadeOut();
+        $('#rank_page').fadeOut();
+        $('#detail_page').fadeToggle();
     });
-});
 
-$(document).ready(() => {
     $('#error_btn').on('click', () => {
-        console.log(1);
-        $('.question_set_hover').fadeToggle();
+        $('#detail_page').fadeOut();
+        $('#rank_page').fadeOut();
+        $('#error_page').fadeToggle();
     });
 });

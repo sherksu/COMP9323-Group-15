@@ -20,11 +20,94 @@
                 </div>
             </div>
         </div>
-        {% include('/basic/nav_buttons.html')%}
     </div>
-    <iframe src="/profile/ranking" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="rank_hover"></iframe>
-    <iframe src="/profile/detail" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="detail_hover"></iframe>
-    <iframe src="/profile/question_set" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowTransparency="true" class="question_set_hover"></iframe>
+    {% include('/basic/nav_buttons.html')%}
+    <div class="dropdown-content" id="dropp">
+            <div class="row" style="height: 50px"><button class="b1" id="b11"></button></div>
+                <div class="panel-group" id="accordion"><div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: coral">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseOne" style="font-family: 'Roboto Light'; font-size: 20px;">
+                                Course Recommendation
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <a class="cc" onclick="show()">Course Selection Guide</a>
+                        </div>
+                    </div>
+                </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #ffb42e">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseTwo" style="font-family: 'Roboto Light'; font-size: 18px">
+                                    Level One Courses
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <a class="cc" onclick="openWin1()">COMP9020 Outline</a>
+                                <a class="cc" onclick="openWin2()">COMP9021 Outline</a>
+                                <a class="cc" onclick="openWin3()">COMP9311 Outline</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #ffb42e">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseThree" style="font-family: 'Roboto Light'; font-size: 18px">
+                                    Level Two Courses
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <a class="cc" onclick="openWin4()">COMP9321 Outline</a>
+                                <a class="cc" onclick="openWin5()">COMP9024 Outline</a>
+                                <a class="cc" onclick="openWin6()">COMP9313 Outline</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #ffb42e">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseFour" style="font-family: 'Roboto Light'; font-size: 18px">
+                                    Level Three Courses
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <a class="cc" onclick="openWin7()">COMP9318 Outline</a>
+                                <a class="cc" onclick="openWin8()">COMP9319 Outline</a>
+                                <a class="cc" onclick="openWin9()">COMP9444 Outline</a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    <div id="background-pop">
+        <div id="div-pop">
+            <div class="div-top1">
+                <span id="close-button">back</span>
+                <p class="top-text">Here is course selection guide!</p>
+            </div>
+            <div class="div-content">
+                <img src="../../static/image/guide/stru1.jpg" style="width: 100%; height: 530px; margin-top: -25px">
+                <div class="bbb">
+                    <div class="wrapper1">
+                        <a class="button" onclick="openWin()">Handbook</a>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+    </div>
     <div class="containers">
         <div class="layout">
             <div class="col-pad"></div>
@@ -118,6 +201,65 @@
              console.log(course_code);
              window.open('/town/'+course_code.toString())
          })
+    </script>
+    <script>
+        function openWin(){
+            win=window.open('https://www.handbook.unsw.edu.au/postgraduate/programs/2020/8543?q=8543&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin1(){
+            win1=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9020/?q=comp9020&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin2(){
+            win2=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9021/?q=comp9021&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin3(){
+            win3=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9311/?q=comp9311&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin4(){
+            win4=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9321/?q=comp9321&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin5(){
+            win5=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9024/?q=comp9024&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin6(){
+            win6=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9313/?q=comp9313&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin7(){
+            win7=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9318/?q=comp9318&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin8(){
+            win8=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9319/?q=comp9319&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin9(){
+            win9=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9444/?q=comp9444&ct=all','newwindow','width=1760,height=1300');
+        }
+
+    </script>
+    <script>
+        var div = document.getElementById('background-pop');
+        var close = document.getElementById('close-button');
+        function show(){
+            div.style.display = "block";
+        }
+        close.onclick = function close() {
+            div.style.display = "none";
+        };
+        window.onclick = function close(e) {
+            if (e.target == div) {
+                div.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#recommend").click(function() {
+                $("#dropp").fadeToggle();
+            });
+
+            $("#b11").click(function() {
+                $("#dropp").fadeToggle();
+            })
+        })
     </script>
 {% endblock %}
 
