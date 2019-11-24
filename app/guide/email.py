@@ -1,3 +1,9 @@
+"""
+# Project           : COMP9323
+# Author            : Heping Zhao
+# Date created      : 25/10/2019
+# Description       : GUIDE SYSTEM -- Send reset password email
+"""
 from flask_mail import Message
 from app import mail
 from SevManager import app

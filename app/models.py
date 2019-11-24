@@ -1,8 +1,8 @@
 """
 # Project           : COMP9323
-# Author            : Group 15
+# Author            : Heping Zhao
 # Date created      : 25/10/2019
-# Description       : Login user class
+# Description       : Login User Class
 """
 from app import db as pydb, login_manager
 from flask import current_app

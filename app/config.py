@@ -3,6 +3,9 @@
 # Author            : Group 15
 # Date created      : 25/10/2019
 # Description       : Application configuration
+# Revision History  :
+# Date              Author            Revision
+# 25/10/2019        Heping Zhao      create os environment
 """
 import os
 

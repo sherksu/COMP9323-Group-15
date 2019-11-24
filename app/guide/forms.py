@@ -1,3 +1,9 @@
+"""
+# Project           : COMP9323
+# Author            : Heping Zhao
+# Date created      : 25/10/2019
+# Description       : GUIDE SYSTEM -- FLASK-WTF forms to create tables
+"""
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError

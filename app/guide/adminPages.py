@@ -1,3 +1,10 @@
+"""
+# Project           : COMP9323
+# Author            : Heping Zhao
+# Date created      : 25/10/2019
+# Description       : GUIDE SYSTEM ROUTES
+"""
+
 from . import guide
 from flask import render_template, flash, redirect, url_for, request
 from app import secure
@@ -18,6 +25,14 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+"""
+Page:        Role create
+Description: Create role and sign up new account
+API:         http://host/guide/signup
+methods:     GET AND POST
+ref.data:    username, email, avatar file ...
+"""
 
 @guide.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -54,6 +69,13 @@ def signup():
     return render_template('/guide/signup.html', form=form)
 
 
+"""
+Page:        Login
+Description: Login to access world map
+API:         http://host/guide/login
+methods:     GET AND POST
+ref.data:    username, password ...
+"""
 @guide.route('/login', methods=['GET', 'POST'])
 def login():
     if not current_user.is_authenticated:
@@ -74,6 +96,13 @@ def login():
         return redirect(url_for('guide.world_map'))
 
 
+"""
+Page:        logout
+Description: logout to homepage
+API:         http://host/guide/logout
+methods:     none
+ref.data:    none
+"""
 @guide.route('/logout')
 @login_required
 def logout():
@@ -81,6 +110,13 @@ def logout():
     return redirect(url_for('welcome'))
 
 
+"""
+Page:        Send reset password email
+Description: Type email address then we will send email to guide them to reset password page
+API:         http://host/guide/password_reset
+methods:     GET AND POST
+ref.data:    username, email
+"""
 @guide.route('/password_reset', methods=['GET', 'POST'])
 def password_reset():
     if current_user.is_authenticated:
@@ -96,6 +132,13 @@ def password_reset():
     return render_template('/guide/password_reset.html', form=form)
 
 
+"""
+Page:        Reset password
+Description: Help users to reset new password if they forget
+API:         http://host/guide/reset_password/<token>
+methods:     GET AND POST
+ref.data:    username, password
+"""
 @guide.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
@@ -114,6 +157,13 @@ def reset_password(token):
     return render_template('/guide/password_reset_commit.html', form=form)
 
 
+"""
+Page:        Map
+Description: Lead students to choose recommended courses and link to town page
+API:         http://host/guide/world_map
+methods:     GET AND POST
+ref.data:    courses id, username, course complete
+"""
 @guide.route('/world_map', methods=['GET', 'POST'])
 def world_map():
     courses = pydb.courses.find()
@@ -130,15 +180,5 @@ def world_map():
             result.append(i)
     return render_template('/guide/world_map.html', course=result, lengths=len(result), title="map")
 
-
-@guide.route('/user_page', methods=['GET', 'POST'])
-@login_required
-def user_page():
-    user = pydb.users.find_one({'username': current_user.username})
-    avatar = user['avatar']
-    slogan = user['slogan']
-    gender = user['gender']
-    rolename = user['rolename']
-    return render_template('/guide/user_profile.html', avatar=avatar, slogan=slogan, gender=gender, rolename=rolename)
 
 

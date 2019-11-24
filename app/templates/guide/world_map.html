@@ -1,3 +1,9 @@
+<!--
+ Project           : COMP9323
+ Author            : Heping Zhao
+ Date created      : 25/10/2019
+ Description       : world_map page
+-->
 {% extends '/basic/BasicConfig.html' %}
 
 {% block styles %}
@@ -285,6 +291,7 @@
             margin: -235px 695px;
         }
         #background-pop{
+            display: none;
             position: fixed;
             left: 0;
             top: 0;
@@ -314,15 +321,15 @@
             color: #ffffff;
         }
         #close-button{
-            margin-right: 10px;
+            position: relative;
+            right: 0;
             color: white;
-            margin-left: 20px ;
+            margin-left: 970px ;
             cursor: pointer;
-            float: right;
             font-size: 20px;
         }
         #close-button:hover{
-            background-color: #ba3a13;
+            color: #ba3a13;
         }
         .top-text{
             position: relative;
@@ -330,7 +337,7 @@
             font-size: 28px;
             font-weight: bold;
             margin-left: 290px;
-            padding-top: 20px;
+            margin-top: -10px;
         }
     @-webkit-keyframes sheen {
             0% {
@@ -506,6 +513,7 @@
         <div id="background-pop">
             <div id="div-pop">
                 <div class="div-top1">
+                    <span id="close-button">back</span>
                     <p class="top-text">Here is course selection guide!</p>
                 </div>
                 <div class="div-content">
