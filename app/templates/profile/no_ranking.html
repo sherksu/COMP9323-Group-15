@@ -1,90 +1,107 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
-
-
 {%- block content %}
-<!-- Bootstrap -->
-    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="ranking_page.css" />
-    <style>
-      .w3-bar-item:hover{
-        transform: scale(1.2)
-      }
-      .w3-left, .w3-right, .w3-badge {cursor:pointer}
-      .w3-badge {height:13px;width:13px;padding:0}
+<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+
+<style>
+
+.tangerine {
+    font-family: "Roboto", sans-serif;
+}
+
+.use_color{
+    color: #662D91;
+}
+
+.use_color2{
+    color:#f15a24;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.clip_css {
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+    max-height: 90%;
+    max-width: 90%;
+}
+
+.bottom_image{
+    position: absolute;
+    bottom: 0;
+}
+
+.container {
+    padding: 0;
+    margin: 0;
+}
+
+.left-element {
+    background: green;
+    display: inline-block;
+    float: left;
+}
+
+.right-element {
+    padding-left: 150px;
+    display: inline-block;
+    float: left;
+}
+
+tr{
+    height:50px;
+}
+
+</style>
+
+<script>
+var total_num = {{len(course_code_name_list)}};
+for (i = 0; i < total_num; i++){
+    document.getElementById("rank_"+i).style.display = "none";
+}
 
 
-      .square {
-        height: 200px;
-        width: 200px;
-      }
+function expand_collapse(id){
+    for (i=0; i<total_num; i++){
+        if (id != i){
+            document.getElementById("rank_"+i).style.display = "none"
 
-      .square:hover{
-        transform: scale(1.2)
-      }
+        }
+        else{
+            if (document.getElementById("rank_"+i).style.display === "block"){
+                document.getElementById("rank_"+i).style.display = "none";
+            }
+            else{
+                document.getElementById("rank_"+i).style.display = "block";
+            }
+        }
+    }
+}
 
-      div.scrollmenu {
+</script>
 
-          overflow: auto;
-          white-space: nowrap;
-      }
+<body>
 
-      div.scrollmenu a {
-          display: inline-block;
-          color: grey;
-          text-align: center;
-          padding: 14px;
-          text-decoration: none;
-      }
-
-      div.scrollmenu a:hover {
-          background-color: teal;
-      }
-
-    </style>
-
-
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
-  <div class="w3-container w3-row">
-
-    <div class="w3-col s8 w3-bar w3-pale-blue" align="center">
-      <h2><span>Welcome<br><strong>{{username}}</strong></span></h2><br>
+<div style="position: absolute; width: 840px; height: 700px; top: 10px; left: 100px" class="tangerine">
+    <img style="z-index:1" src="{{url_for('static',filename='image/profile/clip.png')}}" width="840px" height="700px" alt="clip board picture"/>
+    <img style="position:absolute; z-index:2; margin-top:450px; margin-left:-850px" src="{{url_for('static', filename='image/profile/c_rank.png')}}" width="300" height="250"/>
+    <div style="position:absolute; z-index:3; margin-top:-600px; margin-left:30px">
+        <h1 class="tangerine use_color2"><b>Rank</b></h1>
+        <h3 class="tangerine use_color">Currently you have not enrolled into courses.<br>Please head to the town.</h3>
     </div>
-  </div>
-
-  <hr>
-
-  <div class="w3-container w3-aqua">
-    <h3>Ranking page</h3>
-  </div>
-</nav>
-
-
-<!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px; margin-top:43px; position:relative; height:auto; min-height:100%">
-
-  <!-- Header -->
-  <header class="w3-container w3-light-grey w3-leftbar" style="padding-top:22px">
-    <h1><b><i class="fa fa-dashboard"></i> Ranking </b></h1>
-  </header>
-
-  <br>
-
-  <table class="w3-table w3-striped w3-white">
-    <tr>
-      <td><h3><i class="fa fa-bookmark w3-text-pale-red w3-large"></i></h3></td>
-      <td><h3>Currently you have not attempted courses.<br>
-                Click on the link and have a go !!</h3></td>
-    </tr>
-  </table>
-    <a href="/guide/world_map">Return to the world map</a>
-
 </div>
+
+
+</body>
 {% endblock content %}
