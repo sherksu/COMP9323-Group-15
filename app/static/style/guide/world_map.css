@@ -156,18 +156,6 @@
     font-family: 'Barlow Semi Condensed', sans-serif;
 }
 
-/* btn list */
-.btn-list {
-    position: fixed;
-    bottom: 2%;
-    right: 2%;
-    list-style-type:none;
-}
-
-.btn-list li {
-    margin-bottom: 30%;
-}
-
 /* recommend */
 #recommend {
     position: fixed;

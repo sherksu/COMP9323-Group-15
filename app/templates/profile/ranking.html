@@ -113,65 +113,65 @@ function expand_collapse(id){
 {% endblock %}
 
 {%- block content %}
-<div style="position: absolute; width: 1000px; height: 700px; bottom:0; left:100px;" class="tangerine" id="screenshot">
-    <img style="z-index:1;" src="{{url_for('static',filename='image/profile/clip.png')}}" width="100%" height="100%" alt="clip board picture"/>
-    <div style="position:absolute; z-index:2; left: -100px; bottom: 0; height: 350px; width: 415px">
-        <img src="{{url_for('static', filename='image/profile/c_rank.png')}}" width="100%" height="100%"/>
-    </div>
-    <div style="position:absolute; z-index:3; margin-top:-600px; margin-left:30px; padding: 20px">
-        <h1 class="tangerine use_color2"><b>Rank</b></h1>
-        <h4 class="use_color">Choose course here</h4><br>
+<div style="position: absolute; width: 1000px; height: 700px; bottom:0; left:150px;" class="tangerine" id="screenshot">
+    <div>
+        <img style="z-index:1;" src="{{url_for('static',filename='image/profile/clip.png')}}" width="100%" height="100%" alt="clip board picture"/>
+        <div style="position:absolute; z-index:3; top: 80px; left:40px; padding: 20px">
+            <h1 class="tangerine use_color2"><b>Rank</b></h1>
+            <h4 class="use_color">Choose course here</h4><br>
 
-        <div class="container">
-            <div class="left-element w3-bar-block w3-sand" id="ranking_node">
-                {% for index, course in enumerate(course_code_name_list) %}
-                    <button class="use_color w3-bar-item w3-border w3-button w3-padding" align="center" id="{{index}}" onclick="expand_collapse(this.id)"><i class="fa fa-diamond fa-fw"></i>
-                        {{course[0]}}
-                    </button>
-                {% endfor %}
-            </div>
-            <div class="right-element use_color">
-                {% for index, position in enumerate(position_list) %}
-                    <div id="rank_{{index}}" style="display:none">
-                        <table class="w3-table w3-border w3-centered w3-hoverable w3-bordered">
-                            <caption class="use_color w3-large">{{course_code_name_list[index][0]}}</caption>
-                            <col width="100px">
-                            <col width="150px">
-                            <col width="200px">
-                            {% for person in total_rank_list[index] %}
-                                <tr>
-                                    {% if person[0] <= 3 %}
-                                        <th>
-                                            <p class="w3-xlarge" style="font-style: italic">{{person[0]}}</p>
-                                        </th>
-                                        <th>
-                                            <p class="w3-large" style="padding-top:5px">{{person[1]}}</p>
-                                        </th>
-                                        <th>
-                                            {% if person[1] == username %}
-                                                <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
-                                            {% endif %}
-                                        </th>
-                                    {% else %}
-                                        <th>
-                                            <p class="w3-large" style="font-style:italic">{{person[0]}}</p>
-                                        </th>
-                                        <th>
-                                            <p class="w3-large">{{person[1]}}</p>
-                                        </th>
-                                        <th>
-                                            {% if person[1] == username %}
-                                                <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
-                                            {% endif %}
-                                        </th>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                {% endfor %}
+            <div class="container">
+                <div class="left-element w3-bar-block w3-sand" id="ranking_node">
+                    {% for index, course in enumerate(course_code_name_list) %}
+                        <button class="use_color w3-bar-item w3-border w3-button w3-padding" align="center" id="{{index}}" onclick="expand_collapse(this.id)"><i class="fa fa-diamond fa-fw"></i>
+                            {{course[0]}}
+                        </button>
+                    {% endfor %}
+                </div>
+                <div class="right-element use_color">
+                    {% for index, position in enumerate(position_list) %}
+                        <div id="rank_{{index}}" style="display:none">
+                            <table class="w3-table w3-border w3-centered w3-hoverable w3-bordered">
+                                <caption class="use_color w3-large">{{course_code_name_list[index][0]}}</caption>
+                                <col width="100px">
+                                <col width="150px">
+                                <col width="200px">
+                                {% for person in total_rank_list[index] %}
+                                    <tr>
+                                        {% if person[0] <= 3 %}
+                                            <th>
+                                                <p class="w3-xlarge" style="font-style: italic">{{person[0]}}</p>
+                                            </th>
+                                            <th>
+                                                <p class="w3-large" style="padding-top:5px">{{person[1]}}</p>
+                                            </th>
+                                            <th>
+                                                {% if person[1] == username %}
+                                                    <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
+                                                {% endif %}
+                                            </th>
+                                        {% else %}
+                                            <th>
+                                                <p class="w3-large" style="font-style:italic">{{person[0]}}</p>
+                                            </th>
+                                            <th>
+                                                <p class="w3-large">{{person[1]}}</p>
+                                            </th>
+                                            <th>
+                                                {% if person[1] == username %}
+                                                    <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
+                                                {% endif %}
+                                            </th>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
+    <img style="position:absolute; z-index:2; left: -150px; bottom: 0; height: 350px; width: 415px" src="{{url_for('static', filename='image/profile/c_rank.png')}}" width="100%" height="100%"/>
 </div>
 {% endblock content %}
