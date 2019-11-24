@@ -66,6 +66,7 @@ def question_set():
                            get_question_chapter=get_question_chapter,correct_answer = correct_answer,
                            get_question_option=get_question_option,get_question_correct_answer=get_question_correct_answer,
                            chr=chr,int=int,str=str)
+<<<<<<< HEAD
 
 @profile.route('/question_set_solutions/<question_id>')
 def question_set_solutions(question_id):
@@ -82,6 +83,8 @@ def question_set_solutions(question_id):
     print(user_answer)
     return render_template("/profile/question_set_solutions.html",content=content, option=option, correct_answer=correct_answer,
                            solutions=solution, chr=chr, id=q_id,user_answer = user_answer)
+=======
+>>>>>>> parent of bffd2e2... 123
 
 @profile.route('/study_career/')
 def study_career():
@@ -92,10 +95,6 @@ def get_user_info(user_name):
     result = db.users.find_one({"username": user_name})
     return result
 
-def get_question_option(question_id):
-    question = db.question_set.find_one({"_id": question_id})
-    if question:
-        return question['option']
 
 def get_course_name(course_id):
     course = db.courses.find_one({"_id": course_id})
@@ -108,10 +107,6 @@ def get_course_code(course_id):
     if course:
         return course['code']
 
-def get_question_correct_answer(question_id):
-    question = db.question_set.find_one({"_id": question_id})
-    if question:
-        return question['correct_answer']
 
 def get_chapter_name(chapter_id):
     chapter = db.chapters.find_one({"_id": chapter_id})
