@@ -8,11 +8,13 @@ from flask_socketio import emit, join_room, leave_room, disconnect, Namespace, r
 import json
 from time import time
 from pprint import  pprint
+from app import answer_buffer
 
 #TODO -- 暂时先存在这里
 type_num = {"1 vs 1":2,
             "2 vs 2":4,
             "Battlegrounds":3}
+
 def getNotFull():
     r = []
     for k,v  in type_num.items():
@@ -41,20 +43,6 @@ def bg_update_room(course):
         for r in cur:
             db.rooms.update({"_id": r["_id"]},
                             {"$set": {"start_game": True}})
-            socketio.start_background_task(bg_game, r)
-
-
-def bg_game(r):
-    while True:
-        socketio.sleep(1)
-        cur = db.rooms.find_one({"_id":r["_id"]})
-        # print(cur)
-        # socketio.emit("start_game",
-        #           json.dumps(r, default=str),
-        #           room=r["course"],
-        #           namespace='/pvp',
-        #           broadcast=1,
-        #           skip_sid=1)
 
 #background green thread
 def bg_full_check():
@@ -74,30 +62,28 @@ def bg_full_check():
 def bg_gaming_thread(room_id):
     start_time = time()
     print(f"\nbg_gaming_thread started {room_id}\n")
+    cur = db.rooms.find_one({"_id": ObjectId(room_id)})
+    if cur:
+        data = dict(cur)
     while True:
         socketio.sleep(1)
-        cur = db.rooms.find_one({"_id":ObjectId(room_id)})
-        if cur:
+        if data:
             data = dict(cur)
             socketio.emit('gaming',
                           json.dumps({"id": room_id,
-                           "data":data},
+                           "data":data,
+                           "answer":answer_buffer.get(room_id,{})},
                           default=str),
                           room=room_id,
                           namespace='/pvp',
                           broadcast=1,
                           skip_sid=1)
-        if time() - start_time > 600:
-            #remove document
-            #return 0
-            pass
-        # query = []
-        # for k, v in type_num.items():
-        #     query.append({"type": k, "player": {"$size": v}})
-        # cur = db.rooms.find({"course": course,"game_start":{"$exists":False},"$or":query})
-        # for r in cur:
-        #     if str(r["_id"]) not in bg_task:
-        #         bg_task[str(r["_id"])] = socketio.start_background_task(bg_update_room, request.args["course"])
+        else:
+            cur = db.rooms.find_one({"_id": ObjectId(room_id)})
+            if cur:
+                data = dict(cur)
+
+
 
 @socketio.on('connect',namespace="/pvp")
 def on_connect():
@@ -123,10 +109,12 @@ def on_reconnect(data):
 def on_join(data):
     try:
         print(f"\n{current_user.get_id()} join to:")
+        # check if player is in a started game
         print("query", {"player": {"$in": [current_user.get_id()]}, "game_start": True})
         cur = db.rooms.find_one({"player": {"$in": [current_user.get_id()]}, "game_start": True})
         join = ''
         in_game = 0
+
         #run thread for the started game
         if cur:
             curL = dict(cur)
@@ -137,20 +125,24 @@ def on_join(data):
                 print(str(curL["_id"]))
                 join = curL["_id"]
                 in_game = 1
+
+        # join the course pvp room
         if request.args["course"] in bg_task:
             join_room(data["room"])
             print(data["room"])
             join = data["room"]
         print(bg_task)
+
         #run thread for the course
         if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
             bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room, request.args["course"])
-        print("1")
+
         #run thread for full room checking
         if bg_task["bg_full_check"] == 0:
             bg_task["bg_full_check"] = socketio.start_background_task(bg_full_check)
         print({"status":1,"join":join,"rooms":rooms(),"in_game":in_game,"user":current_user.get_id()})
         print("\n")
+
         return {"status":1,"join":join,"rooms":rooms(),"in_game":in_game,"user":current_user.get_id()}
     except KeyError as e:
         return ""
@@ -276,11 +268,11 @@ def on_leave_room():
 @socketio.on('update_focus', namespace='/pvp')
 def on_update_focus(data):
     try:
-        # print("\n","on_update_focus",data)
+        # print("\n","on_update_focus")
         # print(current_user.get_id())
-        # print(current_user.get_id(),request.sid)
+        # print(data['focus'])
         if data:
-            emit("position", {"user": current_user.get_id(),
+            socketio.emit("position", {"user": current_user.get_id(),
                 "focus": data["focus"]},
                  room=data['room'],
                  namespace='/pvp',

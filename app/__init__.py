@@ -31,6 +31,7 @@ cors = CORS()
 #install package eventlet
 socketio = SocketIO(async_mode="eventlet")
 bg_task = {}
+answer_buffer = {}
 
 # factory function
 def create_app():

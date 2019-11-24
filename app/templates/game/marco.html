@@ -44,6 +44,13 @@
             {% endfor %}
             </div>
         </div>
+        {% if not cond %}
+        <div class="row">
+            <div class="offset-10 col-2">
+            <button class="submit-answer btn-warning submit-answer btn-warning ">Commit</button>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endmacro %}
@@ -78,6 +85,8 @@
                         <form action="{{url_for('game.upload_csv')}}" id="{{d['_id']}}{{ran}}" method="post" enctype="multipart/form-data" target="{{d['_id']}}{{ran}}">
                             <input type="hidden" name="question" value="{{d['_id']}}" >
                             <input type="hidden" name="{{d['_id']}}" class="answer" value="-1">
+                            <input type="hidden" name="room" class="room" value="-1">
+                            <input type="hidden" name="username" class="username" value="-1">
                             <input type="file" name="fileToUpload" onchange="file_change(this)" id="fileToUpload{{Qloop.index}}"
                                    style="visibility: collapse;display: contents;">
                             <button  class="btn btn-warning game_submit" onclick="$('#fileToUpload{{Qloop.index}}').click();return false;" style="width:100%">
@@ -86,8 +95,10 @@
                             </button>
                             <script defer>
                                 (function() {
-                                    let iframe = "<iframe id=\"hidden_upload{{Qloop.index}}\" name=\"{{d['_id']}}{{ran}}\" src='' onload='onload_fn(this)' style='width:0;height:0;border:0px solid #fff'> </iframe>"
+                                    setTimeout(function () {
+                                        let iframe = "<iframe id=\"hidden_upload{{Qloop.index}}\" name=\"{{d['_id']}}{{ran}}\" src='' onload='onload_fn(this)' style='width:0;height:0;border:0px solid #fff'> </iframe>"
                                     document.getElementById("{{d['_id']}}{{ran}}").innerHTML+=iframe
+                                    },1000)
                                 })();
                             </script>
 

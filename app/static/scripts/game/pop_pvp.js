@@ -11,7 +11,7 @@ function equal(setA, setB) {
     return !setA.size ;
 }
 
-(function($){
+$(document).ready(function(){
     let Room = function (course,type){
         this.id = 0
         this.course = course
@@ -217,7 +217,7 @@ function equal(setA, setB) {
     $.fn.Rooms = function (...args) {
         return new Rooms($(this),...args);
     }
-}(jQuery))
+})
 
 ////////////////////////////////////////////////
 

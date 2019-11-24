@@ -1,5 +1,5 @@
 from . import game
-from flask import render_template, abort, request,send_from_directory,current_app
+from flask import render_template, abort, request,send_from_directory,current_app,Response
 from app.MongoFunction import *
 from flask_login import current_user, login_required
 import re
@@ -9,6 +9,8 @@ from pprint import pprint
 from time import time
 import pandas as pd
 import os.path
+import json
+from app import answer_buffer
 
 # TODO 1. 排版 2. 游戏规则
 
@@ -27,23 +29,43 @@ def download_csv():
     #send_from_directory handle the file not found exception with proper information
     return send_from_directory(current_app.static_folder,"game/csv/"+request.args["file"])
 
+@game.route('/upload_answer', methods=['post'], strict_slashes=False)
+# @login_required
+def on_upload_answer():
+    print("\nupload_answer")
+    print(request.form)
+    cur = db.question_set.find({"_id":ObjectId(request.form['name']),"correct_answer":int(request.form["value"])},{"_id":1})
+    print("count",cur.count(),list(cur))
+    if cur.count():
+        if request.form['room'] not in answer_buffer:
+            answer_buffer[request.form['room']]={}
+        if request.form['name'] not in answer_buffer[request.form['room']]:
+            answer_buffer[request.form['room']][request.form['name']] = request.form['username']
+    print("\n")
+    return Response(json.dumps(answer_buffer, default=str), mimetype='application/json')
+
 @game.route('/upload_csv', methods=['POST'], strict_slashes=False)
 # @login_required
 def upload_csv():
     print("\nupload_csv")
-    print(request.form['question'])
+    print(request.form)
     cur = db.question_set.find_one({"_id":ObjectId(request.form['question'])})
     data = dict(cur)
     if data:
-        print(data['correct_answer'])
+        # print(data['correct_answer'])
         answer = pd.read_csv(current_app.static_folder+"/game/csv/"+data['correct_answer'])
-        pprint(answer)
+        # pprint(answer)
         submited = pd.read_csv(request.files['fileToUpload'])
-        pprint(submited)
+        # pprint(submited)
         print(answer.equals(submited))
-        if answer.equals(submited) and "room" in request:
-            db.rooms.update({"_id":ObjectId(request.form['room']),ObjectId(request.form['room']):{"$exists":0}},
-                            {"$set":{ObjectId(request.form['room']):1}})
+        if answer.equals(submited) and "room" in request.form:
+            # db.rooms.update({"_id":ObjectId(request.form['room']),ObjectId(request.form['room']):{"$exists":0}},{"$set":{ObjectId(request.form['room']):1}})
+            if request.form['room'] not in answer_buffer:
+                answer_buffer[request.form['room']] = {}
+            if request.form['question'] not in answer_buffer[request.form['room']]:
+                answer_buffer[request.form['room']][request.form['question']] = request.form['username']
+            pprint(answer_buffer)
+        print("\n")
         return data['correct_answer'] if answer.equals(submited) else "0"
     else:
         return "0"

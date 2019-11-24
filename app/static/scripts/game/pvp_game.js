@@ -41,15 +41,17 @@
             let inViewPort = 0
             sn.e.find(".nav-link").removeClass("active")
             sn.contents.each(function (k, item) {
-                // tmp = $(item)
+
                 let domRect = item.getBoundingClientRect()
                 if ((domRect.top < 0 && domRect.bottom >= 50)
                     || (domRect.top >= 0 && domRect.top < (window.innerHeight - 50))) {
                     item = $(item)
                     let ele = sn.e.find(".nav-link[href='#" + item.prop("id") + "']")
+                    // tmp = ".nav-link[href='#" + item.prop("id") + "']"
                     if (!inViewPort)
                         inViewPort = ele
                     ele.addClass("active")
+                    // console.log("in",ele,item,".nav-link[href='#" + item.prop("id") + "']")
                     return true
                 } else {
                     if (inViewPort.length) {
@@ -121,6 +123,7 @@ let tmp
 let pvpNavBar
 let socket
 let update_interval_id
+
 $(document).ready(function () {
     socket = io.connect(window.location.origin+"/pvp")
     bind_event()
@@ -139,6 +142,8 @@ $(document).ready(function () {
 
 function file_change(e){
     console.log('onchange');
+    $(e).parent('form').find(".room").val(room_id["_id"])
+    $(e).parent('form').find(".username").val(username)
     $(e).parent('form')[0].submit();
     $(e).parent('form').find(".game_submit").prop("disabled","disabled").attr("disabled","disabled")
     return false;
@@ -148,6 +153,7 @@ function onload_fn(e) {
     tmp = e
     response = $(e.contentWindow.document).find("body").text()?$(e.contentWindow.document).find("body").text():$(e.contentDocument).find("body").text()
     $(e).parent("form").find(".answer").val(response)
+    console.log(response)
 }
 
 function getAnswers(){
@@ -165,9 +171,29 @@ function set_update_interval(room_id){
         socket.emit("update_focus",{"focus":focus_q,"room":room_id})
     }, 1000);
 }
+function disable_question(key,name){
+    if (q_dict.hasOwnProperty(key)) {
+        let question = q_dict[key]
+        tmp =".blocker." + question.trim()
+        if(!$(".blocker." + question.trim()+":visible").length){
+            $(".opacity-block." + question.trim()).find("input").css("disabled", "disabled")
+            $(".opacity-block." + question.trim()).find("button").css("disabled", "disabled")
+            $(".opacity-block." + question.trim()).css("opacity", "0.3")
+            if(name == username){
+                $(".blocker." + question.trim()).find(".textspan").text(" You alreay finished this question ~~!")
+            }else{
+                $(".blocker." + question.trim()).find(".textspan").text(name + " get ahead of you ~~!")
+            }
+            $(".blocker." + question.trim()).css("display", "block")
+        }
+    }
+}
+
 let gaminglog = 0
 let positionlog = 0
 let focuslog = 0
+let room_id =0
+let answerlog=0
 function bind_event() {
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
@@ -200,6 +226,15 @@ function bind_event() {
             // console.debug("update_interval_id")
             set_update_interval(data.id,data["data"]["player"])
             pvpNavBar.addPlayer(data["data"]["player"])
+            room_id = data["data"]
+        }
+        if(Object.keys(data["answer"]).length){
+            if(answerlog){
+                console.log(data)
+            }
+            for (var key of Object.keys(data["answer"])) {
+                disable_question(key,data["answer"][key])
+            }
         }
         // tmp = data
         // pvpNavBar.showPlayers(data["data"]["player"],data["data"])
@@ -208,5 +243,24 @@ function bind_event() {
         if(positionlog)
             console.log("position",data)
         pvpNavBar.showPlayer(data)
+    })
+    $(".submit-answer").click(function () {
+        let answer_array = $(this).closest('.question').find("input").serializeArray()
+        if (answer_array.length){
+            answer_array[0]["username"] = username
+            answer_array[0]["room"]=room_id['_id']
+            tmp = answer_array
+            $.ajax({
+                url: window.location.origin + "/game/upload_answer",
+                method: "POST",
+                data: answer_array[0],
+                success:function (data) {
+                    console.log("submit-answer callback",data)
+                }
+            })
+        }else {
+            alert("Please choose an answer before commit")
+        }
+
     })
 }

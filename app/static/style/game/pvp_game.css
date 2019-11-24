@@ -24,6 +24,7 @@
     min-height: 300px;
     border-top: 5px solid lightskyblue;
     padding-bottom: 20px;
+    position: relative;
 }
 
 /*.question .row{*/
@@ -130,4 +131,13 @@ document::-webkit-scrollbar,window::-webkit-scrollbar,body::-webkit-scrollbar {
 
 .invisible{
     visibility: hidden;
+}
+
+.blocker{
+    position: absolute;
+    transform: translateY(-50%);
+    /*transform: translateX(50%);*/
+    /*left: 35%;*/
+    height: 100%;
+    width: 100%;
 }
