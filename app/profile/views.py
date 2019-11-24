@@ -16,7 +16,10 @@ def personal_profile():
 @profile.route('/detail/', methods=['GET', 'POST'])
 def detail():
     dic = get_user_info(current_user.username)
-    img = dic['avatar']
+    if 'avatar' in dic.keys():
+        img = dic['avatar']
+    else:
+        img = None
     return render_template("/profile/detail.html",
                            **dic, get_course_name=get_course_name, get_course_code=get_course_code,
                            img=img, get_chapter_name=get_chapter_name)

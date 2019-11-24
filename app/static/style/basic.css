@@ -76,8 +76,8 @@
 .detail_hover {
     position: absolute;
     bottom: 0;
-    height: 700px;
-    width: 840px;
+    height: 900px;
+    width: 1500px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
@@ -86,8 +86,8 @@
 .question_set_hover {
     position: absolute;
     bottom: 0;
-    height: 700px;
-    width: 840px;
+    height: 900px;
+    width: 1500px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;

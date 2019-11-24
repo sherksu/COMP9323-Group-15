@@ -44,6 +44,7 @@ def create_app():
     login_manager.login_view = 'guide.login'
     bootstrap.init_app(app)
     cors.init_app(app, supports_credentials=True)
+    app.jinja_env.globals.update(__builtins__)
 
     # blueprint register ----------------
     # guide

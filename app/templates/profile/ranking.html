@@ -86,7 +86,7 @@ function makeScreenshot() {
 }
 
 
-var total_num = {{len(course_code_name_list)}};
+var total_num = {{ course_code_name_list|length }};
 for (i = 0; i < total_num; i++){
     document.getElementById("rank_"+i).style.display = "none";
 }

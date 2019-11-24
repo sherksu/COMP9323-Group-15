@@ -53,6 +53,7 @@
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <script>
 let username = '{{ username }}';
 {%- if level %}
