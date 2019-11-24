@@ -75,9 +75,4 @@ def create_app():
     def welcome():
         return render_template('/welcome/welcome.html')
 
-    # test_tool
-    @app.route('/bootstrap')
-    def test_bootstrap():
-        return render_template('/welcome/bootstrap.html')
-
     return app

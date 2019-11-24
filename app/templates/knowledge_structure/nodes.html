@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content%}
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-2">
+            <div class="col-xs-3">
                 <ul class="list-group">
                     <li class="list-group-item" style="background-color: lavender">{{ course.name}}</li>
                     {% for i in chapters %}
@@ -26,7 +26,7 @@
                     {% endfor%}
                 </ul>
             </div>
-            <div class="col-xs-10">
+            <div class="col-xs-9">
                 <div class="page-header" style="margin-top:0px">
                     <h2 style="margin-top:0px">
                         {% if not chapter %}
