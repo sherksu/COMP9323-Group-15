@@ -29,7 +29,7 @@ $(document).ready(function(){
         return r
     }
 
-    Room.prototype.init = function (user_name="",join_handler) {
+    Room.prototype.init = function (username="",join_handler) {
         let tpl, time, tid, outterID
         time = new Date().getTime()
         tid = "#player-"+this.id
@@ -45,7 +45,7 @@ $(document).ready(function(){
             "                        </div>\n" +
             "                        <div id=\""+tid.substring(1)+"\" class=\"panel-collapse collapse in\">\n" +
             "                            <div class=\"panel-body\">\n"
-        tpl += this.players(user_name)
+        tpl += this.players(username)
         tpl += "                                   </a>"+
             "                                </div>\n" +
             "                            </div>\n" +
@@ -68,10 +68,10 @@ $(document).ready(function(){
             "player":this.player
         }
     }
-    Room.prototype.players = function (user_name) {
+    Room.prototype.players = function (username) {
         let tpl = ""
         this.player.forEach(function (item) {
-            if (item == user_name) {
+            if (item == username) {
                 tpl += "<a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-info\">" +
                     item +
                     "</a>"
@@ -84,19 +84,19 @@ $(document).ready(function(){
         return tpl
     }
     Room.prototype.join_btn = function(){
-        // if(!this.player.includes(user_name) && !this.e.find(".join-room").length)
+        // if(!this.player.includes(username) && !this.e.find(".join-room").length)
         //     this.e.find(".panel-heading").prepend("<button class='btn btn-warning pull-right join-room' style='margin-top: -8px;'>Join this room</button>")
-        // else if (this.player.includes(user_name) && this.e.find(".join-room").length)
+        // else if (this.player.includes(username) && this.e.find(".join-room").length)
         //     this.e.find(".join-room").remove()
         //TODO -- 暂时先存在这里
         let type_num = {
             "1 vs 1": 2,
             "2 vs 2": 4,
-            "Battlegrounds": 10,
+            "Battlegrounds": 3,
             "fake type":1000
         }
 
-        if (this.player.includes(user_name)) {
+        if (this.player.includes(username)) {
             this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
             if (this.game_start)
                 this.e.find(".join-room").prop("disabled", false).attr("disabled", false).text("Game Started")
@@ -112,8 +112,8 @@ $(document).ready(function(){
             }
         }
     }
-    Room.prototype.update = function (user_name) {
-        this.e.find(".panel-collapse.collapse.in").html(this.players(user_name))
+    Room.prototype.update = function (username) {
+        this.e.find(".panel-collapse.collapse.in").html(this.players(username))
         this.join_btn()
     }
 
@@ -224,7 +224,7 @@ $(document).ready(function(){
 let socket
 let rooms
 $(document).ready(function () {
-    rooms = $("#pvp_Modal .modal-body").Rooms(user_name, c_code,new_socket,join_socket,leave_socket)
+    rooms = $("#pvp_Modal .modal-body").Rooms(username, c_code,new_socket,join_socket,leave_socket)
     socket = io.connect(window.location.origin+"/pvp?course="+(c_code?c_code:"''")).disconnect()
     bind_event()
     $("#pvp_Modal").on("show.bs.modal", function (e) {
@@ -294,6 +294,7 @@ function new_socket(data){
     })
 }
 let showed = false
+let updateroomlog =0
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
@@ -316,7 +317,9 @@ function bind_event(){
         // rooms.push_room(data, 1)
     });
     socket.on('update_room', function (data) {
-        // console.debug("on update_room", data)
+        if(updateroomlog){
+            console.debug("on update_room", JSON.parse(data))
+        }
         rooms.update_from(JSON.parse(data), in_room)
     });
 
