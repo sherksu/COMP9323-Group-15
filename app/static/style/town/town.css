@@ -1,0 +1,59 @@
+.containers {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    min-height: 605px;
+    min-width: 1024px;
+    background-image: url('/static/image/town/town-09.png');
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: auto 100%;
+    overflow: scroll;
+}
+
+.containers::-webkit-scrollbar {
+    display: none;
+}
+
+.character {
+    position: absolute;
+    height: 400px;
+    width: 200px;
+    bottom: 7%;
+    left: 5%;
+}
+
+.chat-input {
+    position: absolute;
+    display: none;
+    bottom: 10%;
+    background-color: white;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
+    border-radius: calc(3px + 0.5vmin);
+    height:4%;
+    width: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.5s ease;
+}
+
+.chat-input:hover {
+    transform: scale(1.05) translateX(-50%);
+}
+
+.field {
+    position: absolute;
+    height: 185px;
+    width: 205px;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.5s ease;
+}
+
+.field:hover {
+    transform: scale(1.05) translateY(-52%);
+}

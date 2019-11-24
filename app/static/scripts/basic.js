@@ -16,4 +16,8 @@ $(document).ready(() => {
         $('#rank_page').fadeOut();
         $('#error_page').fadeToggle();
     });
+
+    $('.hover_mask').on('click', function() {
+        $(this).parent().fadeToggle();
+    })
 });
