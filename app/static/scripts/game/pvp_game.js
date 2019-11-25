@@ -123,12 +123,12 @@ let tmp
 let pvpNavBar
 let socket
 let update_interval_id
-
+let sid
 $(document).ready(function () {
     socket = io.connect(window.location.origin+"/pvp")
     bind_event()
     pvpNavBar = $(".question-block").ScrollNav($(".side-wrapper"))
-    console.log("pvp_game.js", pvpNavBar)
+    // console.log("pvp_game.js", pvpNavBar)
 
     $(".question-block .download-btn").click(function (e) {
         console.log(this)
@@ -137,6 +137,27 @@ $(document).ready(function () {
     })
     $(window).trigger("scroll")
 
+    $(".submit-answer").click(function () {
+        let answer_array = $(this).closest('.question').find("input").serializeArray()
+        if (answer_array.length) {
+            answer_array[0]["username"] = username
+            answer_array[0]["room"] = room_id['_id']
+            answer_array[0]["sid"] = sid
+            tmp = answer_array
+            disable_question(answer_array[0]["name"],"",1)
+            $.ajax({
+                url: window.location.origin + "/game/upload_answer",
+                method: "POST",
+                data: answer_array[0],
+                success: function (data) {
+                    console.log("submit-answer callback", data)
+                }
+            })
+        } else {
+            alert("Please choose an answer before commit")
+        }
+
+    })
 
 })
 
@@ -171,9 +192,17 @@ function set_update_interval(room_id){
         socket.emit("update_focus",{"focus":focus_q,"room":room_id})
     }, 1000);
 }
-function disable_question(key,name){
-    if (q_dict.hasOwnProperty(key)) {
-        let question = q_dict[key]
+
+function disable_question(key,name,uploading=0){
+    let question = q_dict[key]
+    if (uploading){
+        console.log("upload lock")
+        $(".opacity-block." + question.trim()).find("input").css("disabled", "disabled")
+        $(".opacity-block." + question.trim()).find("button").css("disabled", "disabled")
+        $(".opacity-block." + question.trim()).css("opacity", "0.3")
+        $(".blocker." + question.trim()).find(".textspan").text(" This question is locked  ~~!")
+        $(".blocker." + question.trim()).css("display", "block")
+    }else if (q_dict.hasOwnProperty(key)) {
         tmp =".blocker." + question.trim()
         if(!$(".blocker." + question.trim()+":visible").length){
             $(".opacity-block." + question.trim()).find("input").css("disabled", "disabled")
@@ -185,8 +214,62 @@ function disable_question(key,name){
                 $(".blocker." + question.trim()).find(".textspan").text(name + " get ahead of you ~~!")
             }
             $(".blocker." + question.trim()).css("display", "block")
+        }else{
+
         }
     }
+}
+function custom_json(json){
+    let sstr = unescape(json.room)
+    // console.log(sstr)
+    return JSON.parse(sstr)
+}
+function finish_pop() {
+    re  = /(?:\/[^\/]*)/gm
+    course = window.location.href.match(re)
+    course = course[course.length-1]
+    let modal = "<div class=\"modal pvp-end-modal\" tabindex=\"-1\" role=\"dialog\">\n" +
+        "  <div class=\"modal-dialog\" role=\"document\">\n" +
+        "    <div class=\"modal-content\">\n" +
+        "      <div class=\"modal-header\">\n" +
+        "        <h5 class=\"modal-title\">Redirect</h5>\n" +
+        "      </div>\n" +
+        "      <div class=\"modal-body\">\n" +
+        "        <p>Sorry you loss!</p>\n" +
+        "      </div>\n" +
+        "      <div class=\"modal-footer\">\n" +
+        "        <a href='/town"+course+"'><button type=\"button\" class=\"btn btn-primary pull-right\">Leave</button>\n</a>" +
+        "      </div>\n" +
+        "    </div>\n" +
+        "  </div>\n" +
+        "</div>"
+    $(modal).modal({backdrop: 'static', keyboard: false})
+}
+
+function win_pop(data) {
+    re  = /(?:\/[^\/]*)/gm
+    course = window.location.href.match(re)
+    course = course[course.length-1]
+    let modaltpl =
+        "<div class=\"modal win-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
+        "  <div class=\"modal-dialog\" role=\"document\">\n" +
+        "    <div class=\"modal-content\">\n" +
+        "      <div class=\"modal-header\">\n" +
+        "        <h5 class=\"modal-title\">Congratulation</h5>\n" +
+        "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
+        "          <span aria-hidden=\"true\">&times;</span>\n" +
+        "        </button>\n" +
+        "      </div>\n" +
+        "      <div class=\"modal-body\">\n" +
+        "        <p>You win this game!!!!</p>\n" +(data?("You have "+data["wins"]+" win now"):"")+
+        "      </div>\n" +
+        "      <div class=\"modal-footer\">\n" +
+        "        <a href='/town"+course+"'><button type=\"button\" class=\"btn btn-primary pull-right\">Leave</button>\n</a>" +
+        "      </div>\n" +
+        "    </div>\n" +
+        "  </div>\n" +
+        "</div>" ;
+    $(modaltpl).modal({backdrop: 'static', keyboard: false})
 }
 
 let gaminglog = 0
@@ -194,15 +277,23 @@ let positionlog = 0
 let focuslog = 0
 let room_id =0
 let answerlog=0
+let tmp2=0
 function bind_event() {
     socket.on('connect', function () {
-        console.log("connect\n\n\n\n")
+        console.log("connect")
         socket.emit("join", {}, function (data) {
             console.log("join", data)
         })
+        sid = socket.id.substring(5)
     });
     socket.on('disconnect', function (data) {
         console.log("disconnect", data)
+    });
+    socket.on('win', function (data) {
+        tmp = data["answer"]
+        console.log("win", data)
+        // tmp=data=custom_json(data)
+        win_pop(data)
     });
     socket.on('message', function (data) {
         console.log("message", data)
@@ -217,6 +308,12 @@ function bind_event() {
     socket.on('update_room', function (data) {
         console.debug("on update_room", data)
         rooms.update_from(JSON.parse(data), in_room)
+    });
+    socket.on('loss', function (data) {
+        tmp2 = data["answer"]
+        // tmp=data=custom_json(data)
+        console.debug("on loss", data)
+        finish_pop()
     });
     socket.on('gaming', function (data) {
         data =JSON.parse(data)
@@ -243,24 +340,5 @@ function bind_event() {
         if(positionlog)
             console.log("position",data)
         pvpNavBar.showPlayer(data)
-    })
-    $(".submit-answer").click(function () {
-        let answer_array = $(this).closest('.question').find("input").serializeArray()
-        if (answer_array.length){
-            answer_array[0]["username"] = username
-            answer_array[0]["room"]=room_id['_id']
-            tmp = answer_array
-            $.ajax({
-                url: window.location.origin + "/game/upload_answer",
-                method: "POST",
-                data: answer_array[0],
-                success:function (data) {
-                    console.log("submit-answer callback",data)
-                }
-            })
-        }else {
-            alert("Please choose an answer before commit")
-        }
-
     })
 }

@@ -17,6 +17,7 @@ $(document).ready(function(){
         this.course = course
         this.type = type
         this.player = []
+        this.game_start = false
     }
 
     Room.from = function (obj) {
@@ -95,21 +96,19 @@ $(document).ready(function(){
             "Battlegrounds": 3,
             "fake type":1000
         }
-
-        if (this.player.includes(username)) {
+        if (this.game_start && this.player.includes(username)){
             this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
-            if (this.game_start)
-                this.e.find(".join-room").prop("disabled", false).attr("disabled", false).text("Game Started")
-            else{
-                this.e.find(".join-room").prop("disabled", "disabled").attr("disabled", "disabled").text("Current Room")
-            }
-        } else {
+            this.e.find(".join-room").prop("disabled", false).attr("disabled", false).text("Game Started")
+            this.e.find(".redirect").prop("href", "/game/pvp/" + this.course)
+        }else if(this.player.includes(username) && !this.game_start ){
+            this.e.find(".join-room").removeClass("btn-warning").addClass("btn-success")
+            this.e.find(".join-room").prop("disabled", "disabled").attr("disabled", "disabled").text("Current Room")
+        } else if(this.player.length >= type_num[this.type] || this.game_start) {
             this.e.find(".join-room").removeClass("btn-success").addClass("btn-warning")
-            if (this.player.length >= type_num[this.type]) {
-                this.e.find(".join-room").prop("disabled", "disabled").attr("disabled", "disabled").text("Full Room")
-            } else {
-                this.e.find(".join-room").prop("disabled", false).attr("disabled", false).text("Join this room")
-            }
+            this.e.find(".join-room").prop("disabled", "disabled").attr("disabled", "disabled").text("Full Room")
+        }else {
+            this.e.find(".join-room").removeClass("btn-success").addClass("btn-warning")
+            this.e.find(".join-room").prop("disabled", false).attr("disabled", false).text("Join this room")
         }
     }
     Room.prototype.update = function (username) {
@@ -159,6 +158,9 @@ $(document).ready(function(){
                         // console.log("\n",this.rooms[item._id].player)
                         // console.log(item.player,"\n")
                         rs.rooms[item._id].player = item.player
+                        rs.rooms[item._id].update(rs.user)
+                    }else if(rs.rooms[item._id].game_start != (typeof item.game_start !== "undefined")){
+                        rs.rooms[item._id].game_start = true
                         rs.rooms[item._id].update(rs.user)
                     }
                 } else {
@@ -213,6 +215,10 @@ $(document).ready(function(){
     Rooms.prototype.leave_room = function(){
         this.leave_handler()
     }
+    Rooms.prototype.updatebtn = function(){
+        this.leave_handler()
+    }
+
 
     $.fn.Rooms = function (...args) {
         return new Rooms($(this),...args);
@@ -293,8 +299,10 @@ function new_socket(data){
         console.log("new_room callback", data)
     })
 }
+
 let showed = false
 let updateroomlog =0
+let gaminglog = 0
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
@@ -324,16 +332,19 @@ function bind_event(){
     });
 
     socket.on('gaming', function (data) {
-        console.log("gaming")
+        data = JSON.parse(data)
+        if(gaminglog){
+            console.log("gaming",JSON.parse((data)))
+        }
         let modal = "<div class=\"modal fade message-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
             "  <div class=\"modal-dialog\" role=\"document\">\n" +
             "    <div class=\"modal-content\">\n" +
             "      <div class=\"modal-header\">\n" +
             "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-            "        <h4 class=\"modal-title\">Modal title</h4>\n" +
+            "        <h4 class=\"modal-title\">Message</h4>\n" +
             "      </div>\n" +
             "      <div class=\"modal-body\">\n" +
-            "        <p>One fine body&hellip;</p>\n" +
+            "        <p>&hellip;</p>\n" +
             "      </div>\n" +
             "      <div class=\"modal-footer\">\n" +
             "        <button type=\"button\" class=\"btn btn-default pull-left\" data-dismiss=\"modal\"> No </button>\n" +
@@ -348,12 +359,12 @@ function bind_event(){
             console.log("in")
             $(".message-pop").modal()
             $(".message-pop").find(".modal-body").html("<h2>Redirect you to the game page</h2>")
-            $(".message-pop").find("a.yes-btn").prop("href", "/game/pvp/" + data["id"])
+            tmp = data
+            $(".message-pop").find("a.yes-btn").prop("href", "/game/pvp/" + data["data"]["course"])
             $("message-pop").show()
-            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href", "/game/pvp/" + data["id"])
+            $("#pvp_Modal .join-room:contains('Game Started')").parent(".redirect").prop("href", "/game/pvp/" + data["data"]["course"])
             showed = true
         }
-        console.debug("gaming", data)
     })
     socket.on('start_game', function (data) {
         console.debug("on start_game", data)

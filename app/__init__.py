@@ -32,7 +32,7 @@ cors = CORS()
 socketio = SocketIO(async_mode="eventlet")
 bg_task = {}
 answer_buffer = {}
-
+QUESTION_NUM =10
 # factory function
 def create_app():
     # config % initial app ----------------

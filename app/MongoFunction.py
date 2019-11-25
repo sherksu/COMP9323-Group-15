@@ -136,6 +136,27 @@ def get_list_of_levels(user_id, course_id):
 
     return [i for i in result][0]
 
+# 获取关于course_id和user_id的levels
+@show_db_data()
+def get_list_of_pvplevels(username, course_code):
+    print(username, course_code)
+    result = db.users.aggregate(
+        [{"$project": {
+                "username": 1,
+                "pvplevels": {
+                    "$filter": {
+                        "input": "$pvplevels",
+                        "as": "x",
+                        "cond": {
+                            "$eq": ["$$x.course", course_code]
+                        }
+                    }
+                }
+            }}, {"$match": {"username": username}}]
+        )
+
+    return [i for i in result]
+
 
 # personal profile --------------------------------------------------------
 # game - question

@@ -1,26 +1,5 @@
-.containers {
-    position:fixed;
-    top:0;
-    left:0;
-    z-index: -1;
-    height: 100%;
-    width: 100%;
-    min-height: 605px;
-    min-width: 1024px;
-    background-image: url('/static/image/game/pvp_bg-10.png');
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    background-size: auto 100%;
-    overflow: scroll;
-}
-
-.containers::-webkit-scrollbar {
-    display: none;
-}
-
 .middle-wrapper {
     /*width: 80vw;*/
-    background-color: white;
     border-right: 2px solid lightgray;
     border-left: 2px solid lightgray;
     /*margin: 0 auto;*/
@@ -31,11 +10,11 @@
 
 .question-wrapper {
     /*width: 80%;*/
-    border-left: 5px solid #EAE1D3;
+    border-left: 5px solid lightskyblue;
 }
 
 .side-wrapper {
-    background-color: #FF931E;
+    background-color: lightcyan;
     min-height: 300px;
     padding: 0 !important;
 }
@@ -43,7 +22,7 @@
 .question-block {
     /*width: 100%;*/
     min-height: 300px;
-    border-top: 5px solid #EAE1D3;
+    border-top: 5px solid lightskyblue;
     padding-bottom: 20px;
 }
 
@@ -52,7 +31,7 @@
 /*}*/
 
 .side-wrapper a.active{
-    background-color: #FFD0A6;
+    background-color: lightgreen;
 }
 
 document,body {

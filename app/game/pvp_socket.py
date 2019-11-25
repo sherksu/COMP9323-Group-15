@@ -1,4 +1,4 @@
-from . import game
+from . import game, views
 from flask_login import current_user, login_required
 from flask import render_template, abort, request, Response, current_app
 from bson import ObjectId
@@ -8,12 +8,13 @@ from flask_socketio import emit, join_room, leave_room, disconnect, Namespace, r
 import json
 from time import time
 from pprint import  pprint
-from app import answer_buffer
+from app import answer_buffer,QUESTION_NUM
 
 #TODO -- 暂时先存在这里
 type_num = {"1 vs 1":2,
             "2 vs 2":4,
             "Battlegrounds":3}
+
 
 def getNotFull():
     r = []
@@ -62,13 +63,15 @@ def bg_full_check():
 def bg_gaming_thread(room_id):
     start_time = time()
     print(f"\nbg_gaming_thread started {room_id}\n")
-    cur = db.rooms.find_one({"_id": ObjectId(room_id)})
-    if cur:
-        data = dict(cur)
     while True:
-        socketio.sleep(1)
-        if data:
+        socketio.sleep(1.5)
+        cur = db.rooms.find_one({"_id": ObjectId(room_id)})
+        if cur:
             data = dict(cur)
+            if len(data["player"]) ==1 or(room_id in answer_buffer and len(answer_buffer[room_id]) == QUESTION_NUM):
+                views.win_game(room_id,data["player"][0])
+                # bg_task[room_id] = 0
+                return False
             socketio.emit('gaming',
                           json.dumps({"id": room_id,
                            "data":data,
@@ -83,8 +86,6 @@ def bg_gaming_thread(room_id):
             if cur:
                 data = dict(cur)
 
-
-
 @socketio.on('connect',namespace="/pvp")
 def on_connect():
     try:
@@ -92,8 +93,6 @@ def on_connect():
         print(request.args)
         if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
             bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room,request.args["course"])
-        #TODO -- check start_game field, if t spawn game thread
-
         print("\n")
     except Exception as e:
         pprint(e)
@@ -118,8 +117,8 @@ def on_join(data):
         #run thread for the started game
         if cur:
             curL = dict(cur)
-            if(curL):
-                if str(curL["_id"]) not in bg_task:
+            if(len(curL)):
+                if str(curL["_id"]) not in bg_task or not bg_task[str(curL["_id"])]:
                     bg_task[str(curL["_id"])] = socketio.start_background_task(bg_gaming_thread,str(curL["_id"]))
                 join_room(str(curL["_id"]))
                 print(str(curL["_id"]))
@@ -140,6 +139,7 @@ def on_join(data):
         #run thread for full room checking
         if bg_task["bg_full_check"] == 0:
             bg_task["bg_full_check"] = socketio.start_background_task(bg_full_check)
+
         print({"status":1,"join":join,"rooms":rooms(),"in_game":in_game,"user":current_user.get_id()})
         print("\n")
 
