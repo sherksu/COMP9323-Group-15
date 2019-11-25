@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 .text-box {
     padding: 20px;
     height: 600px;
@@ -91,6 +95,11 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
+    overflow: hidden;
+}
+
+.question_set_hover::-webkit-scrollbar {
+    display: none;
 }
 
 .hover_mask {
