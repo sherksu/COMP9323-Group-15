@@ -2,13 +2,15 @@ $('document').ready(function() {
    document.onkeydown = function() {
        if (event.keyCode === 13) {
            let chat = $('.chat-input');
-           $('#chats').fadeToggle();
+           $('#chats').fadeIn();
            if ( chat.val() ) {
                console.log(chat.val()); // emit to socket
                chat.val(""); // clear up textfield
            } else {
                chat.focus();
            }
+       } else if (event.keyCode === 27) {
+           $('#chats').fadeOut();
        }
    };
 
