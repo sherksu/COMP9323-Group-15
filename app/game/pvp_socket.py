@@ -9,8 +9,9 @@ import json
 from time import time
 from pprint import  pprint
 from app import answer_buffer,QUESTION_NUM
+from app.MongoFunction import get_list_of_levels
 
-#TODO -- 暂时先存在这里
+
 type_num = {"1 vs 1":2,
             "2 vs 2":4,
             "Battlegrounds":3}
@@ -25,7 +26,6 @@ def getNotFull():
 
 #background green thread
 def bg_update_room(course):
-    #每有新数据立即推送新数据，会导致多人操作时发送过于频繁，所以统一每秒更新数据
     while True:
         socketio.sleep(1)
         # cur = db.rooms.find({"course": course,"game_start":{"$exists":False}})
@@ -58,6 +58,7 @@ def bg_full_check():
             if str(r["_id"]) not in bg_task:
                 db.rooms.update_one({"_id":r["_id"]},{"$set":{"game_start":True}})
                 bg_task[str(r["_id"])] = socketio.start_background_task(bg_gaming_thread, str(r["_id"]))
+
 
 #background green thread
 def bg_gaming_thread(room_id):
@@ -285,9 +286,48 @@ def on_update_focus(data):
         print(e)
         return json.dumps({"status": 0,
                            "msg": str(e),
-                           }, default=str )
+                           }, default=str)
+
 
 @game.route('/get_rooms', methods=['GET'])
 def get_rooms():
     cur = db.rooms.find({"course":request.args["course"]})
     return Response(json.dumps(list(cur), default=str), mimetype='application/json')
+
+
+@socketio.on('connect', namespace="/chat")
+def on_connect_chat():
+    try:
+        print("connect to connect_chat:", request.namespace)
+        print("\n")
+        user = db.users.find_one({'username': current_user.username})
+        user_id = user['_id']
+        if 'avatar' in user.keys():
+            user_avatar = user['avatar']
+        else:
+            user_avatar = None
+        course_code = request.args['course']
+        course_id = db.courses.find_one({"code": course_code})['_id']
+        if get_list_of_levels(user_id, course_id)['levels']:
+            level = get_list_of_levels(user_id, course_id)['levels'][0]
+        else:
+            level = None
+        data = {"name": current_user.username, "level": level['level'], "avatar": user_avatar}
+        data = json.dumps(data)
+        socketio.emit("chat_message", data,
+                      namespace='/chat',
+                      broadcast=1, )
+    except Exception as e:
+        pprint(e)
+
+
+@socketio.on('broadcast_chat', namespace="/chat")
+def on_broadcast_chat(data):
+    try:
+        print("\nconnect to:", request.namespace)
+        socketio.emit("chat_message", data,
+                      namespace='/chat',
+                      broadcast=1,)
+        print("\n")
+    except Exception as e:
+        pprint(e)

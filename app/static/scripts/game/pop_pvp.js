@@ -132,7 +132,7 @@ $(document).ready(function(){
         this.new_handler(r.data())
     }
     Rooms.prototype.join_room = function (type) {
-        //TODO -- join in database
+
     }
     Rooms.prototype.create_room = function (type) {
         return new Room(this.course, type)
@@ -306,7 +306,6 @@ let gaminglog = 0
 function bind_event(){
     socket.on('connect', function () {
         console.log("connect\n\n\n\n")
-        //TODO  -- if start_game lock all button or rediect to game page
         socket.emit("join",{"room":c_code},function (data) {
             console.log("join",data)
         })

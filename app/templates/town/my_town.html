@@ -5,6 +5,7 @@
 <link href="/static/style/HUD.css" rel="stylesheet">
 <link href="/static/style/font.css" rel="stylesheet">
 <link rel="stylesheet" href="/static/style/town/town.css">
+<link rel="stylesheet" href="{{url_for('static',filename='style/game/pop_pvp.css') }}">
 <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:300,400,600,700&display=swap" rel="stylesheet">
 {% endblock %}
 
@@ -12,10 +13,16 @@
 {{ super() }}
 <script src="../../static/scripts/town/town.js"></script>
 <script src="../../static/scripts/town/pop_page.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
+<script src="{{url_for('static',filename='scripts/game/pop_pvp.js')}}"></script>
+<script>
+    let c_code = "{{code}}";
+    let user_name = "{{user_name}}";
+</script>
 <script>
 let username = '{{ username }}';
 {%- if level %}
@@ -67,14 +74,6 @@ $('#next_exp').text(100);
     <input type="text" class="form-control chat-input" placeholder="You can chat here....">
     <div class="chat_record"></div>
     <div class="user_list">
-        <div id="user_ids" class="tiny_HUD">
-            <div class="tiny_avatar">
-                <img src="/static/filedata/index.icon.png" alt="" height="100%" width="100%">
-            </div>
-            <div class="tiny_heading">
-                <p style="font-size:12pt; margin:0">xinyuan</p><p style="font-size:10pt; margin:0">lv. 6</p>
-            </div>
-        </div>
     </div>  {# add new user #}
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,7 +82,7 @@ $('#next_exp').text(100);
             <div class="play_select">
                 <div class="col-lg-4 single_btn"><b>Single</b></div>
                 <div class="col-lg-4 mids_btn"><div class="slash"></div></div>
-                <div class="col-lg-4 multiple_btn"><b>Multiple</b></div>
+                <div class="col-lg-4 multiple_btn" id="pvp_btn" data-toggle="modal" data-target="#pvp_Modal"><b>Multiple</b></div>
             </div>
         </div>
         <div class="fw_body">
@@ -96,7 +95,7 @@ $('#next_exp').text(100);
                         <div id="{{ i._id }}" class="course_bar_body collapse">
                             <ul class="node_list">
                                 {%- for x in get_node({'chapter': i._id}) %}
-                                <li id="{{ x._id }}"><a href="/game/beginner/{{ x.name }}">{{ x.name }}</a></li>
+                                <li id="{{ x._id }}"><a href="/game/beginner/{{ x._id }}">{{ x.name }}</a></li>
                                 {%- endfor %}
                             </ul>
                         </div>
@@ -106,17 +105,59 @@ $('#next_exp').text(100);
                 <div id="expert_content" class="course_group">
                     {%- for i in chapters %}
                     <div class="course_panel">
-                        <div class="course_bar" id="#m{{ i._id }}"><a href="/game/expert/{{ i.name }}">{{ i.name }}</a></div>
+                        <div class="course_bar" id="#m{{ i._id }}"><a href="/game/expert/{{ i._id }}">{{ i.name }}</a></div>
                     </div>
                     {%- endfor %}
                 </div>
             </div>
-            <div id="multiple_content">
-            </div>
         </div>
     </div>
 </div>
-<div class="pop_pvp_wrapper">
-    {% include "/game/pop_pvp.html" ignore missing%}
+<div class="modal fade" id="pvp_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div id="pvp_Modal" class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">PVP Mode</h4>
+            </div>
+            <div class="modal-body" >
+
+            </div>
+            <div class="modal-footer container-fluid">
+                <div class="col-xs-2">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                </div>
+                <div class="col-xs-10">
+                    <table class="pull-right">
+                        <tr>
+                            <th>
+                                <span class="">Numbers of Player</span>
+                            </th>
+                            <th width="125px">
+                                <div class="btn-group" style="width: 100%">
+                                    <button type="button" class="btn btn-default dropdown-toggle room_type" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" style="width: 100%">
+                                        <span id="room_span">1 vs 1</span> <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">1 vs 1</a></li>
+                                        <li><a href="#">2 vs 2</a></li>
+                                        <li><a href="#">Battlegrounds</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+                            <th>
+                                 <button type="button" class="btn btn-primary create_room" onclick="new_room(this)">Create Room</button>
+                            </th>
+                            <th>
+                                 <button type="button" class="btn btn-default leave_room" disabled="disabled" onclick="rooms.leave_room()">Leave Room</button>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

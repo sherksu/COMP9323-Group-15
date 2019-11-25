@@ -20,7 +20,6 @@ def entry_town(course):
     course_id = course['_id']
     chapters = db.chapters.find({'course': course_id})
     get_node = db.knowledge_nodes.find
-    complete = get_list_of_complete(user_id, course_id)
     if get_list_of_levels(user_id, course_id)['levels']:
         level = get_list_of_levels(user_id, course_id)['levels'][0]
     else:
