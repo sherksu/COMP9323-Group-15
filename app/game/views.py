@@ -241,7 +241,7 @@ def game_start(model, node):
         # print(f"query",{"knowledge_node": ObjectId(node)})
         # pprint(data)
         node_name = db.knowledge_nodes.find_one({"_id": ObjectId(node)})
-    elif model == "random":
+    elif model == "expert":
         data = db.question_set.aggregate([{"$match": {"chapter": ObjectId(node)}}, {"$sample": {"size": num}}])
         data = list(data)
         node_name = db.chapters.find_one({"_id": ObjectId(node)})

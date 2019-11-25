@@ -8,6 +8,10 @@
 
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block navbar %}
+    {% include('/basic/navigation.html') %}
+{% endblock %}
+
 {% block content %}
     <style>
         .out{
@@ -25,11 +29,6 @@
             background-size: auto 100%;
             overflow: scroll;
         }
-
-        .out::-webkit-scrollbar {
-            display: none;
-        }
-
         .containers{
             position: relative;
             width: 1000px;
@@ -61,8 +60,8 @@
         }
 
         .img {
-            width: 73px;
-            margin-left: 20px;
+            width: 92px;
+            margin-left: 5px;
         }
         .small-boy{
             background: url("../../static/image/guide/small.png");

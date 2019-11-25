@@ -6,7 +6,7 @@
 """
 
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user, login_required
 from flask_mail import Mail
 from app.config import Config
 from flask_bcrypt import Bcrypt
@@ -44,6 +44,7 @@ def create_app():
     login_manager.login_view = 'guide.login'
     bootstrap.init_app(app)
     cors.init_app(app, supports_credentials=True)
+    app.jinja_env.globals.update(__builtins__)
 
     # blueprint register ----------------
     # guide
@@ -76,6 +77,15 @@ def create_app():
     @app.route('/')
     def welcome():
         return render_template('/welcome/welcome.html')
+
+    # error page
+    @app.errorhandler(404)
+    def miss(e):
+        return render_template('/error/404.html'), 404
+
+    @app.errorhandler(500)
+    def error(e):
+        return render_template('/error/500.html'), 500
 
     # if there is a error of "ValueError: Invalid async_mode specified"
     # try to install eventlet package
