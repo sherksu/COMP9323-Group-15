@@ -106,7 +106,7 @@ ref.data:    none
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('welcome'))
+    return redirect(url_for('guide.login'))
 
 
 """
