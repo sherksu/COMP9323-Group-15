@@ -13,6 +13,7 @@ import sys
 host = "localhost"
 port = 6333
 
+
 class socket_server(Server):
     def __call__(self, app, host, port, use_debugger, use_reloader,
                  threaded, processes, passthrough_errors, ssl_crt, ssl_key):
@@ -42,9 +43,7 @@ class socket_server(Server):
                 debug=use_debugger,
                 use_reloader=use_reloader,
                 **self.server_options,
-                max_size=1024) #max number of socket client
-
-
+                max_size=1024)  #max number of socket client
 
 
 server = socket_server(host, port)
