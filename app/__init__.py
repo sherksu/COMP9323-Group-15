@@ -48,15 +48,6 @@ def create_app():
     cors.init_app(app, supports_credentials=True)
     app.jinja_env.globals.update(__builtins__)
 
-    # socket io initialize ----------------
-    socketio.init_app(app)
-    # events for each course namespace
-    cur = db.courses.find()
-    for doc in cur:
-        # bg_task[doc["code"]] = event.Event()
-        bg_task[doc["code"]] = 0
-    bg_task["bg_full_check"] = 0
-
     # blueprint register ----------------
     # guide
     from .guide import guide
@@ -97,5 +88,14 @@ def create_app():
     @app.errorhandler(500)
     def error(e):
         return render_template('/error/500.html'), 500
+
+    # socket io initialize ----------------
+    socketio.init_app(app)
+    # events for each course namespace
+    cur = db.courses.find()
+    for doc in cur:
+        # bg_task[doc["code"]] = event.Event()
+        bg_task[doc["code"]] = 0
+    bg_task["bg_full_check"] = 0
 
     return app

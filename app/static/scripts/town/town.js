@@ -1,5 +1,5 @@
 $('document').ready(function() {
-    let chat_sock = io.connect(window.location.origin+"/chat?course="+(c_code?c_code:"''"));
+    let chat_sock = io(window.location.origin+"/chat?course="+(c_code?c_code:"''"),{ forceNew: true });
     console.log(chat_sock);
 
     chat_sock.on('chat_message', function(input) {
@@ -19,7 +19,8 @@ $('document').ready(function() {
            let chat = $('.chat-input');
            $('#chats').fadeIn();
            if ( chat.val() ) {
-               chat_sock.emit('broadcast_chat', chat.val(), () => {
+               chat_sock.emit('broadcast_chat', chat.val(), (data) => {
+                   console.log("broadcast_chat",data)
                    //call back
                }); // emit to socket
                chat.val(""); // clear up textfield

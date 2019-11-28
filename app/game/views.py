@@ -94,7 +94,7 @@ def win_game(room,name=""):
     db.rooms.delete_one({"_id": ObjectId(room)})
 
 def finish_game(room,sid):
-    print("\n\nfinishing ","\n\n")
+    print("\nfinishing ","\n")
     cur = db.rooms.find_one({"_id": ObjectId(request.form['room'])})
     data = dict(cur)
     if len(data["player"]) > 1:
@@ -196,34 +196,34 @@ def pvp_game(course):
         return "course is missing",404
 
 # development
-@game.route('/draft/<room>', methods=['GET'], strict_slashes=False)
-# @login_required
-def boostrap_example(room):
-    print("\n\n\n\n\nwin_game")
-    print(current_user.get_id())
-    cur = db.rooms.find_one({"_id": ObjectId(room)})
-    if cur:
-        roomdata = dict(cur)
-        # print(roomdata)
-        result = get_list_of_pvplevels(current_user.username, roomdata["course"])
-        print("result",result)
-        if len(result) and "pvplevels" in result[0] and  not len(result[0]["pvplevels"]):
-            db.users.update({"username":current_user.username},{"$push":{"pvplevels":{"course":roomdata["course"],"wins":1}}})
-        else:
-            db.users.update({"username": current_user.username}, {"$pull": {"pvplevels": {"course": roomdata['course']}}})
-            print({
-                "course":roomdata["course"],
-                "wins":result[0]["pvplevels"][0]["wins"]+1
-            })
-            db.users.update({"username": current_user.username}, {"$push": {"pvplevels": {
-                "course":roomdata["course"],
-                "wins":result[0]["pvplevels"][0]['wins']+1
-            }}})
-            return "Success!"
-
-    print("\n\n\n\n")
-
-    return "404"
+# @game.route('/draft/<room>', methods=['GET'], strict_slashes=False)
+# # @login_required
+# def boostrap_example(room):
+#     print("\nwin_game")
+#     print(current_user.get_id())
+#     cur = db.rooms.find_one({"_id": ObjectId(room)})
+#     if cur:
+#         roomdata = dict(cur)
+#         # print(roomdata)
+#         result = get_list_of_pvplevels(current_user.username, roomdata["course"])
+#         print("result",result)
+#         if len(result) and "pvplevels" in result[0] and  not len(result[0]["pvplevels"]):
+#             db.users.update({"username":current_user.username},{"$push":{"pvplevels":{"course":roomdata["course"],"wins":1}}})
+#         else:
+#             db.users.update({"username": current_user.username}, {"$pull": {"pvplevels": {"course": roomdata['course']}}})
+#             print({
+#                 "course":roomdata["course"],
+#                 "wins":result[0]["pvplevels"][0]["wins"]+1
+#             })
+#             db.users.update({"username": current_user.username}, {"$push": {"pvplevels": {
+#                 "course":roomdata["course"],
+#                 "wins":result[0]["pvplevels"][0]['wins']+1
+#             }}})
+#             return "Success!"
+#
+#     print("\n")
+#
+#     return "404"
 
 # pve game - main process
 @game.route('/<model>/<node>', methods=['GET'], strict_slashes=False)

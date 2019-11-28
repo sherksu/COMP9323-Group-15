@@ -97,6 +97,7 @@ def on_connect():
         if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
             bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room,request.args["course"])
         print("\n")
+        return  "server coonnected"
     except Exception as e:
         pprint(e)
 
@@ -161,13 +162,13 @@ def on_disconnect():
 
 @socketio.on('message', namespace='/pvp')
 def on_message(message):
-    print("\n\n\n\n","text",message,"\n\n\n\n")
+    print("\n","text",message,"\n")
     return "message was received by server"
 
 
 @socketio.on('echo', namespace='/pvp')
 def on_echo(message):
-    print("\n\n\n\n","echo",message,rooms(),"\n\n\n\n")
+    print("\n","echo",message,rooms(),"\n")
     return ""
     if "room" in message:
         for r in message["room"]:
@@ -179,7 +180,7 @@ def on_echo(message):
         # emit("echo", {"data": message["s"], "rooms": rooms()}, namespace='/pvp', room=request.sid)
     else:
         emit("echo", {"data": message, "rooms": rooms()}, namespace='/pvp',room=request.sid)
-    print(bg_task)
+    print(bg_task,"\n")
     return ("echo was received by server", rooms())
 
 
@@ -327,6 +328,7 @@ def on_connect_chat():
         socketio.emit("chat_message", data,
                       namespace='/chat',
                       broadcast=1, )
+        return "server coonnected"
     except Exception as e:
         pprint(e)
 
@@ -339,5 +341,6 @@ def on_broadcast_chat(data):
                       namespace='/chat',
                       broadcast=1,)
         print("\n")
+        return "server broadcast_chat"
     except Exception as e:
         pprint(e)

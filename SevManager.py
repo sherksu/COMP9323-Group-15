@@ -43,7 +43,7 @@ class Socket_server(Server):
 
 
 # basic config
-host = "localhost"
+host = "127.0.0.1"
 port = 6333
 server = Socket_server(host, port)
 

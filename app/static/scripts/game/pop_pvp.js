@@ -231,7 +231,7 @@ let socket
 let rooms
 $(document).ready(function () {
     rooms = $("#pvp_Modal .modal-body").Rooms(username, c_code,new_socket,join_socket,leave_socket)
-    socket = io.connect(window.location.origin+"/pvp?course="+(c_code?c_code:"''")).disconnect()
+    socket = io(window.location.origin+"/pvp?course="+(c_code?c_code:"''"),{ forceNew: true }).disconnect()
     bind_event()
     $("#pvp_Modal").on("show.bs.modal", function (e) {
         console.log("show.bs.modal")
@@ -304,8 +304,8 @@ let showed = false
 let updateroomlog =0
 let gaminglog = 0
 function bind_event(){
-    socket.on('connect', function () {
-        console.log("connect\n\n\n\n")
+    socket.on('connect', function (data) {
+        console.log("connect",data)
         socket.emit("join",{"room":c_code},function (data) {
             console.log("join",data)
         })
