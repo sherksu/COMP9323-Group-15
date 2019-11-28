@@ -236,13 +236,13 @@ def game_start(model, node):
         abort(404)
     if model == "beginner":
         print("beginner")
-        data = db.question_set.find({"knowledge_node": ObjectId(node)}).limit(num)
+        data = db.question_set.find({"knowledge_node": ObjectId(node),"type":"mcq"}).limit(num)
         data = list(data)
         # print(f"query",{"knowledge_node": ObjectId(node)})
         # pprint(data)
         node_name = db.knowledge_nodes.find_one({"_id": ObjectId(node)})
     elif model == "expert":
-        data = db.question_set.aggregate([{"$match": {"chapter": ObjectId(node)}}, {"$sample": {"size": num}}])
+        data = db.question_set.aggregate([{"$match": {"chapter": ObjectId(node),"type":"mcq"}}, {"$sample": {"size": num}}])
         data = list(data)
         node_name = db.chapters.find_one({"_id": ObjectId(node)})
     else:
