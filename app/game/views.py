@@ -255,7 +255,7 @@ def game_start(model, node):
         print("\n")
         return render_template('/game/game.html',
                                data=data, node_name=node_name['name'], type=model.upper(),
-                               chr=chr, level_info=level_info)
+                               chr=chr, level_info=level_info, node_id=node_name['course'])
     else:
         abort(404)
 
