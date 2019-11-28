@@ -261,7 +261,7 @@ function win_pop(data) {
         "        </button>\n" +
         "      </div>\n" +
         "      <div class=\"modal-body\">\n" +
-        "        <p>You win this game!!!!</p>\n" +(data?("You have "+data["wins"]+" win now"):"")+
+        "        <p>You win this game!!!!</p>\n" +(data?("You have "+(data["wins"]+1)+" win now"):"")+
         "      </div>\n" +
         "      <div class=\"modal-footer\">\n" +
         "        <a href='/town"+course+"'><button type=\"button\" class=\"btn btn-primary pull-right\">Leave</button>\n</a>" +

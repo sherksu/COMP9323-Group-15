@@ -33,6 +33,7 @@ socketio = SocketIO(async_mode="eventlet")
 bg_task = {}
 answer_buffer = {}
 QUESTION_NUM = 10
+MCQ_QUESTION_NUM = 4
 
 
 # factory function

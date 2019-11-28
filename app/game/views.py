@@ -10,7 +10,7 @@ from time import time
 import pandas as pd
 import os.path
 import json
-from app import answer_buffer,QUESTION_NUM
+from app import answer_buffer,QUESTION_NUM,MCQ_QUESTION_NUM
 from flask_socketio import emit,leave_room, rooms
 from .. import socketio
 from collections import defaultdict
@@ -231,7 +231,7 @@ def pvp_game(course):
 def game_start(model, node):
     print("\n",request.path,request.method)
     node = node.lower()
-    num = QUESTION_NUM
+    num = MCQ_QUESTION_NUM
     if not (node and num and is_obid(node)):
         abort(404)
     if model == "beginner":
