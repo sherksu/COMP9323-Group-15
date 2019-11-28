@@ -13,7 +13,11 @@ def solutions(question_id):
     content = question['content']
     option = question['option']
     correct_answer = question['correct_answer']
-    solution = question['solutions']
+    try:
+        solution = question['solutions']
+    except KeyError:
+        solution = question['solution']
+        print(solution[0])
     return render_template('/solutions/solutions.html',
                            content=content, option=option, correct_answer=correct_answer,
                            solutions=solution, chr=chr, id=q_id)

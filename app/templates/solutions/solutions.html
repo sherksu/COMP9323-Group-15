@@ -62,9 +62,9 @@
             {% for i in option %}
                 <li class="list-group-item">
                     {% if loop.index0 != correct_answer %}
-                        <p>{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                        <p>{{ chr(loop.index0 + 65) }}.   {{ i }}</p>
                     {% else %}
-                        <p style="color:greenyellow">{{ chr(loop.index0+65) }}.   {{ i }}</p>
+                        <p style="color:greenyellow">{{ chr(loop.index0 + 65) }}.   {{ i }}</p>
                     {% endif %}
                 </li>
             {% endfor %}
@@ -74,6 +74,7 @@
             <p>other solutions</p>
             <div class="panel panel-group">
                 {% for i in solutions %}
+                    {%- if not isinstance(i, str) %}
                     <div class="panel panel-default" style="margin-top:10px">
                         <div class="panel-heading">
                                 {{ i.title }} - {{ i.by }}
@@ -87,6 +88,7 @@
                             {{ i.time}}
                         </div>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
