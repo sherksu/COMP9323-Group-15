@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="{{url_for('static',filename='lib/game/FlipClock-master/compiled/flipclock.css')}}">
 <link rel="stylesheet" href="{{url_for('static',filename='lib/game/dist/loading-bar.min.css')}}">
 <link rel="stylesheet" href="{{url_for('static',filename='style/game/game.css') }}">
+<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block head_scripts %}
@@ -22,6 +23,7 @@
 <script src="{{url_for('static',filename='scripts/game/game_feedback.js')}}"></script>
 <script src="{{url_for('static',filename='lib/game/FlipClock-master/compiled/flipclock.min.js')}}"></script>
 <script src="{{url_for('static',filename='lib/game/dist/loading-bar.min.js')}}"></script>
+<script src="{{url_for('static',filename='scripts/basic.js')}}"></script>
 {% endblock %}
 
 {% if type and node_name %}
@@ -29,9 +31,6 @@
 {% else %}
 {%set title_name="Game!"%}
 {% endif %}
-{% block navbar %}
-    {% include('/basic/navigation.html') %}
-{% endblock %}
 
 {% block scripts %}
 <script>
@@ -59,40 +58,24 @@
 {% endblock %}
 
 {% block content %}
+{% include('/basic/nav_buttons.html')%}
+<div class="containers"></div>
 <div class="container-fluid vw-100" >
     <div class="row justify-content-center">
-        <div class="col-lg-3 col-md-12">
-            {{ timer() }}
-        </div>
-        <div class="col-lg-9 col-md-12 mh-100vh middle-col">
-            <div class="row">
-                <div class="col-12">
-                    <div class="row" style="margin-top: 20px;overflow: hidden">
-                        <div class="col-xs-4" style="overflow: hidden;height: 300px">
-                            <div class="corp">
-                                <img class="hero" id="avatar1"
-                                     src="{{url_for('static',filename='image/game/korra_static.png')}}">
-                                <img class="hero" id="avatar2"
-                                     src="{{url_for('static',filename='image/game/korra.gif')}}"
-                                     style="display: none;">
-                            </div>
-                        </div>
-                        <div class="col-lg-4" style="margin-left: 120px">
-                            <img class="monster" id="m1" src="{{url_for('static',filename='image/game/m1.gif')}}">
-                            <img class="monster" id="m1_1" src="{{url_for('static',filename='image/game/m1_1.gif')}}"
-                                 style="display: none;margin-left: 40%; float: right;">
-                            <img class="monster" id="m2" src="{{url_for('static',filename='image/game/m2.gif')}}" style="display: none">
-                            <img class="monster" id="m2_1" src="{{url_for('static',filename='image/game/m2_1.gif')}}"
-                                 style="display: none;">
-                        </div>
-                        <div class="col-xs-2">
-                        </div>
-                        <div class="w-100 grass">
-                        </div>
-                    </div>
+        <div class="col-lg-2 col-md-3"></div>
+        <div class="col-lg-8 col-md-12 mh-100vh middle-col">
+            <div class="col-lg-3 col-md-12">
+                {{ timer() }}
+            </div>
+            <div class="person_monster">
+                <div id="person">
+                    <img src="\static\image\game\c_single.png" alt="" height="410px" width="210px">
+                </div>
+                <div id="monster">
+                    <img src="\static\image\game\monster_1.png" alt="" height="251px">
                 </div>
             </div>
-            <div class="row">
+            <div class="row question_borad">
                 <div class="col-12 all-questions" q-num="{{data|length}}">
                     {% for d in data %}
                         {% set Qloop = loop %}
@@ -103,10 +86,12 @@
                         {% endif %}
                     {% endfor %}
                 </div>
+                <span class="tips">Do not know how to solve?</span>
+                <button class="btn btn-primary nodes" onclick="">Link to knowledge node</button>
+                <button class="btn btn-primary next" onclick="nextQ(this)">Next</button>
             </div>
         </div>
 <!--        <div class="col-lg-1 .d-md-none"></div>-->
-        <button class="btn btn-primary next" onclick="nextQ(this)">Next</button>
     </div>
 </div>
 {% include "/game/feedback.html" ignore missing%}
