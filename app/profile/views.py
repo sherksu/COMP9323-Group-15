@@ -66,7 +66,7 @@ def question_set():
                            get_course_code=function.get_course_code, get_question_course=function.get_question_course,
                            get_question_chapter=function.get_question_chapter,correct_answer = function.correct_answer,
                            get_question_option=function.get_question_option,get_question_correct_answer=function.get_question_correct_answer,
-                           chr=chr,int=int,str=str)
+                           chr=chr,int=int,str=str,get_question_knowledge_node = function.get_question_knowledge_node,get_node_name = function.get_node_name)
 
 @profile.route('/data_project/')
 def data_project():

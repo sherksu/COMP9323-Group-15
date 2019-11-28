@@ -160,7 +160,16 @@ def get_question_chapter(question_id):
     question = db.question_set.find_one({"_id": question_id})
     if question:
         return question['chapter']
-    
+
+def get_question_knowledge_node(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['knowledge_node']
+
+def get_node_name(node_id):
+    node = db.knowledge_nodes.find_one({"_id": node_id})
+    if node:
+        return node['name']
 def correct_answer(str):
     if str == '1':
         return 'A'
