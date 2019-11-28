@@ -1,6 +1,6 @@
 let question_list = [];
 let correct_rate = 0;
-let gain;
+let gain = 0;
 
 function feedback_build(result) {
     for (let res in result) {
@@ -23,6 +23,7 @@ function feedback_build(result) {
 }
 
 function refresh_level(rate){
+    let exp = level_info.exp;
     level_info.exp += rate*10;
     if (level_info.exp > level_info.next_level) {
         alert('level up!!');

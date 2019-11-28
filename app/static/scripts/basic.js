@@ -18,6 +18,7 @@ $(document).ready(() => {
     });
 
     $('.hover_mask').on('click', function() {
+        console.log('1');
         $(this).parent().fadeToggle();
     })
 });

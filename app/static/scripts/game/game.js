@@ -44,7 +44,7 @@ $( document ).ready(function() {
         $(e.currentTarget).find("input").prop("checked", true);
     });
 
-    heart = new ldBar($(".heart")[0]);
+    // heart = new ldBar($(".heart")[0]);
 
     window.Moster = function(){
         return false
@@ -58,7 +58,7 @@ $( document ).ready(function() {
     });
 
     $("#result_close").click(function(){
-       open("", '_self').close()
+        $(this).parent().parent().fadeOut();
     });
 
     $("#shows").click(() => {
@@ -119,7 +119,7 @@ function feedback(){
 }
 
 function getAnswers(){
-    return $(".all-questions input.answer").serializeArray()
+    return $(".all-questions input").serializeArray()
 }
 
 jQuery.fn.m_restart = function () {
