@@ -15,14 +15,11 @@ def personal_profile():
 
 @profile.route('/detail/', methods=['GET', 'POST'])
 def detail():
-    dic = get_user_info(current_user.username)
-    if 'avatar' in dic.keys():
-        img = dic['avatar']
-    else:
-        img = None
+    dic = function.get_user_info(current_user.username)
+    img = dic['avatar']
     return render_template("/profile/detail.html",
-                           **dic, get_course_name=get_course_name, get_course_code=get_course_code,
-                           img=img, get_chapter_name=get_chapter_name)
+                           **dic, get_course_name=function.get_course_name, get_course_code=function.get_course_code,
+                           img=img, get_chapter_name=function.get_chapter_name)
 
 
 # so the ranking is url /ranking
@@ -62,78 +59,21 @@ def ranking():
 
 @profile.route('/question_set/')
 def question_set():
-    dic = get_user_info(current_user.username)
-    return render_template("/profile/question_set.html", **dic, get_question_content=get_question_content,
-                           get_chapter_name=get_chapter_name, get_course_name=get_course_name,
-                           get_course_code=get_course_code, get_question_course=get_question_course,
-                           get_question_chapter=get_question_chapter,correct_answer = correct_answer,
-                           get_question_option=get_question_option,get_question_correct_answer=get_question_correct_answer,
-                           chr=chr,int=int,str=str)
+    dic = function.get_user_info(current_user.username)
+    return render_template("/profile/question_set.html", **dic, get_question_content=function.get_question_content,
+                           get_chapter_name=function.get_chapter_name, get_course_name=function.get_course_name,
+                           get_course_code=function.get_course_code, get_question_course=function.get_question_course,
+                           get_question_chapter=function.get_question_chapter, correct_answer=function.correct_answer,
+                           get_question_option=function.get_question_option,
+                           get_question_correct_answer=function.get_question_correct_answer,
+                           chr=chr, int=int, str=str, get_question_knowledge_node=function.get_question_knowledge_node,
+                           get_node_name=function.get_node_name)
+
 
 @profile.route('/data_project/')
 def data_project():
     return render_template(
         "/profile/data_project.html",
         user_name=current_user.username,
-        project_list = ['Speed_dating', 'Olympic_medals']
+        project_list=['Speed_dating', 'Olympic_medals']
     )
-    
-def get_question_correct_answer(question_id):
-    question = db.question_set.find_one({"_id": question_id})
-    if question:
-        return question['correct_answer']
-
-def get_question_option(question_id):
-    question = db.question_set.find_one({"_id": question_id})
-    if question:
-        return question['option']
-
-def get_user_info(user_name):
-    result = db.users.find_one({"username": user_name})
-    return result
-
-
-def get_course_name(course_id):
-    course = db.courses.find_one({"_id": course_id})
-    if course:
-        return course['name']
-
-
-def get_course_code(course_id):
-    course = db.courses.find_one({"_id": course_id})
-    if course:
-        return course['code']
-
-
-def get_chapter_name(chapter_id):
-    chapter = db.chapters.find_one({"_id": chapter_id})
-    if chapter:
-        return chapter['name']
-
-
-def get_question_content(question_id):
-    question = db.question_set.find_one({"_id": question_id})
-    if question:
-        return question['content']
-
-
-def get_question_course(question_id):
-    question = db.question_set.find_one({"_id": question_id})
-    if question:
-        return question['course']
-
-
-def get_question_chapter(question_id):
-    question = db.question_set.find_one({"_id": question_id})
-    if question:
-        return question['chapter']
-    
-def correct_answer(str):
-    if str == '1':
-        return 'A'
-    elif str == '2':
-        return 'B'
-    elif str == '3':
-        return 'C'
-    elif str == '4':
-        return 'D'

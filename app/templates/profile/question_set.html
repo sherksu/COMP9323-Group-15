@@ -1,11 +1,11 @@
 {% extends '/basic/BasicConfig.html' %}
 
+{% block styles %}
+{{ super() }}
+<style>::-webkit-scrollbar { width: 0 !important; }</style>
+{% endblock %}
+
 {% block content%}
-<head>
-    <style>
-        ::-webkit-scrollbar { width: 0 !important; }
-    </style>
-</head>
 <body style="background: none;">
     <div style="position:absolute;width:1200px;height:700px;bottom:100px;left:150px;">
         <img src="{{url_for('static', filename='image/profile/book.png')}}" width="100%" height="100%" style="z-index:1;">
@@ -42,6 +42,21 @@
                                             </a>
                                             <div id={{ "collapse" + str(loop.index) }} class="panel-collapse collapse" style="color:white;">
                                                 <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="btn-group dropdown">
+                                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="margin-left:430px;margin-top:-70px;background-color:#F15A24;border:0px;" >
+                                                                <span class="glyphicon glyphicon-th-list"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu" style="margin-left:320px;margin-top:-45px;border-raduis:2px;">
+                                                                <li>
+                                                                    <a href="{{url_for('solutionss.solutions',question_id = j.question)}}" target="_top">Find solution</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="{{url_for('knowledge_structure.specific_page',course = get_course_code(get_question_course(j.question)),chapter = get_chapter_name(get_question_chapter(j.question)),node = get_node_name(get_question_knowledge_node(j.question)))}}" target="_top">Relevant knowledge</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                     <div class="row" style="width:480px;margin-left:2px;">
                                                     <p align="center">{{ get_question_content(j.question) }}</p>
                                                     </div>

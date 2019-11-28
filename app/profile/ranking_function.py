@@ -111,5 +111,74 @@ def get_position_list(username, total_rank_list):
 
     return position_list
 
+def get_question_correct_answer(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['correct_answer']
+
+def get_question_option(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['option']
+
+def get_user_info(user_name):
+    result = db.users.find_one({"username": user_name})
+    return result
+
+
+def get_course_name(course_id):
+    course = db.courses.find_one({"_id": course_id})
+    if course:
+        return course['name']
+
+
+def get_course_code(course_id):
+    course = db.courses.find_one({"_id": course_id})
+    if course:
+        return course['code']
+
+
+def get_chapter_name(chapter_id):
+    chapter = db.chapters.find_one({"_id": chapter_id})
+    if chapter:
+        return chapter['name']
+
+
+def get_question_content(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['content']
+
+
+def get_question_course(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['course']
+
+
+def get_question_chapter(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['chapter']
+
+def get_question_knowledge_node(question_id):
+    question = db.question_set.find_one({"_id": question_id})
+    if question:
+        return question['knowledge_node']
+
+def get_node_name(node_id):
+    node = db.knowledge_nodes.find_one({"_id": node_id})
+    if node:
+        return node['name']
+def correct_answer(str):
+    if str == '1':
+        return 'A'
+    elif str == '2':
+        return 'B'
+    elif str == '3':
+        return 'C'
+    elif str == '4':
+        return 'D'
+
 if __name__ == '__main__':
     pass
