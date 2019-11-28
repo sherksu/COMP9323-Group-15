@@ -1,9 +1,10 @@
 $('document').ready(function() {
-    let join = io.connect(window.location.origin+"/chat?course="+(c_code?c_code:"''"));
+    let chat_sock = io.connect(window.location.origin+"/chat?course="+(c_code?c_code:"''"));
+    console.log(chat_sock);
 
-    join.on('chat_message', function(input) {
+    chat_sock.on('chat_message', function(input) {
         console.log(input);
-        $('.user_list').append("        <div id=\"user_ids\" class=\"tiny_HUD\">\n" +
+        $('.user_list').append("<div id=\"user_ids\" class=\"tiny_HUD\">\n" +
             "            <div class=\"tiny_avatar\">\n" +
             "                <img src=\"" + input['avatar'] + "\" alt=\"\" height=\"100%\" width=\"100%\">\n" +
             "            </div>\n" +
@@ -18,7 +19,7 @@ $('document').ready(function() {
            let chat = $('.chat-input');
            $('#chats').fadeIn();
            if ( chat.val() ) {
-               join.emit('broadcast_chat', chat.val(), () => {
+               chat_sock.emit('broadcast_chat', chat.val(), () => {
                    //call back
                }); // emit to socket
                chat.val(""); // clear up textfield

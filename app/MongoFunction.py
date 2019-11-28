@@ -35,18 +35,8 @@ def show_db_data(debug=DEBUG):
 
 # personal profile --------------------------------------------------------
 # course_id - string
-# 获取用户的关于course_id的用户名和level -> [tuple,...]
-# 问题: 这里如何数据库没有level项，在做聚合的时候无法返回正确值，会导致ranking页面加载失败
 @show_db_data()
 def get_list_of_level_rank(course_id):
-    '''
-    this function returns the list of level and rank
-    :param course_id: course object id
-    :type course_id: pymongo object id
-    :return: a list of [rank, username, level]
-    :rtype: list
-    '''
-
     result = db.users.aggregate(
         [{"$project": {
             "username": 1,
@@ -63,11 +53,6 @@ def get_list_of_level_rank(course_id):
         }}, {"$sort": {"rank.level": -1}}]
     )
 
-    # the sample result is 1 => {'username': 'xinyuan',
-    #                               'rank': [{'course': ObjectId('5db18c70c10657b763c513d5'), 'level': 4}]}
-    # deal with rank: [] or rank: None
-
-    # return a list of list: [[rank, username, level], [], []]
     rank_result = []
     for key, value in enumerate(result):
         if value['rank']:
@@ -76,8 +61,7 @@ def get_list_of_level_rank(course_id):
     return rank_result
 
 
-# 获取用户的关于course_id的用户名和complete
-
+# get one course complete info. by user_id and course_id
 @show_db_data()
 def get_list_of_complete(user_id, course_id):
     result = db.users.aggregate(
@@ -97,6 +81,8 @@ def get_list_of_complete(user_id, course_id):
 
     return [i for i in result][0]
 
+
+# get one course complete info. by username and course_id
 @show_db_data()
 def get_list_of_complete_username(username, course_id):
     result = db.users.aggregate(
@@ -116,7 +102,7 @@ def get_list_of_complete_username(username, course_id):
 
     return [i for i in result][0]
 
-# 获取关于course_id和user_id的levels
+# get one course level info. by user_id and course_id
 @show_db_data()
 def get_list_of_levels(user_id, course_id):
     result = db.users.aggregate(
@@ -136,7 +122,7 @@ def get_list_of_levels(user_id, course_id):
 
     return [i for i in result][0]
 
-# 获取关于course_id和user_id的levels
+# get one course pvp level info. by username and course_code
 @show_db_data()
 def get_list_of_pvplevels(username, course_code):
     print(username, course_code)
@@ -157,32 +143,27 @@ def get_list_of_pvplevels(username, course_code):
 
     return [i for i in result]
 
-
 # personal profile --------------------------------------------------------
 # game - question
-# node_id - string
-# 获取基于node_id的知识节点的题目
-# 返回mongodb command cursor, 可迭代
+# get all questions by node_id
 @show_db_data()
 def get_beginner_question(node_id):
     return db.question_set.find({"knowledge_node": ObjectId(node_id)})
 
 
-# 获取基于chapter_id的随机题目
-# 返回mongodb command cursor, 可迭代
+# get all questions by chapter_id
 @show_db_data()
 def get_random_question(chapter_id):
     return db.question_set.find({"chapter": ObjectId(chapter_id)})
 
 
-# 获取基于question_id的question object - 可用于solution搜索
-# 返回一条数据
+# get questions by question_id
 @show_db_data()
 def get_question(question_id):
     return db.question_set.find_one({"_id": ObjectId(question_id)})
 
 
-# profile
+# get user_id by username
 @show_db_data()
 def get_user_id(user_name):
     return db.users.find_one({"username": user_name})['_id']

@@ -1,14 +1,14 @@
 from . import game, views
-from flask_login import current_user, login_required
-from flask import render_template, abort, request, Response, current_app
+from flask_login import current_user
+from flask import request, Response
 from bson import ObjectId
 from app.MongoFunction import db
 from .. import socketio, bg_task,client
-from flask_socketio import emit, join_room, leave_room, disconnect, Namespace, rooms
+from flask_socketio import emit, join_room, leave_room, rooms
 import json
 from time import time
 from pprint import  pprint
-from app import answer_buffer,QUESTION_NUM
+from app import answer_buffer, QUESTION_NUM
 from app.MongoFunction import get_list_of_levels
 
 
@@ -24,7 +24,7 @@ def getNotFull():
     return r
 
 
-#background green thread
+# background green thread
 def bg_update_room(course):
     while True:
         socketio.sleep(1)
@@ -45,7 +45,8 @@ def bg_update_room(course):
             db.rooms.update({"_id": r["_id"]},
                             {"$set": {"start_game": True}})
 
-#background green thread
+
+# background green thread
 def bg_full_check():
     print(f"\nbg_full_check started \n")
     while True:
@@ -60,7 +61,7 @@ def bg_full_check():
                 bg_task[str(r["_id"])] = socketio.start_background_task(bg_gaming_thread, str(r["_id"]))
 
 
-#background green thread
+# background green thread
 def bg_gaming_thread(room_id):
     start_time = time()
     print(f"\nbg_gaming_thread started {room_id}\n")
@@ -87,10 +88,11 @@ def bg_gaming_thread(room_id):
             if cur:
                 data = dict(cur)
 
-@socketio.on('connect',namespace="/pvp")
+
+@socketio.on('connect', namespace="/pvp")
 def on_connect():
     try:
-        print("\nconnect to:",request.namespace)
+        print("\nconnect to:", request.namespace)
         print(request.args)
         if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
             bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room,request.args["course"])
@@ -98,12 +100,14 @@ def on_connect():
     except Exception as e:
         pprint(e)
 
+
 @socketio.on('reconnect', namespace='/pvp')
 def on_reconnect(data):
     print("\nreconnect to:")
     print(data)
     print(request)
     print("\n")
+
 
 @socketio.on('join', namespace='/pvp')
 def on_join(data):
@@ -115,7 +119,7 @@ def on_join(data):
         join = ''
         in_game = 0
 
-        #run thread for the started game
+        # run thread for the started game
         if cur:
             curL = dict(cur)
             if(len(curL)):
@@ -133,11 +137,11 @@ def on_join(data):
             join = data["room"]
         print(bg_task)
 
-        #run thread for the course
+        # run thread for the course
         if request.args["course"] in bg_task and bg_task[request.args["course"]] == 0:
             bg_task[request.args["course"]] = socketio.start_background_task(bg_update_room, request.args["course"])
 
-        #run thread for full room checking
+        # run thread for full room checking
         if bg_task["bg_full_check"] == 0:
             bg_task["bg_full_check"] = socketio.start_background_task(bg_full_check)
 
@@ -148,15 +152,18 @@ def on_join(data):
     except KeyError as e:
         return ""
 
+
 @socketio.on('disconnect', namespace='/pvp')
 def on_disconnect():
     print("pvp Client disconnected")
     on_leave_room()
 
+
 @socketio.on('message', namespace='/pvp')
 def on_message(message):
     print("\n\n\n\n","text",message,"\n\n\n\n")
     return "message was received by server"
+
 
 @socketio.on('echo', namespace='/pvp')
 def on_echo(message):
@@ -173,7 +180,8 @@ def on_echo(message):
     else:
         emit("echo", {"data": message, "rooms": rooms()}, namespace='/pvp',room=request.sid)
     print(bg_task)
-    return ("echo was received by server",rooms())
+    return ("echo was received by server", rooms())
+
 
 @socketio.on('new_room', namespace='/pvp')
 def on_new_room(data):
@@ -193,6 +201,7 @@ def on_new_room(data):
         return json.dumps({"status": result.acknowledged,
                            "msg": "KeyError",
                            }, default=str)
+
 
 @socketio.on('change_room', namespace='/pvp')
 def on_change_room(data):
@@ -227,6 +236,7 @@ def on_change_room(data):
         return json.dumps({"status": 0,
                            "msg": str(e),
                            }, default=str )
+
 
 @socketio.on('leave_room', namespace='/pvp')
 def on_leave_room():

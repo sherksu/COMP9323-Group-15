@@ -28,7 +28,7 @@ def entry_town(course):
             level = None
 
         return render_template('/town/my_town.html',  username=current_user.username, level=level, course=course,
-                           is_town=True, code=code, _id=course_id, name=name, chapters=list(chapters),
-                           get_node=get_node, avatar=user_avatar)
+                               is_town=True, code=code, _id=course_id, name=name, chapters=list(chapters),
+                               get_node=get_node, avatar=user_avatar)
     else:
         abort(404)
