@@ -1,103 +1,267 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{#{% block navbar %}#}
-{#    {% include('/basic/navigation.html') %}#}
-{#{% endblock %}#}
-
 {% block styles %}
 {{ super() }}
-<link href="/static/style/guide/world_map.css" rel="stylesheet">
+    <link href="/static/style/guide/world_map.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/lib/font-awesome/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed:300,400,600,700&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <div id="popView">
-        <img src="/static/image/guide/111.jpg" height="320" width="500">
-        <div class="tb-rl pop_bar" data-toggle="#popView">
-            <span>Here to access Course Structure</span>
+    <div class="buttons">
+        <div id="recommend">
+            <div style="position:relative">
+                <div class="stn-button">
+                    <div class="icn"><i class="icon-reorder"></i></div>
+                    <div class="illustration">Find a good way to learn!</div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="containers" style="position:absolute; top:0; z-index: -1">
-        <div class="b1">
-                <button class="button" type="button" onclick="pp()">
-                        Structure
-                </button>
+    {% include('/basic/nav_buttons.html')%}
+    <div class="dropdown-content" id="dropp">
+            <div class="row" style="height: 50px"><button class="b1" id="b11"></button></div>
+                <div class="panel-group" id="accordion"><div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: coral">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseOne" style="font-family: 'Roboto Light'; font-size: 20px;">
+                                Course Recommendation
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <a class="cc" onclick="show()">Course Selection Guide</a>
+                        </div>
+                    </div>
+                </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #ffb42e">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseTwo" style="font-family: 'Roboto Light'; font-size: 18px">
+                                    Level One Courses
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <a class="cc" onclick="openWin1()">COMP9020 Outline</a>
+                                <a class="cc" onclick="openWin2()">COMP9021 Outline</a>
+                                <a class="cc" onclick="openWin3()">COMP9311 Outline</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #ffb42e">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseThree" style="font-family: 'Roboto Light'; font-size: 18px">
+                                    Level Two Courses
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <a class="cc" onclick="openWin4()">COMP9321 Outline</a>
+                                <a class="cc" onclick="openWin5()">COMP9024 Outline</a>
+                                <a class="cc" onclick="openWin6()">COMP9313 Outline</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #ffb42e">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseFour" style="font-family: 'Roboto Light'; font-size: 18px">
+                                    Level Three Courses
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <a class="cc" onclick="openWin7()">COMP9318 Outline</a>
+                                <a class="cc" onclick="openWin8()">COMP9319 Outline</a>
+                                <a class="cc" onclick="openWin9()">COMP9444 Outline</a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
         </div>
-        <div class="b2">
-            <a href="{{ url_for('town.entry_town', course='COMP9020') }}">
-                <button class="button1" type="button">
-                        COMP9020
-                </button>
-            </a>
+    <div id="background-pop">
+        <div id="div-pop">
+            <div class="div-top1">
+                <span id="close-button">back</span>
+                <p class="top-text">Here is course selection guide!</p>
+            </div>
+            <div class="div-content">
+                <img src="../../static/image/guide/stru1.jpg" style="width: 100%; height: 530px; margin-top: -25px">
+                <div class="bbb">
+                    <div class="wrapper1">
+                        <a class="button" onclick="openWin()">Handbook</a>
+                    </div>
+                </div><br>
+            </div>
         </div>
-        <div class="b3">
-            <a href="{{ url_for('town.entry_town', course='COMP9323') }}">
-                <button class="button1" type="button">
-                        COMP9323
-                </button>
-            </a>
-        </div>
-        <div class="b4">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button2" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b5">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button2" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b6">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button2" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b7">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button2" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b8">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button3" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b9">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button3" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b10">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button3" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b10">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button3" type="button">
-                        COMP9311
-                </button>
-            </a>
-        </div>
-        <div class="b11">
-            <a href="{{ url_for('guide.world_map') }}">
-                <button class="button3" type="button">
-                        COMP9311
-                </button>
-            </a>
+    </div>
+    <div class="containers">
+        <div class="layout">
+            <div class="col-pad"></div>
+            <div class="col-main">
+                <div class="cities">
+                    <div id="pre_course" class="selectors-l">
+                        <i class="icon-angle-left"></i>
+                    </div>
+                    <div id="next_course" class="selectors-r">
+                        <i class="icon-angle-right"></i>
+                    </div>
+                    {%- for i in course %}
+                        {{ city(i.code, i.name, i.overall, loop.index0) }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-pad"></div>
         </div>
     </div>
 {% endblock %}
+
+{% macro city(course_code, course_name, course_complete, i) %}
+<div id="switch_{{ i }}" style="display: {%- if i == 0 %}block{%- else %}none{% endif %}">
+    <div id="{{ course_code }}" class="courses">
+        <img src="/static/image/guide/town_{%- if i <= 5 %}{{ i }}{%- else %}{{ i - 5 }}{%- endif %}.png" alt="" height="100%" width="100%">
+    </div>
+    <div id="courseHUD" class="HUD course-HUD">
+        <div class="description">
+            <b id="course_name">{{ course_code }}</b><br />
+            <span id="course_description">{{ course_name }}</span>
+        </div>
+        <div>
+            <div><i>Your complete:</i></div>
+            <div class="process">
+                <div class="process-body">
+                    <div id="complete_bar" class="bar" style="width: {{ course_complete }}0%"></div>
+                </div>
+                <div id="complete_detail" class="process-status">
+                    <i>{%- if course_complete  %}{{ course_complete }}{%- else %}0{%- endif %}/10</i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="preHUD" class="HUD course-req">
+        <div>
+            <div class="heading"><b>Prerequisite</b></div>
+            <span id="pre_req">comp9020 | comp9024</span>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% block scripts %}
+{{ super() }}
+    <script>
+        let i = 0;
+        let length = {{ lengths }};
+        let is_click = true;
+        $('#next_course').on('click', () => {
+            if (is_click) {
+                is_click = false;
+                let name = "#switch\_"+i.toString();
+                $(name).fadeOut();
+                i++;
+                if (i >= length) {
+                    i = 0;
+                }
+                name = "#switch\_"+i.toString();
+                setTimeout(function(){$(name).fadeIn()}, 500);
+                setTimeout(function(){is_click = true}, 1000);
+            }
+        });
+
+         $('#pre_course').on('click', () => {
+             if (is_click) {
+                is_click = false;
+                let name = "#switch\_"+i.toString();
+                $(name).fadeOut();
+                i--;
+                if (i < 0) {
+                    i = length - 1;
+                }
+                name = "#switch\_"+i.toString();
+                setTimeout(function(){$(name).fadeIn()}, 500);
+                setTimeout(function(){is_click = true}, 1000);
+             }
+        });
+
+         $('.courses').on('click', function(){
+             let course_code = $(this).attr('id');
+             console.log(course_code);
+             window.open('/town/'+course_code.toString(), '_self');
+         })
+    </script>
+    <script>
+        function openWin(){
+            win=window.open('https://www.handbook.unsw.edu.au/postgraduate/programs/2020/8543?q=8543&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin1(){
+            win1=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9020/?q=comp9020&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin2(){
+            win2=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9021/?q=comp9021&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin3(){
+            win3=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9311/?q=comp9311&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin4(){
+            win4=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9321/?q=comp9321&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin5(){
+            win5=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9024/?q=comp9024&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin6(){
+            win6=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9313/?q=comp9313&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin7(){
+            win7=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9318/?q=comp9318&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin8(){
+            win8=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9319/?q=comp9319&ct=all','newwindow','width=1760,height=1300');
+        }
+        function openWin9(){
+            win9=window.open('https://www.handbook.unsw.edu.au/postgraduate/courses/2020/COMP9444/?q=comp9444&ct=all','newwindow','width=1760,height=1300');
+        }
+
+    </script>
+    <script>
+        var div = document.getElementById('background-pop');
+        var close = document.getElementById('close-button');
+        function show(){
+            div.style.display = "block";
+        }
+        close.onclick = function close() {
+            div.style.display = "none";
+        };
+        window.onclick = function close(e) {
+            if (e.target == div) {
+                div.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#recommend").click(function() {
+                $("#dropp").fadeToggle();
+            });
+
+            $("#b11").click(function() {
+                $("#dropp").fadeToggle();
+            })
+        })
+    </script>
+{% endblock %}
+
+{# id #}
+{# API: course-HUD: course_name(text), course_description(text), complete_bar(width:%), complete_detail(5/10) #}
+{# API: pre-HUD: pre_req(text: course1 | course2) #}
+{# redirect API: profile_btn | rank_btn | error_btn | recommend #}
+{#pic_id: course-pic#}

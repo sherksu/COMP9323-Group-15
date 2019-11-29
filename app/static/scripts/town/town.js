@@ -1,55 +1,46 @@
-window.onload = function(){
-    var myCanvas = document.getElementById('c1')
-    let ctx = myCanvas.getContext('2d')
-    let img = new Image();
-    let canvasWidth = ctx.canvas.width;
-    let canvasHeight = ctx.canvas.height;
-    var direction = 3;
-    var step = 0;
-    img.onload = function(){
-        let personWidth = img.width/10;
-        let personHeight = img.height/8;
-        let x0 = 200;
-        let y0 = 600;
-        // 在中间画出来就行了
-        // 第一步就是把它画出来，非常的简单
-        ctx.drawImage(img,personWidth*9,personHeight*7,personWidth,personHeight,x0,y0,personWidth,personHeight);
-        document.onkeydown = function(e){
-            if(e.keyCode==37){
-                    ctx.clearRect(0,0,canvasWidth,canvasHeight)
-                if(direction!=0){
-                    step=0;
-                        ctx.drawImage(img,0,personHeight*5,personWidth,personHeight,x0,y0,personWidth,personHeight);
-                    direction=0;
-                }else {
-                    // 若是同个方向，则开始行走
-                    step++;
-                     x0-=10;
-                    if(step>3){
-                        step = 0;
-                    }
-                    ctx.drawImage(img,step*personWidth,personHeight*5,personWidth,personHeight,x0,y0,personWidth,personHeight);
+$('document').ready(function() {
+    let chat_sock = io(window.location.origin+"/chat?course="+(c_code?c_code:"''"),{ forceNew: true });
+    console.log(chat_sock);
 
-                }
+    chat_sock.on('chat_message', function(input) {
+        console.log(input);
+        $('.user_list').append("<div id=\"user_ids\" class=\"tiny_HUD\">\n" +
+            "            <div class=\"tiny_avatar\">\n" +
+            "                <img src=\"" + input['avatar'] + "\" alt=\"\" height=\"100%\" width=\"100%\">\n" +
+            "            </div>\n" +
+            "            <div class=\"tiny_heading\">\n" +
+            "                <p style=\"font-size:12pt; margin:0\">"+ input['name'] +"</p><p style=\"font-size:10pt; margin:0\">lv. "+ input['level'] +"</p>\n" +
+            "            </div>\n" +
+            "        </div>");
+    });
 
-            } else if(e.keyCode==39){
-                    ctx.clearRect(0,0,canvasWidth,canvasHeight)
-                    if(direction!=2){
-                        step=0;
-                        ctx.drawImage(img,personWidth*9,personHeight*7,personWidth,personHeight,x0,y0,personWidth,personHeight);
-                        direction=2;
-                }else{
-                    x0+=10;
-                    step++;
-                    if(step>3){
-                        step = 0;
-                    }
-                    ctx.drawImage(img,step*personWidth,personHeight*7,personWidth,personHeight,x0,y0,personWidth,personHeight);
-                }
+   document.onkeydown = function() {
+       if (event.keyCode === 13) {
+           let chat = $('.chat-input');
+           $('#chats').fadeIn();
+           if ( chat.val() ) {
+               chat_sock.emit('broadcast_chat', chat.val(), (data) => {
+                   console.log("broadcast_chat",data)
+                   //call back
+               }); // emit to socket
+               chat.val(""); // clear up textfield
+           } else {
+               chat.focus();
+           }
+       } else if (event.keyCode === 27) {
+           $('#chats').fadeOut();
+       }
+   };
 
-            }
 
-        }
-    }
-    img.src = "/static/image/town/pp.png"
-}
+
+   $('#beginner').on('click', () => {
+        $('#beginner_content').fadeIn();
+        $('#expert_content').css('display', 'none');
+    });
+
+    $('#expert').on('click', () => {
+        $('#beginner_content').css('display', 'none');
+        $('#expert_content').fadeIn();
+    });
+});

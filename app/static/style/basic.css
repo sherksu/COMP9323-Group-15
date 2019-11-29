@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 .text-box {
     padding: 20px;
     height: 600px;
@@ -13,4 +17,103 @@
 .stripe {
     background-image:
         repeating-linear-gradient(45deg, red 0px, yellow 10px, transparent 10px, transparent 20px);
+}
+
+
+/* stander button */
+/* btn list */
+.btn-list {
+    position: fixed;
+    bottom: 2%;
+    right: 2%;
+    list-style-type:none;
+    z-index: 10;
+}
+
+.btn-list li {
+    margin-bottom: 30%;
+}
+
+.stn-button {
+    position: relative;
+    height: calc(40px + 1vmin);
+    width: calc(40px + 1vmin);
+    color: white;
+    border-radius: 100%;
+    background-color: #FF931E;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 99;
+}
+
+.stn-button div:first-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 70%;
+    width: 70%;
+    transform: translate(-50%, -50%);
+}
+
+.stn-button:hover {
+    transform: scale(1.2);
+}
+
+.stn-button:hover .illustration {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* ------- hover page ------- */
+.rank_hover {
+    position: absolute;
+    bottom: 0;
+    height: 700px;
+    width: 1200px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+}
+
+
+.detail_hover {
+    position: absolute;
+    bottom: 0;
+    height: 900px;
+    width: 1500px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+}
+
+.question_set_hover {
+    position: absolute;
+    bottom: 0;
+    height: 900px;
+    width: 1500px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    overflow: hidden;
+}
+
+.question_set_hover::-webkit-scrollbar {
+    display: none;
+}
+
+.hover_mask {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left:0;
+    z-index: 0;
+}
+
+.iframe_page {
+    display: none;
+    height: 100%;
+    width:100%;
 }

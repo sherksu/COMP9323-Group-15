@@ -1,0 +1,62 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+<link rel="stylesheet" href="{{url_for('static',filename='style/game/pop_pvp.css') }}">
+<script src="{{url_for('static',filename='scripts/game/pop_pvp.js')}}"></script>
+<script>
+    let c_code = "{{code}}"
+    let user_name = "{{user_name}}"
+</script>
+
+<!-- Button trigger modal -->
+<button id="pvp_btn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#pvp_Modal">
+    PVP Mode
+</button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="pvp_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div id="pvp_Modal" class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">PVP Mode</h4>
+            </div>
+            <div class="modal-body" >
+
+            </div>
+            <div class="modal-footer container-fluid">
+                <div class="col-xs-2">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                </div>
+                <div class="col-xs-10">
+                    <table class="pull-right">
+                        <tr>
+                            <th>
+                                <span class="">Numbers of Player</span>
+                            </th>
+                            <th width="125px">
+                                <div class="btn-group" style="width: 100%">
+                                    <button type="button" class="btn btn-default dropdown-toggle room_type" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" style="width: 100%">
+                                        <span id="room_span">1 vs 1</span> <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">1 vs 1</a></li>
+<!--                                        <li><a href="#">2 vs 2</a></li>-->
+                                        <li><a href="#">Battlegrounds</a></li>
+                                    </ul>
+                                </div>
+                            </th>
+                            <th>
+                                 <button type="button" class="btn btn-primary create_room" onclick="new_room(this)">Create Room</button>
+                            </th>
+                            <th>
+                                 <button type="button" class="btn btn-default leave_room" disabled="disabled" onclick="rooms.leave_room()">Leave Room</button>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

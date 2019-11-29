@@ -1,4 +1,12 @@
+<!--
+ Project           : COMP9323
+ Author            : Heping Zhao
+ Date created      : 25/10/2019
+ Description       : signup page
+-->
 {% extends '/basic/BasicConfig.html' %}
+
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block navbar %}
     {% include('/basic/navigation.html') %}
@@ -6,33 +14,85 @@
 
 {% block content %}
     <style>
-        body{
-            {#background: url("../../static/image/guide/bgd3.jpg") no-repeat center center;#}
-            {#background-size: cover; #}
-            padding: 80px;
-            background-attachment:fixed;
-            user-select: none;
+        .out{
+            position:absolute;
+            top:0;
+            left:0;
+            z-index: -1;
+            height: 100%;
+            width: 100%;
+            min-height: 605px;
+            min-width: 1024px;
+            background-image: url('/static/image/guide/map-06.png');
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            background-size: auto 100%;
+            overflow: scroll;
         }
         .containers{
-            width: 450px;
-            height: 480px;
+            position: relative;
+            width: 1000px;
+            height: 550px;
             margin: auto;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            -webkit-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
-            -moz-box-shadow: 14px 13px 19px 1px rgba(0,0,0,0.71);
-            box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
-            border-radius: 10px;
-            transition: box-shadow .30s;
-            padding: 10px;
+            margin-top: 110px;
+            background: #ffffff;
+            color: #000000;
+            border-radius: 15px;
+
         }
-        .containers:hover{
-            box-shadow: #444444 5px 5px 25px;
+
+        .form-control{
+            width: 400px;
+        }
+
+        .submit{
+            background-color: rgb(0, 77, 153);
+            color: white;
+            font-family: "Roboto Light";
+            margin-top: 20px;
+            height: 45px;
+            border-radius: 10px;
+        }
+        .create-role{
+            position: absolute;
+            margin-left: 70px;
+            float: left;
+        }
+
+        .img {
+            width: 92px;
+            margin-left: 5px;
+        }
+        .small-boy{
+            background: url("../../static/image/guide/small.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 350px;
+            height: 450px;
+            margin-left: 570px;
+            margin-top: 50px;
+        }
+        .file{
+            float: right;
+            margin-top: 90px;
+            margin-left: 210px;
+        }
+        .otherfile{
+            float: left;
+            margin-top: 20px;
+        }
+        .flash{
+            position: fixed;
+            top: 53px;
+            width: 700px;
+            text-align: center;
+            left: 500px;
         }
     </style>
     <body>
-        <div class="row" style="text-align: center;align-content:center; padding-left: 30px; margin:30px 70px 10px 450px; height:20px; width: 830px">
-            <div class="col-md-6">
+        <div class="out">
+            <div class="row flash">
+            <div class="col-md-8" style="">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -45,13 +105,38 @@
             </div>
         </div>
         <div class="containers">
-            <h1 style="text-align: center">Sign Up</h1>
-            <div class="row">
-                <div class="col-md-8" style="align-content:center; padding-left: 10px; margin:30px 70px 10px 75px">
-                    {% import 'bootstrap/wtf.html' as wtf %}
-                    {{ wtf.quick_form(form) }}
+            <div class="row proff">
+                <div class="create-role">
+                    <h2 style="font-family: 'Roboto Light'; font-size: 25px; font-weight: bold; padding-top: 15px">Create Your Character</h2>
+                    <form class="form" method="POST" enctype=multipart/form-data>
+                        {{ form.hidden_tag() }}
+                        <div class="file">
+                            <div class="file1">
+                                <p style="font-family: 'Roboto Light'; font-size: 12px; font-weight: bold">Choose Your Avatar</p>
+                                <input class="img" type="file" name="file" style="margin-top:20px;"/>
+                            </div>
+                        </div>
+                        <div class="otherfile">
+                            {{ wtf.form_field(form.username, class="form-control name") }}
+                            {{ wtf.form_field(form.password, class="form-control password") }}
+                            {{ wtf.form_field(form.confirm, class="form-control confirm") }}
+                            {{ wtf.form_field(form.email, class="form-control email") }}
+                            <p style="font-weight: bold">Gender</p>
+                            <div class="btn-group" role="group" aria-label="...">
+                                <input type="radio" name="submit" value="M"> Male<br>
+                                <input type="radio" name="submit" value="F"> Female
+                            </div>
+                            {{ wtf.form_field(form.submit, class="form-control submit") }}
+                        </div>
+
+                    </form>
+                </div>
+                <div class="small-boy">
+
                 </div>
             </div>
         </div>
+        </div>
+
     </body>
 {% endblock %}

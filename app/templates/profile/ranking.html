@@ -1,6 +1,13 @@
 {% extends '/basic/BasicConfig.html' %}
 
-{%- block content %}
+{% block head_scripts %}
+{{ super() }}
+<script src="{{url_for('static',filename='scripts/profile/html2canvas.min.js')}}"></script>
+<script src="{{url_for('static',filename='scripts/profile/canvas2image.js')}}"></script>
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
 <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -8,8 +15,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
 <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
-
 <style>
+body {
+    background: none;
+}
 
 .tangerine {
     font-family: "Roboto", sans-serif;
@@ -64,29 +73,27 @@ tr{
 }
 
 </style>
+{% endblock %}
 
-<script src="{{url_for('static',filename='scripts/profile/html2canvas.min.js')}}"></script>
-<script src="{{url_for('static',filename='scripts/profile/canvas2image.js')}}"></script>
+{% block scripts %}
 <script>
-function makeScreenshot() {
-    html2canvas(document.getElementById("screenshot"), {scale: 1}).then(canvas => {
-        document.body.appendChild(canvas);
-        Canvas2Image.saveAsJPEG(canvas, 840, 700)
-    });
 
-}
-
-
-var total_num = {{len(course_code_name_list)}};
+var total_num = {{ course_code_name_list|length }};
 for (i = 0; i < total_num; i++){
     document.getElementById("rank_"+i).style.display = "none";
+    document.getElementById("pvp_"+i).style.display = "none";
 }
 
+var current_course = 0;
 
 function expand_collapse(id){
+
+    current_course = id;
+
     for (i=0; i<total_num; i++){
         if (id != i){
-            document.getElementById("rank_"+i).style.display = "none"
+            document.getElementById("rank_"+i).style.display = "none";
+            document.getElementById("pvp_"+i).style.display = "none";
 
         }
         else{
@@ -100,68 +107,166 @@ function expand_collapse(id){
     }
 }
 
+function rank_pvp(id){
+
+    for (i=0; i<total_num; i++){
+        document.getElementById("rank_"+i).style.display = "none";
+        document.getElementById("pvp_"+i).style.display = "none";
+    }
+
+    if (id == "rank_button"){
+        document.getElementById("rank_"+current_course).style.display = "block";
+        document.getElementById("pvp_"+current_course).style.display = "none";
+    }
+
+    if (id == "pvp_button"){
+        document.getElementById("rank_"+current_course).style.display = "none";
+        document.getElementById("pvp_"+current_course).style.display = "block";
+    }
+}
+
+
+
+
 </script>
+{% endblock %}
 
-<body>
+{%- block content %}
+<div style="position: absolute; width: 1000px; height: 700px; bottom:0; left:150px;" class="tangerine" id="screenshot">
+    <div>
+        <img style="z-index:1;" src="{{url_for('static',filename='image/profile/clip.png')}}" width="100%" height="100%" alt="clip board picture"/>
+        <div style="position:absolute; z-index:3; top: 80px; left:40px; padding: 20px">
+            <h1 class="tangerine use_color2"><b>Rank</b></h1>
+            <h4 class="use_color">Choose course here</h4><br>
 
-<div style="position: absolute; width: 840px; height: 700px; top: 10px; left: 100px" class="tangerine" id="screenshot">
-    <img style="z-index:1" src="{{url_for('static',filename='image/profile/clip.png')}}" width="840px" height="700px" alt="clip board picture"/>
-    <img style="position:absolute; z-index:2; margin-top:450px; margin-left:-850px" src="{{url_for('static', filename='image/profile/c_rank.png')}}" width="300" height="250"/>
-    <div style="position:absolute; z-index:3; margin-top:-600px; margin-left:30px">
-        <h1 class="tangerine use_color2"><b>Rank</b></h1>
-        <h4 class="use_color">Choose course here</h4><br>
+            <div class="container">
+                <div class="left-element w3-bar-block w3-sand" id="ranking_node">
+                    {% for index, course in enumerate(course_code_name_list) %}
+                        <button class="use_color w3-bar-item w3-border w3-button w3-padding" align="center" id="{{index}}" onclick="expand_collapse(this.id)"><i class="fa fa-diamond fa-fw"></i>
+                            {{course[0]}}
+                        </button>
+                    {% endfor %}
+                </div>
+                <div class="right-element use_color">
 
-        <div class="container">
-            <div class="left-element w3-bar-block w3-sand" id="ranking_node">
-                {% for index, course in enumerate(course_code_name_list) %}
-                    <button class="use_color w3-bar-item w3-border w3-button w3-padding" align="center" id="{{index}}" onclick="expand_collapse(this.id)"><i class="fa fa-diamond fa-fw"></i>
-                        {{course[0]}}
-                    </button>
-                {% endfor %}
-            </div>
-            <div class="right-element use_color">
-                {% for index, position in enumerate(position_list) %}
-                    <div id="rank_{{index}}" style="display:none">
-                        <table class="w3-table w3-border w3-centered w3-hoverable w3-bordered">
-                            <caption class="use_color w3-large">{{course_code_name_list[index][0]}}</caption>
-                            <col width="100px">
-                            <col width="150px">
-                            <col width="200px">
-                            {% for person in total_rank_list[index] %}
+                    <button class="w3-button" align="center" id="rank_button" onclick="rank_pvp(this.id)">Single</button>
+                    <button class="w3-button" align="center" id="pvp_button" onclick="rank_pvp(this.id)">Multiple</button>
+
+                    {% for index, position in enumerate(position_list) %}
+                        <div id="pvp_{{index}}" style="display:none">
+                            <table class="w3-table w3-border w3-centered w3-hoverable w3-bordered">
+                                <caption class="use_color w3-large">{{course_code_name_list[index][0]}}</caption>
+                                <col width="100px">
+                                <col width="150px">
+                                <col width="200px">
+
                                 <tr>
-                                    {% if person[0] <= 3 %}
-                                        <th>
-                                            <p class="w3-xlarge" style="font-style: italic">{{person[0]}}</p>
-                                        </th>
-                                        <th>
-                                            <p class="w3-large" style="padding-top:5px">{{person[1]}}</p>
-                                        </th>
-                                        <th>
-                                            {% if person[1] == username %}
-                                                <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
-                                            {% endif %}
-                                        </th>
-                                    {% else %}
-                                        <th>
-                                            <p class="w3-large" style="font-style:italic">{{person[0]}}</p>
-                                        </th>
-                                        <th>
-                                            <p class="w3-large">{{person[1]}}</p>
-                                        </th>
-                                        <th>
-                                            {% if person[1] == username %}
-                                                <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
-                                            {% endif %}
-                                        </th>
-                                    {% endif %}
+
+                                    <th>
+                                        <p class="w3-xlarge" style="font-style: italic">1</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="padding-top:5px">alan  Win {{ round(10*(1-exp(-1* (5+index) /2))) }}</p>
+                                    </th>
+                                    <th>
+                                    </th>
                                 </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                {% endfor %}
+                                <tr>
+                                    <th>
+                                        <p class="w3-xlarge" style="font-style: italic">2</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="padding-top:5px">Bo Tang Win {{ round(10*(1-exp(-1* (4+index) /2))) }}</p>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                                <tr>
+
+                                    <th>
+                                        <p class="w3-xlarge" style="font-style: italic">3</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="padding-top:5px">xinyuan  Win {{ round(10*(1-exp(-1* (3+index) /2))) }}</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
+                                    </th>
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+                                        <p class="w3-large" style="font-style:italic">4</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large">sherk Win {{ round(10*(1-exp(-1* (2+index) /2))) }} </p>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <p class="w3-large" style="font-style:italic">5</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large">qingfekg Win {{ round(10*(1-exp(-1* (1+index) /2))) }} </p>
+                                    </th>
+                                    <th>
+                                    </th>
+
+                                </tr>
+                            </table>
+                        </div>
+                    {% endfor %}
+
+
+
+                    {% for index, position in enumerate(position_list) %}
+                        <div id="rank_{{index}}" style="display:none">
+                            <table class="w3-table w3-border w3-centered w3-hoverable w3-bordered">
+                                <caption class="use_color w3-large">{{course_code_name_list[index][0]}}</caption>
+                                <col width="100px">
+                                <col width="150px">
+                                <col width="200px">
+
+                                {% for person in total_rank_list[index] %}
+                                    <tr>
+                                        {% if person[0] <= 3 %}
+                                            <th>
+                                                <p class="w3-xlarge" style="font-style: italic">{{person[0]}}</p>
+                                            </th>
+                                            <th>
+                                                <p class="w3-large" style="padding-top:5px">{{person[1]}}</p>
+                                            </th>
+                                            <th>
+                                                {% if person[1] == username %}
+                                                    <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
+                                                {% endif %}
+                                            </th>
+                                        {% else %}
+                                            <th>
+                                                <p class="w3-large" style="font-style:italic">{{person[0]}}</p>
+                                            </th>
+                                            <th>
+                                                <p class="w3-large">{{person[1]}}</p>
+                                            </th>
+                                            <th>
+                                                {% if person[1] == username %}
+                                                    <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
+                                                {% endif %}
+                                            </th>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
+    <img style="position:absolute; z-index:2; left: -150px; bottom: 0; height: 350px; width: 415px" src="{{url_for('static', filename='image/profile/c_rank.png')}}" width="100%" height="100%"/>
 </div>
-</body>
 {% endblock content %}

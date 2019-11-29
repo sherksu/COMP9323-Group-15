@@ -1,0 +1,178 @@
+.containers {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    min-height: 605px;
+    min-width: 1024px;
+    background-image: url('/static/image/guide/map-06.png');
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: auto 100%;
+    overflow: scroll;
+}
+
+.containers::-webkit-scrollbar {
+    display: none;
+}
+
+.middle-wrapper {
+    /*position: absolute;*/
+    max-height: 80vh;
+    /*background-color: black;*/
+    /*left: 50%;*/
+    /*top:50%;*/
+    /*transform: translate(-50%,-50%);*/
+    /*width: 80vw;*/
+    border-right: 2px solid lightgray;
+    border-left: 2px solid lightgray;
+    /*margin: 0 auto;*/
+    max-width: 1200px;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    overflow: scroll;
+    -ms-overflow-style: none; /*IE hide scroll bar*/
+    scrollbar-width: none; /*firefox hide scroll bar*/
+    border-radius: calc(1vmin);
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+.question-wrapper {
+    /*width: 80%;*/
+    border-left: 5px solid lightskyblue;
+}
+
+.side-wrapper {
+    background-color: lightcyan;
+    min-height: 300px;
+    padding: 0 !important;
+}
+
+.question-block {
+    /*width: 100%;*/
+    min-height: 300px;
+    border-top: 5px solid lightskyblue;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+/*.question .row{*/
+/*    display: block;*/
+/*}*/
+
+.side-wrapper a.active{
+    background-color: lightgreen;
+}
+
+document,body {
+    -ms-overflow-style: none; /*IE hide scroll bar*/
+    scrollbar-width: none; /*firefox hide scroll bar*/
+}
+
+document::-webkit-scrollbar,window::-webkit-scrollbar,body::-webkit-scrollbar {
+    display: none; /* Safari and Chrome hide scroll bar*/
+}
+
+@media (max-width:540px) {
+    .play-span {
+        height: 100%;
+        margin-right:1px ;
+        padding: 8px 0;
+        display: inline!important;
+    }
+        #navbarNavAltMarkup {
+        overflow: scroll;
+        max-height: calc(90vh - 4em);;
+        -ms-overflow-style: none; /*IE hide scroll bar*/
+        scrollbar-width: none; /*firefox hide scroll bar*/
+    }
+
+    #navbarNavAltMarkup::-webkit-scrollbar {
+        display: none; /* Safari and Chrome hide scroll bar*/
+    }
+
+    .side-wrapper {
+        position: fixed!important;
+        z-index: 10;
+        width: 100vw;
+        /*width: 100%;*/
+        top: 0;
+        max-height: 90vh;
+    }
+}
+
+@media (min-width: 768px) {
+    #navbarNavAltMarkup {
+        display: block !important;
+        height: calc(100% - 1em);
+        overflow: scroll;
+        -ms-overflow-style: none; /*IE hide scroll bar*/
+        scrollbar-width: none; /*firefox hide scroll bar*/
+    }
+    #navbarNavAltMarkup::-webkit-scrollbar {
+        display: none; /* Safari and Chrome hide scroll bar*/
+    }
+
+    #ScrollNav .navbar-nav,
+    #ScrollNav {
+        display: block !important;
+    }
+
+    #ScrollNav {
+        position: fixed;
+        /*width: 100%;*/
+        top: 10vh;
+        height: 80vh;
+    }
+
+    .play-span {
+        height: 100%;
+        margin-right:1px ;
+        padding: 8px 0;
+    }
+}
+@media (max-width: 768px) and (min-width: 540px) {
+    #navbarNavAltMarkup {
+        overflow: scroll;
+        max-height: calc(90vh - 4em);;
+        -ms-overflow-style: none; /*IE hide scroll bar*/
+        scrollbar-width: none; /*firefox hide scroll bar*/
+    }
+
+    #navbarNavAltMarkup::-webkit-scrollbar {
+        display: none; /* Safari and Chrome hide scroll bar*/
+    }
+
+    .side-wrapper {
+        position: fixed!important;
+        z-index: 10;
+        width: 100vw;
+        /*width: 100%;*/
+        top: 0;
+        max-height: 90vh;
+    }
+
+    .play-span{
+        display: block!important;
+        margin: 0 -8px;
+    }
+}
+
+.invisible{
+    visibility: hidden;
+}
+
+.blocker{
+    position: absolute;
+    /*transform: translateY(-50%);*/
+    /*transform: translateX(50%);*/
+    /*left: 35%;*/
+    top: 50%;
+    /*height: 100%;*/
+    width: 100%;
+}

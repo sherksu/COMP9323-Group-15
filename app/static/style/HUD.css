@@ -8,6 +8,7 @@
     border-radius: 8px;
     font-family: "candy_beans";
     box-shadow: 5px 5px 0.5px rgba(0,0,0,0.1);
+    z-index: -1;
 }
 
 .HUD .HUD-avatar {
