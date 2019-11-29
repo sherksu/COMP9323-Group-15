@@ -77,25 +77,23 @@ tr{
 
 {% block scripts %}
 <script>
-function makeScreenshot() {
-    html2canvas(document.getElementById("screenshot"), {scale: 1}).then(canvas => {
-        document.body.appendChild(canvas);
-        Canvas2Image.saveAsJPEG(canvas, 840, 700)
-    });
-
-}
-
 
 var total_num = {{ course_code_name_list|length }};
 for (i = 0; i < total_num; i++){
     document.getElementById("rank_"+i).style.display = "none";
+    document.getElementById("pvp_"+i).style.display = "none";
 }
 
+var current_course = 0;
 
 function expand_collapse(id){
+
+    current_course = id;
+
     for (i=0; i<total_num; i++){
         if (id != i){
-            document.getElementById("rank_"+i).style.display = "none"
+            document.getElementById("rank_"+i).style.display = "none";
+            document.getElementById("pvp_"+i).style.display = "none";
 
         }
         else{
@@ -108,6 +106,27 @@ function expand_collapse(id){
         }
     }
 }
+
+function rank_pvp(id){
+
+    for (i=0; i<total_num; i++){
+        document.getElementById("rank_"+i).style.display = "none";
+        document.getElementById("pvp_"+i).style.display = "none";
+    }
+
+    if (id == "rank_button"){
+        document.getElementById("rank_"+current_course).style.display = "block";
+        document.getElementById("pvp_"+current_course).style.display = "none";
+    }
+
+    if (id == "pvp_button"){
+        document.getElementById("rank_"+current_course).style.display = "none";
+        document.getElementById("pvp_"+current_course).style.display = "block";
+    }
+}
+
+
+
 
 </script>
 {% endblock %}
@@ -129,6 +148,81 @@ function expand_collapse(id){
                     {% endfor %}
                 </div>
                 <div class="right-element use_color">
+
+                    <button class="w3-button" align="center" id="rank_button" onclick="rank_pvp(this.id)">Single</button>
+                    <button class="w3-button" align="center" id="pvp_button" onclick="rank_pvp(this.id)">Multiple</button>
+
+                    {% for index, position in enumerate(position_list) %}
+                        <div id="pvp_{{index}}" style="display:none">
+                            <table class="w3-table w3-border w3-centered w3-hoverable w3-bordered">
+                                <caption class="use_color w3-large">{{course_code_name_list[index][0]}}</caption>
+                                <col width="100px">
+                                <col width="150px">
+                                <col width="200px">
+
+                                <tr>
+
+                                    <th>
+                                        <p class="w3-xlarge" style="font-style: italic">1</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="padding-top:5px">alan  Win {{ round(10*(1-exp(-1* (5+index) /2))) }}</p>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <p class="w3-xlarge" style="font-style: italic">2</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="padding-top:5px">Bo Tang Win {{ round(10*(1-exp(-1* (4+index) /2))) }}</p>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                                <tr>
+
+                                    <th>
+                                        <p class="w3-xlarge" style="font-style: italic">3</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="padding-top:5px">xinyuan  Win {{ round(10*(1-exp(-1* (3+index) /2))) }}</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large" style="font-style:italic">&#x2190 You are here!</p>
+                                    </th>
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+                                        <p class="w3-large" style="font-style:italic">4</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large">sherk Win {{ round(10*(1-exp(-1* (2+index) /2))) }} </p>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <p class="w3-large" style="font-style:italic">5</p>
+                                    </th>
+                                    <th>
+                                        <p class="w3-large">qingfekg Win {{ round(10*(1-exp(-1* (1+index) /2))) }} </p>
+                                    </th>
+                                    <th>
+                                    </th>
+
+                                </tr>
+                            </table>
+                        </div>
+                    {% endfor %}
+
+
+
                     {% for index, position in enumerate(position_list) %}
                         <div id="rank_{{index}}" style="display:none">
                             <table class="w3-table w3-border w3-centered w3-hoverable w3-bordered">
@@ -136,6 +230,7 @@ function expand_collapse(id){
                                 <col width="100px">
                                 <col width="150px">
                                 <col width="200px">
+
                                 {% for person in total_rank_list[index] %}
                                     <tr>
                                         {% if person[0] <= 3 %}

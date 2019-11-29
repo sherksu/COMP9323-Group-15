@@ -3,6 +3,7 @@ from app.MongoFunction import *
 from flask import render_template
 from . import ranking_function as function
 from flask_login import current_user
+import math
 
 
 @profile.route('/', methods=['GET', 'POST'])
@@ -47,7 +48,8 @@ def ranking():
                                total_rank_list=total_rank_list,
                                position_list=position_list,
                                enumerate=enumerate,
-                               len=len
+                               len=len,
+                               exp=math.exp
                                )
 
     # if this person does no course, render another template
