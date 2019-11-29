@@ -47,10 +47,14 @@ def add_pvplevel(room, username):
                 "course":roomdata["course"],
                 "wins":result[0]["pvplevels"][0]["wins"]+1
             })
-            wins=result[0]["pvplevels"][0]["wins"]
+            wins = 0
+            for obj in result[0]["pvplevels"]:
+                if obj["course"] == roomdata["course"]:
+                    wins = obj["wins"]
+            # wins=result[0]["pvplevels"][0]["wins"]
             db.users.update({"username": username}, {"$push": {"pvplevels": {
                 "course":roomdata["course"],
-                "wins":result[0]["pvplevels"][0]['wins']+1
+                "wins":wins+1
             }}})
     return wins
 

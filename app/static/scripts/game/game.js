@@ -23,7 +23,7 @@ $( document ).ready(function() {
         cur_answer()
     });
 
-    timer = $('.timer').FlipClock(600, {
+    timer = $('.timer').FlipClock(300, {
         clockFace: 'MinuteCounter',
         countdown: true,
         callbacks: {

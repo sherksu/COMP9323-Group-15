@@ -247,9 +247,11 @@ function finish_pop() {
 }
 
 function win_pop(data) {
-    re  = /(?:\/[^\/]*)/gm
-    course = window.location.href.match(re)
+    let re  = /(?:\/[^\/]*)/gm
+    let course = window.location.href.match(re)
     course = course[course.length-1]
+    console.log(data["wins"],Number(data["wins"]),Number(data["wins"])+1)
+    let tmpwin = Number(data["wins"])+1
     let modaltpl =
         "<div class=\"modal win-pop\" tabindex=\"-1\" role=\"dialog\">\n" +
         "  <div class=\"modal-dialog\" role=\"document\">\n" +
@@ -261,7 +263,7 @@ function win_pop(data) {
         "        </button>\n" +
         "      </div>\n" +
         "      <div class=\"modal-body\">\n" +
-        "        <p>You win this game!!!!</p>\n" +(data?("You have "+(data["wins"]+1)+" win now"):"")+
+        "        <p>You win this game!!!!</p>\n" +(data?("You have "+(tmpwin)+" win now"):"")+
         "      </div>\n" +
         "      <div class=\"modal-footer\">\n" +
         "        <a href='/town"+course+"'><button type=\"button\" class=\"btn btn-primary pull-right\">Leave</button>\n</a>" +
