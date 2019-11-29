@@ -32,7 +32,7 @@
     <div class="col-12">
         <div class="row">
             <div class="col-12">
-                Question {{Qloop.index}}:<br>{{d.content|safe}}
+                Question {{Qloop.index}}:<br>{{d.content|safe}}{{d.correct_answer}}
             </div>
         </div>
         <br/>
@@ -46,7 +46,7 @@
         </div>
         {% if not cond %}
         <div class="row">
-            <div class="offset-10 col-2">
+            <div class="offset-lg-10 offset-sx-8 col-2">
             <button class="submit-answer btn-warning submit-answer btn-warning ">Commit</button>
             </div>
         </div>
@@ -67,7 +67,7 @@
     <div class="col-12">
         <div class="row">
             <div class="col-12">
-                Question {{Qloop.index}}:<br>{{d.content|safe}}
+                Question {{Qloop.index}}:{{d.correct_answer}}<br>{{d.content|safe}}
             </div>
         </div>
         <div class="row">

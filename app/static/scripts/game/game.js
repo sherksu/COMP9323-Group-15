@@ -78,7 +78,7 @@ $( document ).ready(function() {
 function cur_answer(){
     console.log(x[$(".question:visible input").prop("name")])
 }
-
+let monsterNum = 1
 function nextQ(e) {
     if ($(".question:visible input").serializeArray().length == 0){
         alert("Please choose yout answer! ");
@@ -87,13 +87,19 @@ function nextQ(e) {
     let chose = $(".question:visible input").serializeArray()[0];
     $(".question:visible").addClass('animated bounceOutLeft')
     if(x[chose.name] == chose.value){
-        aniP = aniP.then(()=>{
-            return new Promise(correct);
+        // aniP = aniP.then(()=>{
+        //     return new Promise(correct);
+        // })
+        // qnum = $('.all-questions').attr("q-num");
+        // heart.set(heart.value - (1/qnum*100))
+        animateCSS("#person img","wobble")
+        monsterNum = (monsterNum==1)?2:1
+        animateCSS("#monster img","zoomOutRight",function () {
+            $("#monster img").prop("src",window.location.origin+"/static/image/game/monster_"+monsterNum+".png")
         })
-        qnum = $('.all-questions').attr("q-num");
-        heart.set(heart.value - (1/qnum*100))
     }else{
-        $(".monster:visible").m_restart()
+        // $(".monster:visible").m_restart()
+        animateCSS("#monster img","wobble")
     }
 }
 
@@ -166,4 +172,22 @@ function file_change(e){
 function onload_fn(e) {
     response = $(e.contentWindow.document).find("body").text()?$(e.contentWindow.document).find("body").text():$(e.contentDocument).find("body").text()
     $(e).parent("form").find(".answer").val(response)
+}
+
+function animateCSS(element, animationName, callback) {
+    const node = document.querySelector(element)
+    node.classList.add('animated', animationName)
+
+    function handleAnimationEnd() {
+        node.classList.remove('animated', animationName)
+        node.removeEventListener('animationend', handleAnimationEnd)
+
+        if (typeof callback === 'function') callback()
+    }
+
+    node.addEventListener('animationend', handleAnimationEnd)
+}
+
+function switchIMG(){
+
 }
